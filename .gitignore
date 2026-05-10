@@ -45,3 +45,6 @@ coverage/
 *.pid
 *.seed
 *.pid.lock
+
+# Sensitive files
+rzp-key.csv

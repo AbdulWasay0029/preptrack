@@ -27,7 +27,6 @@ export default function Login() {
     if (containerRef.current && containerRef.current.children.length === 0) {
       const script = document.createElement('script');
       script.src = 'https://telegram.org/js/telegram-widget.js?22';
-      // Use the env var if provided, fallback to PrepTrackBot
       const botName = import.meta.env.VITE_TELEGRAM_BOT_NAME || 'PrepTrackBot';
       script.setAttribute('data-telegram-login', botName);
       script.setAttribute('data-size', 'large');
@@ -39,21 +38,70 @@ export default function Login() {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="bg-surface p-8 rounded-2xl border border-gray-800 text-center max-w-md w-full">
-        <h1 className="text-3xl font-bold text-primary mb-2">PrepTrack</h1>
-        <p className="text-gray-400 mb-8">Adaptive DSA prep for your target company</p>
-        
-        <div className="flex justify-center mb-8" ref={containerRef}>
-        </div>
+    <div className="font-body-base text-body-base min-h-screen flex flex-col bg-[#0f0f0f] text-[#dce5d9] selection:bg-primary selection:text-on-primary">
+      {/* Main Content Canvas */}
+      <main className="flex-grow flex items-center justify-center px-gutter">
+        <div className="w-full max-w-[420px]">
+          {/* Login Card */}
+          <div className="bg-[#1a1a1a] border border-[#2a2a2a] p-xl rounded-none shadow-none text-center">
+            {/* Wordmark */}
+            <div className="mb-xl">
+              <h1 className="font-headline-md text-headline-md text-primary tracking-tight">PrepTrack</h1>
+            </div>
 
-        <div className="mt-8 pt-6 border-t border-white/10 text-center">
-          <p className="text-sm text-gray-400 mb-2">Widget not loading or getting "Session Expired"?</p>
-          <p className="text-sm bg-white/5 rounded-md p-3 text-gray-300">
-            Message <strong className="text-primary-400">/web</strong> to your bot on Telegram for a secure Magic Link that instantly logs you in without a phone number!
-          </p>
+            {/* Messaging */}
+            <div className="mb-xl">
+              <h2 className="font-display-lg-mobile text-display-lg-mobile mb-xs text-on-surface">Welcome back</h2>
+              <p className="font-body-sm text-body-sm text-on-surface-variant">Sign in to continue your rigorous preparation.</p>
+            </div>
+
+            {/* Telegram Button Container */}
+            <div className="flex justify-center mb-xl" ref={containerRef}>
+              {/* Widget will be injected here */}
+            </div>
+
+            {/* Subtext */}
+            <p className="mt-md font-body-sm text-body-sm text-on-surface-variant">
+              No account needed. Just your Telegram.
+            </p>
+
+            {/* Fallback Messaging */}
+            <div className="mt-xl pt-6 border-t border-[#2a2a2a] text-center">
+              <p className="text-body-sm text-on-surface-variant mb-2">Widget not loading or getting "Session Expired"?</p>
+              <p className="text-body-sm bg-[#222] rounded p-3 text-on-surface">
+                Message <strong className="text-primary">/web</strong> to your bot on Telegram for a secure Magic Link that instantly logs you in without a phone number!
+              </p>
+            </div>
+
+            {/* Technical Footer/Divider */}
+            <div className="mt-xl pt-lg border-t border-[#2a2a2a] flex items-center justify-center gap-base">
+              <span className="material-symbols-outlined text-[16px] text-outline">verified_user</span>
+              <span className="font-label-caps text-label-caps text-outline uppercase">Secure Authentication</span>
+            </div>
+          </div>
+
+          {/* Contextual Decorative Element (Asymmetric) */}
+          <div className="mt-lg grid grid-cols-2 gap-gutter opacity-40">
+            <div className="h-[2px] bg-primary"></div>
+            <div className="h-[2px] bg-[#2a2a2a]"></div>
+          </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-container-max mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-lg">
+            <span className="text-label-caps font-label-caps text-on-surface">PrepTrack</span>
+            <span className="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">Built by Abdul Wasay</span>
+          </div>
+          <nav className="flex gap-xl mt-lg md:mt-0">
+            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy</a>
+            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Terms</a>
+            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Support</a>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }

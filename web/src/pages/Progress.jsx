@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/client';
-import WeakTopicChart from '../components/WeakTopicChart';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Progress() {
   const [data, setData] = useState(null);
@@ -29,53 +27,171 @@ export default function Progress() {
     fetchData();
   }, [navigate]);
 
-  if (loading) return <div className="p-8 text-center text-gray-400">Loading...</div>;
-  if (!data) return <div className="p-8 text-center text-red-400">Failed to load data</div>;
+  if (loading) return <div className="p-8 text-center text-on-surface-variant font-body-base">Loading...</div>;
+  if (!data) return <div className="p-8 text-center text-error font-body-base">Failed to load data</div>;
 
-  const weakTopics = (data.weakTopics || []).map(t => ({
-    ...t,
-    weak_score: Math.round(t.weak_score * 100)
-  }));
+  const overall = data.overall || {};
+  const topicBreakdown = data.topicBreakdown || [];
+  const dailyActivity = data.dailyActivity || [];
 
-  const activityData = data.activityData || [];
+  // Get max solved for scaling the chart
+  const maxSolved = Math.max(...dailyActivity.map(d => parseInt(d.solved) || 0), 1);
+
+  // Take top 4 weak topics
+  const topWeakTopics = topicBreakdown.slice(0, 4);
+
+  const telegramName = localStorage.getItem('telegram_name') || data.user?.name || 'User';
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Your Progress 📈</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-surface rounded-xl p-6 border border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 text-primary">Weak Topics</h2>
-          <p className="text-gray-400 text-sm mb-4">Focus on these to improve your chances.</p>
-          {weakTopics.length > 0 ? (
-             <WeakTopicChart data={weakTopics} />
-          ) : (
-            <div className="text-gray-500 py-8 text-center">Not enough data to determine weak topics yet.</div>
-          )}
-        </div>
-
-        <div className="bg-surface rounded-xl p-6 border border-gray-800">
-          <h2 className="text-xl font-semibold mb-4 text-primary">Activity (Last 30 Days)</h2>
-          <div className="h-64 w-full">
-            {activityData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={activityData} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
-                  <XAxis dataKey="date" stroke="#888" />
-                  <YAxis stroke="#888" />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
-                    itemStyle={{ color: '#22c55e' }}
-                  />
-                  <Area type="monotone" dataKey="solved" stroke="#22c55e" fill="#22c55e" fillOpacity={0.2} />
-                </AreaChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="text-gray-500 py-8 text-center">No activity data available yet.</div>
-            )}
+    <div className="font-body-base text-body-base min-h-screen flex flex-col bg-background text-on-background selection:bg-primary selection:text-on-primary">
+      {/* TopNavBar */}
+      <header className="bg-background dark:bg-background border-b border-outline-variant dark:border-outline-variant docked full-width top-0 sticky z-50">
+        <div className="flex justify-between items-center w-full px-lg max-w-container-max mx-auto h-16">
+          <div className="flex items-center gap-xl">
+            <span className="text-headline-md font-headline-md text-primary dark:text-primary">PrepTrack</span>
+            <nav className="hidden md:flex items-center gap-lg">
+              <a className="text-on-surface-variant hover:text-on-surface transition-colors font-body-base text-body-base" href="/dashboard">Dashboard</a>
+              <a className="text-primary font-bold border-b-2 border-primary pb-1 font-body-base text-body-base" href="/progress">Progress</a>
+            </nav>
+          </div>
+          <div className="flex items-center gap-md">
+            <span className="text-on-surface-variant font-body-sm">{telegramName}</span>
           </div>
         </div>
-      </div>
+      </header>
+
+      <main className="max-w-container-max mx-auto px-lg py-xl flex-grow w-full">
+        {/* Page Header */}
+        <div className="mb-xl">
+          <h1 className="font-display-lg text-display-lg text-on-surface mb-xs">Performance Metrics</h1>
+          <p className="font-body-base text-body-base text-on-surface-variant">Analytical overview of your technical interview preparation cycle.</p>
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
+          {/* Solved */}
+          <div className="bg-surface-container border border-outline-variant p-lg flex flex-col gap-xs rounded-lg">
+            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Solved</span>
+            <span className="font-display-lg text-display-lg text-primary">{overall.total_solved || 0}</span>
+            <div className="h-1 bg-outline-variant w-full mt-sm rounded-full overflow-hidden">
+              <div className="h-full bg-primary" style={{ width: `${Math.min(((overall.total_solved || 0) / (overall.total_attempted || 1)) * 100, 100)}%` }}></div>
+            </div>
+          </div>
+
+          {/* Stuck */}
+          <div className="bg-surface-container border border-outline-variant p-lg flex flex-col gap-xs rounded-lg">
+            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Stuck</span>
+            <span className="font-display-lg text-display-lg text-tertiary">{overall.total_stuck || 0}</span>
+            <div className="h-1 bg-outline-variant w-full mt-sm rounded-full overflow-hidden">
+              <div className="h-full bg-tertiary" style={{ width: `${Math.min(((overall.total_stuck || 0) / (overall.total_attempted || 1)) * 100, 100)}%` }}></div>
+            </div>
+          </div>
+
+          {/* Skipped */}
+          <div className="bg-surface-container border border-outline-variant p-lg flex flex-col gap-xs rounded-lg">
+            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Skipped</span>
+            <span className="font-display-lg text-display-lg text-outline">{overall.total_skipped || 0}</span>
+            <div className="h-1 bg-outline-variant w-full mt-sm rounded-full overflow-hidden">
+              <div className="h-full bg-outline" style={{ width: `${Math.min(((overall.total_skipped || 0) / (overall.total_attempted || 1)) * 100, 100)}%` }}></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+          {/* Activity Chart Section */}
+          <div className="lg:col-span-8 bg-surface-container border border-outline-variant p-lg rounded-lg">
+            <div className="flex justify-between items-center mb-xl">
+              <h2 className="font-headline-md text-headline-md text-on-surface">30-Day Activity</h2>
+              <span className="font-label-caps text-label-caps text-on-surface-variant">Last 30 Days</span>
+            </div>
+            
+            {dailyActivity.length > 0 ? (
+              <div className="relative h-64 w-full flex items-end gap-[2px]">
+                {dailyActivity.map((day, index) => {
+                  const solvedCount = parseInt(day.solved) || 0;
+                  const heightPercent = maxSolved > 0 ? (solvedCount / maxSolved) * 100 : 0;
+                  return (
+                    <div 
+                      key={index} 
+                      className="flex-1 bg-primary/20 hover:bg-primary transition-colors cursor-pointer"
+                      style={{ height: `${Math.max(heightPercent, 5)}%` }}
+                      title={`${day.date}: ${solvedCount} solved`}
+                    ></div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="h-64 w-full flex items-center justify-center border border-dashed border-outline-variant rounded-lg">
+                <span className="text-on-surface-variant font-body-sm">No activity data available yet.</span>
+              </div>
+            )}
+
+            <div className="mt-md pt-md border-t border-outline-variant flex justify-between text-on-surface-variant font-label-caps text-label-caps">
+              <span>30D AGO</span>
+              <span>TODAY</span>
+            </div>
+          </div>
+
+          {/* Weak Topics Section */}
+          <div className="lg:col-span-4 bg-surface-container border border-outline-variant p-lg rounded-lg">
+            <h2 className="font-headline-md text-headline-md text-on-surface mb-xl">Weak Topics</h2>
+            <div className="flex flex-col gap-lg">
+              {topWeakTopics.length > 0 ? (
+                topWeakTopics.map((topic, index) => {
+                  const score = Math.round(parseFloat(topic.weak_score) * 100) || 0;
+                  return (
+                    <div key={index} className="flex flex-col gap-xs">
+                      <div className="flex justify-between items-center mb-xs">
+                        <span className="font-body-sm text-body-sm text-on-surface">{topic.topic}</span>
+                        <span className="font-code-snippet text-code-snippet text-primary">{score}%</span>
+                      </div>
+                      <div className="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
+                        <div className="h-full bg-primary" style={{ width: `${score}%` }}></div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-on-surface-variant text-center py-xl">
+                  Not enough data to determine weak topics yet.
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Empty States / Placeholder Section */}
+        <div className="mt-xl grid grid-cols-1 md:grid-cols-2 gap-gutter">
+          <div className="bg-surface-container border border-outline-variant border-dashed p-xl flex flex-col items-center justify-center text-center rounded-lg">
+            <span className="material-symbols-outlined text-outline mb-md" style={{ fontSize: '48px' }}>analytics</span>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Detailed Breakdown</h3>
+            <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Complete 10 more problems to unlock deep-dive performance analysis per difficulty level.</p>
+          </div>
+
+          <div className="bg-surface-container border border-outline-variant border-dashed p-xl flex flex-col items-center justify-center text-center rounded-lg">
+            <span className="material-symbols-outlined text-outline mb-md" style={{ fontSize: '48px' }}>leaderboard</span>
+            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Peer Comparison</h3>
+            <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Global ranking data is currently being synthesized. Check back after your next mock assessment.</p>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant mt-xl">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-container-max mx-auto">
+          <div className="mb-md md:mb-0">
+            <span className="text-label-caps font-label-caps text-on-surface">PrepTrack</span>
+            <span className="mx-md text-outline-variant">|</span>
+            <span className="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">Built by Abdul Wasay</span>
+          </div>
+          <div className="flex gap-lg">
+            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
+            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
+            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

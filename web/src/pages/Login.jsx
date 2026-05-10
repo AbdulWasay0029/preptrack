@@ -42,9 +42,15 @@ export default function Login() {
         <h1 className="text-3xl font-bold text-primary mb-2">PrepTrack</h1>
         <p className="text-gray-400 mb-8">Adaptive DSA prep for your target company</p>
         
-        <div className="flex justify-center mb-4" ref={containerRef}>
+        <div className="flex justify-center mb-8" ref={containerRef}>
         </div>
-        <p className="text-sm text-gray-500">Log in with Telegram to access your dashboard</p>
+
+        <div className="mt-8 pt-6 border-t border-white/10 text-center">
+          <p className="text-sm text-gray-400 mb-2">Widget not loading or getting "Session Expired"?</p>
+          <p className="text-sm bg-white/5 rounded-md p-3 text-gray-300">
+            Message <strong className="text-primary-400">/web</strong> to your bot on Telegram for a secure Magic Link that instantly logs you in without a phone number!
+          </p>
+        </div>
       </div>
     </div>
   );

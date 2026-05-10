@@ -1,4 +1,4 @@
-const { Markup } from 'telegraf';
+const { Markup } = require('telegraf');
 
 function registerUpgradeCommand(bot) {
   bot.command('upgrade', async (ctx) => {

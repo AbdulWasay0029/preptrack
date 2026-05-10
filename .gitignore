@@ -5,6 +5,11 @@ node_modules/
 
 # Environment variables — never commit these
 .env
+.env.*
+!.env.example
+backend/.env
+bot/.env
+web/.env
 .env.local
 .env.development.local
 .env.test.local

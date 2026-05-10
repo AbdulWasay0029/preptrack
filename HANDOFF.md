@@ -423,7 +423,7 @@ WEB_URL=https://preptrack.vercel.app  # Your Vercel URL
 
 ### `bot/.env`
 ```
-TELEGRAM_BOT_TOKEN=8596220157:AAGwDBQU75LDy19N49knY3WUqgq3DVKGLD8
+TELEGRAM_BOT_TOKEN=<your-bot-token-here>
 BACKEND_URL=https://your-backend.railway.app
 INTERNAL_API_SECRET=<same as backend>
 DAILY_CRON=30 2 * * *

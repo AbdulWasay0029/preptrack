@@ -8,14 +8,14 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('telegram_id')) {
-      navigate('/');
+      navigate('/dashboard');
     }
 
     window.onTelegramAuth = async (user) => {
       try {
         await api.post('/users/auth/telegram', user);
         localStorage.setItem('telegram_id', user.id);
-        navigate('/');
+        navigate('/dashboard');
       } catch (error) {
         console.error('Login failed', error);
         alert('Login failed. Please try again.');

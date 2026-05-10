@@ -12,7 +12,7 @@ export default function Landing() {
           PrepTrack
         </div>
         <a 
-          href={TELEGRAM_BOT_URL}
+          href="/login"
           className="px-6 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-colors text-sm font-medium"
         >
           Sign In

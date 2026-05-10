@@ -26,7 +26,7 @@
 | Database | PostgreSQL | pg pool |
 | Frontend | React + Vite + Tailwind CSS | Vercel deployment |
 | Payments | Razorpay | UPI-compatible, ₹199/month Pro tier |
-| Hosting | Railway (bot + backend) + Vercel (web) |
+| Hosting | Render (bot + backend) + Vercel (web) |
 
 **DO NOT** switch any of these. All decisions are locked.
 
@@ -398,17 +398,16 @@ web/
 Write step-by-step instructions for:
 
 **Railway (backend + bot):**
-1. Go to railway.app → New Project → Deploy from GitHub
-2. Add PostgreSQL service — Railway gives you a DATABASE_URL
-3. Create two services: one for `/backend`, one for `/bot`
-4. Set env vars for each (copy from .env.example, fill real values)
-5. For backend: set start command `npm start`, root directory `/backend`
-6. For bot: set start command `npm start`, root directory `/bot`
+1. Go to render.com → Dashboard → New → Web Service
+2. Deploy the backend: point to your GitHub repo, set root directory to `/backend`, build command `npm install`, start command `npm start`.
+3. Go to Dashboard → New → Background Worker
+4. Deploy the bot: point to your repo, set root directory to `/bot`, build command `npm install`, start command `npm start`.
+5. Add env variables for both. Render will provide an internal URL for the backend (e.g. `https://preptrack-backend.onrender.com`).
 
 **Vercel (web):**
 1. Go to vercel.com → New Project → Import GitHub repo
 2. Set root directory to `/web`
-3. Set env var `VITE_API_URL` to your Railway backend URL
+3. Set env var `VITE_API_URL` to your Render backend URL
 4. Deploy
 
 ---
@@ -417,7 +416,7 @@ Write step-by-step instructions for:
 
 ### `backend/.env`
 ```
-DATABASE_URL=postgresql://...         # From Railway PostgreSQL service
+DATABASE_URL=postgresql://...         # From Neon PostgreSQL service
 PORT=3001
 NODE_ENV=production
 INTERNAL_API_SECRET=<random 32+ char string>
@@ -430,14 +429,14 @@ WEB_URL=https://preptrack.vercel.app  # Your Vercel URL
 ### `bot/.env`
 ```
 TELEGRAM_BOT_TOKEN=<your-bot-token-here>
-BACKEND_URL=https://your-backend.railway.app
+BACKEND_URL=https://your-backend.onrender.com
 INTERNAL_API_SECRET=<same as backend>
 DAILY_CRON=30 2 * * *
 ```
 
 ### `web/.env`
 ```
-VITE_API_URL=https://your-backend.railway.app
+VITE_API_URL=https://your-backend.onrender.com
 ```
 
 ---
@@ -491,7 +490,7 @@ VITE_API_URL=https://your-backend.railway.app
 7. ~~Test the bot end-to-end locally~~ ✅ Done (2026-05-10)
 8. ~~Build the React web dashboard~~ ✅ Done (2026-05-10)
 9. ~~Write deployment docs~~ ✅ Done (2026-05-10)
-10. Deploy to Railway + Vercel ← NEXT STEP FOR CLAUDE
+10. Deploy to Render + Vercel ← NEXT STEP FOR CLAUDE
 
 ---
 
@@ -559,6 +558,6 @@ Everything else (dashboard, payments, multiple companies) is secondary. The bot 
 
 **What's left for Claude:**
 - [ ] Test Telegram Login Widget on the web dashboard locally (`cd web && npm run dev`)
-- [ ] Deploy to Railway (backend + bot) + Vercel (web)
+- [ ] Deploy to Render (backend + bot) + Vercel (web)
 - [ ] Write missing docs (`docs/ARCHITECTURE.md`, `docs/API.md`, `docs/DATABASE.md`)
 - [ ] Set up Razorpay webhooks and full payment flow when ready for monetization

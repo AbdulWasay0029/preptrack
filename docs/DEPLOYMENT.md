@@ -1,7 +1,7 @@
 # PrepTrack — Deployment Guide
 
 > Step-by-step instructions for deploying PrepTrack to production.
-> **Stack:** Railway (backend + bot + PostgreSQL) + Vercel (web dashboard)
+> **Stack:** Render (backend + bot) + Neon (PostgreSQL) + Vercel (web dashboard) + Vercel (web dashboard)
 
 ---
 
@@ -13,40 +13,39 @@
 
 ---
 
-## 1. Railway — PostgreSQL Database
+## 1. Neon — PostgreSQL Database
 
-1. Go to [railway.app](https://railway.app) → **New Project**
-2. Click **Add Service** → **Database** → **PostgreSQL**
-3. Once provisioned, click the PostgreSQL service → **Variables** tab
-4. Copy the `DATABASE_URL` value — you'll need it for the backend
+1. Go to [neon.tech](https://neon.tech) → **Create Project**
+2. In the dashboard, copy the PostgreSQL connection string from the connection details.
+3. This is your `DATABASE_URL` — you'll need it for the backend.
 
 ### Seed the database
 
-Option A — Use Railway's **Query** tab:
-- Click the PostgreSQL service → **Data** tab → **Query**
-- Paste the contents of `database/schema.sql` and run
-- Then paste `database/seed/questions.sql` and run
-
-Option B — Connect from your terminal:
+Connect from your terminal:
 ```bash
 # Install psql locally, then:
-psql "<your-railway-DATABASE_URL>" -f database/schema.sql
-psql "<your-railway-DATABASE_URL>" -f database/seed/questions.sql
+psql "<your-neon-DATABASE_URL>" -f database/schema.sql
+psql "<your-neon-DATABASE_URL>" -f database/seed/questions.sql
 ```
 
+Alternatively, you can just run the node seed script:
+```bash
+node database/seed-neon.js
+```
 ---
 
-## 2. Railway — Backend Service
+## 2. Render — Backend Service
 
-1. In the same Railway project, click **Add Service** → **GitHub Repo**
-2. Select `AbdulWasay0029/preptrack`
+1. Go to [render.com](https://render.com) → Dashboard → **New** → **Web Service**
+2. Select your GitHub repo `AbdulWasay0029/preptrack`
 3. In **Settings**:
-   - **Root Directory:** `/backend`
+   - **Root Directory:** `backend`
+   - **Build Command:** `npm install`
    - **Start Command:** `npm start`
-4. In **Variables**, add:
+4. In **Environment Variables**, add:
 
 ```env
-DATABASE_URL=<copied from PostgreSQL service — or use Railway's variable reference: ${{Postgres.DATABASE_URL}}>
+DATABASE_URL=<copied from Neon>
 PORT=3001
 NODE_ENV=production
 INTERNAL_API_SECRET=<generate a random 32+ character string>
@@ -59,23 +58,24 @@ WEB_URL=https://preptrack.vercel.app
 > node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 > ```
 
-5. Railway will auto-deploy. Check the **Deployments** tab for logs.
-6. Once deployed, copy the **public URL** (e.g., `https://preptrack-backend-production.up.railway.app`)
+5. Render will auto-deploy.
+6. Once deployed, copy the **public URL** (e.g., `https://preptrack-backend.onrender.com`)
 
 ---
 
-## 3. Railway — Bot Service
+## 3. Render — Bot Service
 
-1. In the same project, click **Add Service** → **GitHub Repo** again
+1. In Render dashboard, click **New** → **Background Worker**
 2. Select the same repo `AbdulWasay0029/preptrack`
 3. In **Settings**:
-   - **Root Directory:** `/bot`
+   - **Root Directory:** `bot`
+   - **Build Command:** `npm install`
    - **Start Command:** `npm start`
-4. In **Variables**, add:
+4. In **Environment Variables**, add:
 
 ```env
 TELEGRAM_BOT_TOKEN=<same bot token as backend>
-BACKEND_URL=<Railway backend URL from step 2, e.g., https://preptrack-backend-production.up.railway.app>
+BACKEND_URL=<Render backend URL from step 2, e.g., https://preptrack-backend.onrender.com>
 INTERNAL_API_SECRET=<same secret as backend>
 DAILY_CRON=30 2 * * *
 ```
@@ -97,12 +97,12 @@ DAILY_CRON=30 2 * * *
 4. In **Environment Variables**, add:
 
 ```env
-VITE_API_URL=<Railway backend URL from step 2>
+VITE_API_URL=<Render backend URL from step 2>
 ```
 
 5. Click **Deploy**
 6. Once live, copy the Vercel URL (e.g., `https://preptrack.vercel.app`)
-7. Go back to Railway → Backend service → Variables → update `WEB_URL` to this Vercel URL
+7. Go back to Render → Backend service → Environment → update `WEB_URL` to this Vercel URL
 
 ---
 
@@ -124,8 +124,8 @@ VITE_API_URL=<Railway backend URL from step 2>
 2. Add your domain (e.g., `preptrack.tech`)
 3. Update DNS records as Vercel instructs
 
-### Railway
-1. Go to your backend service → **Settings** → **Networking** → **Custom Domain**
+### Render
+1. Go to your backend service → **Settings** → **Custom Domains**
 2. Add your API domain (e.g., `api.preptrack.tech`)
 3. Update `VITE_API_URL` in Vercel and `BACKEND_URL` in the bot service
 
@@ -135,15 +135,15 @@ VITE_API_URL=<Railway backend URL from step 2>
 
 | Variable | Where | Value |
 |----------|-------|-------|
-| `DATABASE_URL` | Backend | Railway PostgreSQL connection string |
+| `DATABASE_URL` | Backend | Neon PostgreSQL connection string |
 | `PORT` | Backend | `3001` |
 | `NODE_ENV` | Backend | `production` |
 | `INTERNAL_API_SECRET` | Backend + Bot | Same random 32+ char string in both |
 | `TELEGRAM_BOT_TOKEN` | Backend + Bot | From @BotFather |
 | `WEB_URL` | Backend | Your Vercel URL |
-| `BACKEND_URL` | Bot | Your Railway backend URL |
+| `BACKEND_URL` | Bot | Your Render backend URL |
 | `DAILY_CRON` | Bot | Cron expression (UTC), default `30 2 * * *` |
-| `VITE_API_URL` | Web | Your Railway backend URL |
+| `VITE_API_URL` | Web | Your Render backend URL |
 | `RAZORPAY_KEY_ID` | Backend | From Razorpay dashboard (when ready) |
 | `RAZORPAY_KEY_SECRET` | Backend | From Razorpay dashboard (when ready) |
 
@@ -153,9 +153,9 @@ VITE_API_URL=<Railway backend URL from step 2>
 
 | Symptom | Likely Cause | Fix |
 |---------|-------------|-----|
-| Bot doesn't respond at all | Bot service crashed or token wrong | Check Railway bot logs, verify `TELEGRAM_BOT_TOKEN` |
+| Bot doesn't respond at all | Bot service crashed or token wrong | Check Render bot logs, verify `TELEGRAM_BOT_TOKEN` |
 | "Something went wrong" on every command | Backend unreachable or secret mismatch | Verify `BACKEND_URL` is correct, `INTERNAL_API_SECRET` matches in both services |
-| No questions returned by `/today` | Database not seeded | Run `schema.sql` then `questions.sql` against your PostgreSQL |
+| No questions returned by `/today` | Database not seeded | Run `node database/seed-neon.js` locally to populate Neon |
 | Web dashboard CORS error | Backend not allowing Vercel origin | Ensure `WEB_URL` is set correctly in backend env vars |
 | Telegram Login Widget doesn't load | Bot username mismatch | Update `data-telegram-login` in `Login.jsx` to match your bot's username |
-| Railway deploy fails | Missing dependencies | Check that `package.json` is in the root directory specified |
+| Render deploy fails | Missing dependencies | Check that `package.json` is in the root directory specified |

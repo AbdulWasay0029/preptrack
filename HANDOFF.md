@@ -574,3 +574,20 @@ Everything else (dashboard, payments, multiple companies) is secondary. The bot 
 - **Task 6:** Web Onboarding Flow forced company selection
 - **Task 7:** LinkedIn Share Card for Streaks added
 - **Task 8:** Community Question Submission added via `/suggest` and DB
+
+### 2026-05-10 — Hotfix: Deploy-Breaking Bugs (Antigravity)
+Two bugs introduced during Phase 2 crashed both Render and Vercel deploys:
+
+**Bug 1 — `bot/src/commands/upgrade.js` line 1:**
+Used ESM `from` syntax in a CommonJS file (`const { Markup } from 'telegraf'`).
+Fix: Changed to `const { Markup } = require('telegraf')`.
+
+**Bug 2 — `web/src/pages/Landing.jsx` missing dependency:**
+Imported `lucide-react` icons but never installed the package. Vite build failed.
+Fix: `npm install lucide-react` in `/web`.
+
+Both fixes pushed in commit `5c0e5fd`. Render and Vercel should redeploy clean now.
+
+**Verified locally:**
+- `node -e "require('./src/commands/upgrade'); ..."` → all bot modules load OK
+- `npm run build` in `/web` → `✓ built in 7.19s`, all assets generated

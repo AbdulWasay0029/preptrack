@@ -30,7 +30,7 @@ export default function Landing() {
               Stop grinding randomly. <br />
               <span className="text-primary">Start fixing your weaknesses.</span>
             </h1>
-            <p className="font-body-base text-body-base text-on-surface-variant max-w-xl">
+            <p className="font-body-base text-body-base text-on-surface-variant max-w-xl w-full">
               PrepTrack sends you company-specific DSA questions daily and adapts based on what you keep getting stuck on. Tailored technical interview prep delivered straight to your workflow.
             </p>
             <div className="flex flex-wrap gap-md mt-sm">

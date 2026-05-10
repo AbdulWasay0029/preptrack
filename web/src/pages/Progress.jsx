@@ -27,6 +27,12 @@ export default function Progress() {
     fetchData();
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('telegram_id');
+    localStorage.removeItem('telegram_name');
+    navigate('/login');
+  };
+
   if (loading) return <div className="p-8 text-center text-on-surface-variant font-body-base">Loading...</div>;
   if (!data) return <div className="p-8 text-center text-error font-body-base">Failed to load data</div>;
 
@@ -56,6 +62,7 @@ export default function Progress() {
           </div>
           <div className="flex items-center gap-md">
             <span className="text-on-surface-variant font-body-sm">{telegramName}</span>
+            <button onClick={handleLogout} className="text-on-surface-variant hover:text-error transition-colors font-body-base text-body-base px-md py-sm">Logout</button>
           </div>
         </div>
       </header>

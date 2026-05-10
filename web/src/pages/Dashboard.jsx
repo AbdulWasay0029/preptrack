@@ -30,7 +30,7 @@ export default function Dashboard() {
   const handleUpgrade = () => {
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_dummy',
-      amount: 49900, // ₹499 in paise
+      amount: 19900, // ₹199 in paise
       currency: 'INR',
       name: 'PrepTrack',
       description: 'Upgrade to PrepTrack Pro',
@@ -59,6 +59,12 @@ export default function Dashboard() {
       document.body.removeChild(script);
     };
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('telegram_id');
+    localStorage.removeItem('telegram_name');
+    navigate('/login');
+  };
 
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState('');
@@ -148,6 +154,7 @@ export default function Dashboard() {
           </nav>
           <div className="flex items-center gap-md">
             <span className="text-on-surface-variant font-body-sm">{telegramName}</span>
+            <button onClick={handleLogout} className="text-on-surface-variant hover:text-error transition-colors font-body-base text-body-base px-md py-sm">Logout</button>
           </div>
         </div>
       </header>

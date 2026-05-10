@@ -599,3 +599,10 @@ Fixed critical bugs in scheduler, name display, and web routing:
 - **Routing Fix:** Added `vercel.json` to handle React Router fallback for SPAs, fixing 404 errors on direct navigation to `/login`.
 - **Verified:** `/users/active` endpoint already exists in `users.js`.
 
+### 2026-05-11 — Redesign and Security (Antigravity)
+Completed the redesign of the web platform using the designs provided by the user in `designs.html`:
+- **Dashboard Page (`web/src/pages/Dashboard.jsx`)**: Converted static HTML to JSX, integrated dynamic data for greetings, streak, and daily problem set.
+- **Progress Page (`web/src/pages/Progress.jsx`)**: Converted static HTML to JSX, replaced recharts with custom bar-style activity chart mapping analytics data.
+- **Login Page (`web/src/pages/Login.jsx`)**: Converted static HTML to JSX while preserving Telegram widget logic.
+- **Security**: Added `rzp-key.csv` to `.gitignore` to prevent leaking API keys.
+- **Deployment**: Pushed changes to GitHub, triggering Vercel deployment.

@@ -591,3 +591,11 @@ Both fixes pushed in commit `5c0e5fd`. Render and Vercel should redeploy clean n
 **Verified locally:**
 - `node -e "require('./src/commands/upgrade'); ..."` → all bot modules load OK
 - `npm run build` in `/web` → `✓ built in 7.19s`, all assets generated
+
+### 2026-05-11 — Post-Deploy Fixes (Antigravity)
+Fixed critical bugs in scheduler, name display, and web routing:
+- **Scheduler Fix:** Fixed destructuring bug in `bot/src/utils/scheduler.js` line 19 (`const { questions } = await api.getDailyQuestions(telegramId)`).
+- **Name Bug Fix:** Fixed fallback to `data.user?.name` in `Dashboard.jsx`, explicit column selection in `analytics.js`, and saved name to `localStorage` in `Login.jsx`.
+- **Routing Fix:** Added `vercel.json` to handle React Router fallback for SPAs, fixing 404 errors on direct navigation to `/login`.
+- **Verified:** `/users/active` endpoint already exists in `users.js`.
+

@@ -89,7 +89,7 @@ export default function Login() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant">
+      <footer className="bg-[#0f0f0f] border-t border-[#2a2a2a]">
         <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-container-max mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-lg">
             <span className="text-label-caps font-label-caps text-on-surface">PrepTrack</span>

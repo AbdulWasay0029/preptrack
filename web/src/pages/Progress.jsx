@@ -50,22 +50,7 @@ export default function Progress() {
 
   return (
     <div className="font-body-base text-body-base min-h-screen flex flex-col bg-background text-on-background selection:bg-primary selection:text-on-primary">
-      {/* TopNavBar */}
-      <header className="bg-background dark:bg-background border-b border-outline-variant dark:border-outline-variant docked full-width top-0 sticky z-50">
-        <div className="flex justify-between items-center w-full px-lg max-w-container-max mx-auto h-16">
-          <div className="flex items-center gap-xl">
-            <span className="text-headline-md font-headline-md text-primary dark:text-primary">PrepTrack</span>
-            <nav className="hidden md:flex items-center gap-lg">
-              <a className="text-on-surface-variant hover:text-on-surface transition-colors font-body-base text-body-base" href="/dashboard">Dashboard</a>
-              <a className="text-primary font-bold border-b-2 border-primary pb-1 font-body-base text-body-base" href="/progress">Progress</a>
-            </nav>
-          </div>
-          <div className="flex items-center gap-md">
-            <span className="text-on-surface-variant font-body-sm">{telegramName}</span>
-            <button onClick={handleLogout} className="text-on-surface-variant hover:text-error transition-colors font-body-base text-body-base px-md py-sm">Logout</button>
-          </div>
-        </div>
-      </header>
+
 
       <main className="max-w-container-max mx-auto px-lg py-xl flex-grow w-full">
         {/* Page Header */}

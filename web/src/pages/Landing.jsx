@@ -5,22 +5,7 @@ export default function Landing() {
 
   return (
     <div className="font-body-base text-body-base selection:bg-primary selection:text-on-primary bg-background min-h-screen">
-      {/* TopNavBar */}
-      <header className="bg-background dark:bg-background border-b border-outline-variant dark:border-outline-variant sticky top-0 z-50">
-        <nav className="flex justify-between items-center w-full px-lg max-w-container-max mx-auto h-16">
-          <div className="flex items-center gap-xl">
-            <span className="text-headline-md font-headline-md text-primary dark:text-primary">PrepTrack</span>
-            <div className="hidden md:flex items-center gap-lg">
-              <a className="text-on-surface-variant hover:text-on-surface transition-colors font-body-base text-body-base" href="/dashboard">Dashboard</a>
-              <a className="text-on-surface-variant hover:text-on-surface transition-colors font-body-base text-body-base" href="/progress">Progress</a>
-            </div>
-          </div>
-          <div className="flex items-center gap-md">
-            <a href="/login" className="text-on-surface-variant hover:text-on-surface transition-colors font-body-base text-body-base px-md py-sm">Login</a>
-            <a href={TELEGRAM_BOT_URL} className="bg-primary text-on-primary px-md py-sm rounded-lg font-bold transition-all duration-200 hover:brightness-110">Get Started</a>
-          </div>
-        </nav>
-      </header>
+
 
       <main className="max-w-container-max mx-auto px-lg">
         {/* Hero Section */}

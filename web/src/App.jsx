@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Progress from './pages/Progress';
@@ -6,9 +7,8 @@ import Landing from './pages/Landing';
 
 function AppLayout() {
   const location = useLocation();
-  const isLandingPage = location.pathname === '/';
   const isLoginPage = location.pathname === '/login';
-  const hideNavbar = isLandingPage || isLoginPage;
+  const hideNavbar = isLoginPage;
 
   // Magic link login bypass
   const searchParams = new URLSearchParams(location.search);
@@ -20,6 +20,7 @@ function AppLayout() {
 
   return (
     <div className="min-h-screen bg-background text-white font-sans">
+      {!hideNavbar && <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<Landing />} />

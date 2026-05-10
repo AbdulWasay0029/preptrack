@@ -24,7 +24,13 @@ app.use(cors({
   origin: getOrigin(),
   credentials: true,
 }));
-app.use(express.json());
+app.use(express.json({
+  verify: (req, res, buf) => {
+    if (req.originalUrl.startsWith('/payments/webhook')) {
+      req.rawBody = buf.toString();
+    }
+  }
+}));
 
 // ── Routes ────────────────────────────────────────────────────
 app.use('/users',     usersRouter);

@@ -7,7 +7,7 @@ const { requireInternalAuth } = require('../middleware/auth');
 router.get('/:telegram_id', async (req, res) => {
   try {
     const { rows: userRows } = await db.query(
-      `SELECT u.*, c.slug AS company_slug, c.name AS company_name
+      `SELECT u.id, u.name, u.streak, c.slug AS company_slug, c.name AS company_name
        FROM users u
        LEFT JOIN companies c ON u.target_company_id = c.id
        WHERE u.telegram_id = $1`,

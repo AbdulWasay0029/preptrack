@@ -130,8 +130,11 @@ web/
         └── WeakTopicChart.jsx
 ```
 
-### `/docs/` NOT BUILT YET
-ARCHITECTURE.md, API.md, DATABASE.md, DEPLOYMENT.md need to be written.
+### `/docs/` PARTIALLY BUILT
+- `DEPLOYMENT.md` ✅ Complete (Railway + Vercel step-by-step)
+- `ARCHITECTURE.md` ❌ Not yet — hand off to Claude
+- `API.md` ❌ Not yet — hand off to Claude
+- `DATABASE.md` ❌ Not yet — hand off to Claude
 
 ---
 

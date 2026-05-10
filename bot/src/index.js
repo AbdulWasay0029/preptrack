@@ -31,5 +31,15 @@ bot.launch().then(() => {
   startScheduler(bot);
 });
 
+// Start a dummy HTTP server so Render (Free Web Service) doesn't crash the bot
+const http = require('http');
+const PORT = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('PrepTrack Bot is running!\n');
+}).listen(PORT, () => {
+  console.log(`Dummy web server listening on port ${PORT} to keep Render happy`);
+});
+
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));

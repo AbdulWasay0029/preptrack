@@ -38,12 +38,12 @@ export default function Login() {
   }, [navigate]);
 
   return (
-    <div className="font-body-base text-body-base min-h-screen flex flex-col bg-[#0f0f0f] text-[#dce5d9] selection:bg-primary selection:text-on-primary">
+    <div className="font-body-base text-body-base min-h-screen flex flex-col bg-background text-on-background selection:bg-primary selection:text-on-primary">
       {/* Main Content Canvas */}
       <main className="flex-grow flex items-center justify-center px-gutter">
         <div className="w-full max-w-[420px]">
           {/* Login Card */}
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] p-xl rounded-none shadow-none text-center">
+          <div className="bg-surface-container border border-outline-variant p-xl rounded-none shadow-none text-center">
             {/* Wordmark */}
             <div className="mb-xl">
               <h1 className="font-headline-md text-headline-md text-primary tracking-tight">PrepTrack</h1>
@@ -89,8 +89,8 @@ export default function Login() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#0f0f0f] border-t border-[#2a2a2a]">
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-container-max mx-auto">
+      <footer className="bg-surface-container-lowest border-t border-outline-variant">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-[1200px] mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-lg">
             <span className="text-label-caps font-label-caps text-on-surface">PrepTrack</span>
             <span className="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">Built by Abdul Wasay</span>

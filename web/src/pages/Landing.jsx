@@ -1,21 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import api from '../api/client';
 
 export default function Landing() {
   const TELEGRAM_BOT_URL = "https://t.me/PrepTrackBot?start=web";
+  const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    api.get('/questions/companies')
+      .then(res => setCompanies(res.data))
+      .catch(err => console.error('Failed to fetch companies:', err));
+  }, []);
 
   return (
     <div className="font-body-base text-body-base selection:bg-primary selection:text-on-primary bg-background min-h-screen">
 
 
-      <main className="max-w-container-max mx-auto px-lg">
+      <main className="max-w-[1200px] mx-auto px-lg w-full">
         {/* Hero Section */}
         <section className="py-xl md:py-32 grid md:grid-cols-12 gap-xl items-center">
-          <div className="md:col-span-7 flex flex-col gap-lg">
+          <div className="md:col-span-7 flex flex-col gap-lg w-full">
             <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
               Stop grinding randomly. <br />
               <span className="text-primary">Start fixing your weaknesses.</span>
             </h1>
-            <p className="font-body-base text-body-base text-on-surface-variant max-w-xl w-full">
+            <p className="font-body-base text-body-base text-on-surface-variant max-w-xl">
               PrepTrack sends you company-specific DSA questions daily and adapts based on what you keep getting stuck on. Tailored technical interview prep delivered straight to your workflow.
             </p>
             <div className="flex flex-wrap gap-md mt-sm">
@@ -81,23 +89,21 @@ export default function Landing() {
             <h2 className="font-headline-md text-headline-md text-on-surface mt-base">Company-Specific Tracks</h2>
           </div>
           <div className="flex flex-wrap justify-center gap-md">
-            <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface font-body-base flex items-center gap-sm">
-              Amazon
-            </span>
-            <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface font-body-base flex items-center gap-sm">
-              Microsoft
-            </span>
-            <span className="bg-surface-container border border-primary px-xl py-sm rounded-full text-primary font-bold font-body-base flex items-center gap-sm">
-              Google
-              <span className="text-[10px] bg-primary text-on-primary px-base rounded uppercase font-bold">Pro</span>
-            </span>
-            <span className="bg-surface-container border border-primary px-xl py-sm rounded-full text-primary font-bold font-body-base flex items-center gap-sm">
-              Flipkart
-              <span className="text-[10px] bg-primary text-on-primary px-base rounded uppercase font-bold">Pro</span>
-            </span>
-            <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface-variant font-body-base">Apple</span>
-            <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface-variant font-body-base">Meta</span>
-            <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface-variant font-body-base">Uber</span>
+            {companies.length > 0 ? (
+              companies.map(c => (
+                <span key={c.slug} className={`bg-surface-container border ${c.is_pro_only ? 'border-primary text-primary font-bold' : 'border-outline-variant text-on-surface'} px-xl py-sm rounded-full font-body-base flex items-center gap-sm`}>
+                  {c.name}
+                  {c.is_pro_only && (
+                    <span className="text-[10px] bg-primary text-on-primary px-base rounded uppercase font-bold">Pro</span>
+                  )}
+                </span>
+              ))
+            ) : (
+              <>
+                <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface font-body-base flex items-center gap-sm">Amazon</span>
+                <span className="bg-surface-container border border-outline-variant px-xl py-sm rounded-full text-on-surface font-body-base flex items-center gap-sm">Microsoft</span>
+              </>
+            )}
           </div>
         </section>
 

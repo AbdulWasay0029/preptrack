@@ -42,17 +42,17 @@ module.exports = async (ctx) => {
       );
     }
   } catch (err) {
-    // Handle Pro-gated company error
-    if (err.response && err.response.status === 403) {
+    console.error('/today error:', err.message);
+    if (err.response?.status === 403) {
       await ctx.reply(
         '🔒 Your target company requires a Pro subscription.\n\n' +
         'Upgrade to Pro (₹199/month) to unlock all 8 companies, unlimited daily questions, and full weak-topic analysis.\n\n' +
         'Switch to Amazon or Microsoft for free access, or visit the web dashboard to upgrade.'
       );
-      return;
+    } else if (err.response?.status === 400 && err.response?.data?.error === 'User has no target company set') {
+      await ctx.reply('⚠️ Please set your target company first using /settings or /start.');
+    } else {
+      await ctx.reply('Something went wrong fetching your questions. Please try /today again.');
     }
-
-    console.error('/today error:', err.message);
-    await ctx.reply('Something went wrong fetching your questions. Please try /today again.');
   }
 };

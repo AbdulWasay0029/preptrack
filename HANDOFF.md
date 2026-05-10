@@ -488,10 +488,10 @@ VITE_API_URL=https://your-backend.railway.app
 4. ~~Build `bot/src/commands/today.js` (core daily loop)~~ ✅ Done (2026-05-10)
 5. ~~Build `bot/src/commands/progress.js`~~ ✅ Done (2026-05-10)
 6. ~~Build `bot/src/commands/settings.js`~~ ✅ Done (2026-05-10)
-7. **Test the bot end-to-end locally** ← YOU ARE HERE
+7. ~~Test the bot end-to-end locally~~ ✅ Done (2026-05-10)
 8. ~~Build the React web dashboard~~ ✅ Done (2026-05-10)
 9. ~~Write deployment docs~~ ✅ Done (2026-05-10)
-10. Deploy to Railway + Vercel
+10. Deploy to Railway + Vercel ← NEXT STEP FOR CLAUDE
 
 ---
 
@@ -554,10 +554,11 @@ Everything else (dashboard, payments, multiple companies) is secondary. The bot 
 - Hardened `.gitignore` with explicit `.env.*` patterns + `!.env.example` exception
 - Fixed 403 (INTERNAL_API_SECRET mismatch between bot and backend)
 - Fixed 500 (DATABASE_URL pointing to nonexistent local Postgres → now points to Neon)
+- Fixed undefined questions error in `/today` response parsing
+- Added missing company guardrails and chunked UI buttons for improved layout
 
-**What's left:**
-- [ ] End-to-end bot test (restart backend + bot, try /start → /today → /progress)
+**What's left for Claude:**
+- [ ] Test Telegram Login Widget on the web dashboard locally (`cd web && npm run dev`)
 - [ ] Deploy to Railway (backend + bot) + Vercel (web)
-- [ ] Write ARCHITECTURE.md, API.md, DATABASE.md (hand off to Claude)
-- [ ] Test Telegram Login Widget on web dashboard
-- [ ] Set up Razorpay when ready for payments
+- [ ] Write missing docs (`docs/ARCHITECTURE.md`, `docs/API.md`, `docs/DATABASE.md`)
+- [ ] Set up Razorpay webhooks and full payment flow when ready for monetization

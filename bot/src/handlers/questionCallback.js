@@ -84,9 +84,14 @@ module.exports = async (ctx) => {
         note = '\n\n🔒 Free tier: max 3/day. Upgrade to Pro for up to 10.';
       }
 
+      const chunkedButtons = [];
+      for (let i = 0; i < buttons.length; i += 5) {
+        chunkedButtons.push(buttons.slice(i, i + 5));
+      }
+
       await ctx.editMessageText(
         `📝 How many questions per day?${note}`,
-        Markup.inlineKeyboard([buttons])
+        Markup.inlineKeyboard(chunkedButtons)
       );
     }
 

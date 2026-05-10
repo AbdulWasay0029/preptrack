@@ -92,7 +92,7 @@ export default function Dashboard() {
   if (loading) return <div className="p-8 text-center text-gray-400">Loading...</div>;
   if (!data) return <div className="p-8 text-center text-red-400">Failed to load data</div>;
 
-  const telegramName = localStorage.getItem('telegram_name') || 'User';
+  const telegramName = localStorage.getItem('telegram_name') || data.user?.name || 'User';
 
   if (!data.user?.company) {
     return (

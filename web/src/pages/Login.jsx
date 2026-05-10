@@ -15,6 +15,8 @@ export default function Login() {
       try {
         await api.post('/users/auth/telegram', user);
         localStorage.setItem('telegram_id', user.id);
+        const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ');
+        if (fullName) localStorage.setItem('telegram_name', fullName);
         navigate('/dashboard');
       } catch (error) {
         console.error('Login failed', error);

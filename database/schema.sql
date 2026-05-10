@@ -128,3 +128,14 @@ CREATE INDEX IF NOT EXISTS idx_company_questions_company
 
 CREATE INDEX IF NOT EXISTS idx_questions_topic
   ON questions(topic_id);
+
+-- ============================================================
+-- SUGGESTIONS
+-- ============================================================
+CREATE TABLE IF NOT EXISTS suggestions (
+  id          SERIAL PRIMARY KEY,
+  user_id     INT NOT NULL REFERENCES users(id),
+  url         TEXT NOT NULL,
+  status      VARCHAR(20) NOT NULL DEFAULT 'pending',
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

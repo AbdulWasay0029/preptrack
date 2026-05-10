@@ -99,4 +99,53 @@ router.post('/verify', async (req, res) => {
   }
 });
 
+// POST /payments/webhook — Razorpay webhook endpoint
+router.post('/webhook', express.json({ type: 'application/json' }), async (req, res) => {
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  
+  if (!secret) {
+    console.warn('RAZORPAY_WEBHOOK_SECRET not set, ignoring webhook');
+    return res.status(500).json({ error: 'Webhook secret not configured' });
+  }
+
+  const shasum = crypto.createHmac('sha256', secret);
+  shasum.update(JSON.stringify(req.body));
+  const digest = shasum.digest('hex');
+
+  if (digest !== req.headers['x-razorpay-signature']) {
+    return res.status(400).json({ error: 'Invalid signature' });
+  }
+
+  const event = req.body.event;
+
+  try {
+    if (event === 'payment.captured' || event === 'order.paid') {
+      const orderId = req.body.payload.payment.entity.order_id;
+      const paymentId = req.body.payload.payment.entity.id;
+
+      // Update payment record and get user_id
+      const { rows } = await db.query(
+        `UPDATE payments
+         SET razorpay_payment_id = $1, status = 'completed'
+         WHERE razorpay_order_id = $2
+         RETURNING user_id`,
+        [paymentId, orderId]
+      );
+
+      if (rows.length > 0) {
+        // Upgrade user to Pro
+        await db.query(
+          'UPDATE users SET is_pro = TRUE WHERE id = $1',
+          [rows[0].user_id]
+        );
+      }
+    }
+
+    res.json({ status: 'ok' });
+  } catch (err) {
+    console.error('Webhook error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

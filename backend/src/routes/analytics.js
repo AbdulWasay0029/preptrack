@@ -14,7 +14,7 @@ router.get('/:telegram_id', async (req, res) => {
       [req.params.telegram_id]
     );
     if (!userRows.length) return res.status(404).json({ error: 'User not found' });
-    const { id: userId, streak, company_name } = userRows[0];
+    const { id: userId, name, streak, company_name } = userRows[0];
 
     // Overall stats
     const { rows: overall } = await db.query(
@@ -86,7 +86,7 @@ router.get('/:telegram_id', async (req, res) => {
     );
 
     res.json({
-      user: { streak, company: company_name },
+      user: { name, streak, company: company_name },
       overall: overall[0],
       topicBreakdown,
       dailyActivity,

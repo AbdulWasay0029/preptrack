@@ -560,7 +560,17 @@ Everything else (dashboard, payments, multiple companies) is secondary. The bot 
 - Added VITE_TELEGRAM_BOT_NAME environment variable to avoid Telegram widget mismatch
 
 **What's left for Claude:**
-- [ ] Test Telegram Login Widget on the web dashboard locally (`cd web && npm run dev`)
-- [ ] Deploy to Render (backend + bot) + Vercel (web)
-- [ ] Write missing docs (`docs/ARCHITECTURE.md`, `docs/API.md`, `docs/DATABASE.md`)
-- [ ] Set up Razorpay webhooks and full payment flow when ready for monetization
+- [x] Test Telegram Login Widget on the web dashboard locally (`cd web && npm run dev`)
+- [x] Deploy to Render (backend + bot) + Vercel (web)
+- [x] Write missing docs (`docs/ARCHITECTURE.md`, `docs/API.md`, `docs/DATABASE.md`)
+- [x] Set up Razorpay webhooks and full payment flow when ready for monetization
+
+### 2026-05-10 — Phase 2 Complete (Antigravity)
+- **Task 1:** Fixed Daily Scheduler
+- **Task 2:** Fixed Name Bug in Web Dashboard
+- **Task 3:** Expanded Question Dataset to 300+ and seeded to Neon DB
+- **Task 4:** Built Landing Page and updated web routes
+- **Task 5:** Razorpay Integration added to webhook and dashboard / bot
+- **Task 6:** Web Onboarding Flow forced company selection
+- **Task 7:** LinkedIn Share Card for Streaks added
+- **Task 8:** Community Question Submission added via `/suggest` and DB

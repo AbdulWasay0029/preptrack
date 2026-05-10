@@ -24,6 +24,20 @@ router.post('/', requireInternalAuth, async (req, res) => {
   }
 });
 
+// GET /users/active — fetch all active user IDs for the scheduler
+router.get('/active', requireInternalAuth, async (req, res) => {
+  try {
+    // If last_active_date is null, they just started, so include them too
+    const { rows } = await db.query(
+      `SELECT telegram_id FROM users WHERE last_active_date > NOW() - INTERVAL '7 days' OR last_active_date IS NULL`
+    );
+    res.json(rows.map(row => row.telegram_id));
+  } catch (err) {
+    console.error('GET /users/active error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // GET /users/:telegram_id — fetch user by telegram ID
 router.get('/:telegram_id', requireInternalAuth, async (req, res) => {
   try {
@@ -43,7 +57,7 @@ router.get('/:telegram_id', requireInternalAuth, async (req, res) => {
 });
 
 // PATCH /users/:telegram_id — update company, questions_per_day
-router.patch('/:telegram_id', requireInternalAuth, async (req, res) => {
+router.patch('/:telegram_id', async (req, res) => {
   const { target_company_slug, questions_per_day } = req.body;
   const updates = [];
   const values = [];
@@ -102,6 +116,26 @@ router.post('/auth/telegram', async (req, res) => {
     res.json({ user: rows[0] });
   } catch (err) {
     console.error('POST /users/auth/telegram error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// POST /users/suggest — submit a question suggestion
+router.post('/suggest', requireInternalAuth, async (req, res) => {
+  const { telegram_id, url } = req.body;
+  if (!telegram_id || !url) return res.status(400).json({ error: 'telegram_id and url required' });
+
+  try {
+    const { rows: userRows } = await db.query('SELECT id FROM users WHERE telegram_id = $1', [telegram_id]);
+    if (!userRows.length) return res.status(404).json({ error: 'User not found' });
+
+    await db.query(
+      'INSERT INTO suggestions (user_id, url) VALUES ($1, $2)',
+      [userRows[0].id, url]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('POST /users/suggest error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });

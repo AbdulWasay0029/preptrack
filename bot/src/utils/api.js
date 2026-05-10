@@ -49,6 +49,16 @@ const api = {
     const { data } = await client.get(`/progress/${telegramId}/summary`);
     return data;
   },
+
+  async getActiveUsers() {
+    const { data } = await client.get('/users/active');
+    return data;
+  },
+
+  async submitSuggestion(telegramId, url) {
+    const { data } = await client.post('/users/suggest', { telegram_id: telegramId, url });
+    return data;
+  }
 };
 
-module.exports = api;
+module.exports = { ...api, client };

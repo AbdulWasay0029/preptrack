@@ -16,7 +16,7 @@ async function deliverDailyQuestions(bot) {
     
     for (const telegramId of telegramIds) {
       try {
-        const questions = await api.getDailyQuestions(telegramId);
+        const { questions } = await api.getDailyQuestions(telegramId);
         
         if (questions && questions.length > 0) {
           await bot.telegram.sendMessage(

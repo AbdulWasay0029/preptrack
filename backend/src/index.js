@@ -10,11 +10,18 @@ const paymentsRouter  = require('./routes/payments');
 
 const app = express();
 
-// ── Middleware ────────────────────────────────────────────────
+// Helper to ensure WEB_URL is a valid CORS origin
+const getOrigin = () => {
+  if (process.env.NODE_ENV !== 'production') return 'http://localhost:5173';
+  let url = process.env.WEB_URL || '*';
+  if (url !== '*' && !url.startsWith('http')) {
+    url = 'https://' + url;
+  }
+  return url.replace(/\/$/, ''); // Remove trailing slash if present
+};
+
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.WEB_URL         // set this to your Vercel URL in prod
-    : 'http://localhost:5173',    // Vite dev server
+  origin: getOrigin(),
   credentials: true,
 }));
 app.use(express.json());

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Target, TrendingUp, BellRing, CheckCircle, Zap } from 'lucide-react';
 
 export default function Landing() {
-  const TELEGRAM_BOT_URL = "https://t.me/your_bot_username?start=web";
+  const TELEGRAM_BOT_URL = "https://t.me/PrepTrackBot?start=web";
 
   return (
     <div className="min-h-screen bg-gray-900 text-white selection:bg-indigo-500/30">

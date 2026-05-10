@@ -8,6 +8,7 @@ const todayCommand = require('./commands/today');
 const progressCommand = require('./commands/progress');
 const settingsCommand = require('./commands/settings');
 const webCommand = require('./commands/web');
+const helpCommand = require('./commands/help');
 const questionCallback = require('./handlers/questionCallback');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -18,13 +19,14 @@ bot.command('today', todayCommand);
 bot.command('progress', progressCommand);
 bot.command('settings', settingsCommand);
 bot.command('web', webCommand);
+bot.command('help', helpCommand);
 
 // Register inline keyboard callbacks
 bot.on('callback_query', questionCallback);
 
 // Handle unknown messages
 bot.on('message', (ctx) => {
-  ctx.reply('Use /today to get your questions, /progress to see your stats, /settings to update preferences, or /web for the dashboard link.');
+  ctx.reply('I didn\'t understand that. Type /help to see all available commands!');
 });
 
 // Start

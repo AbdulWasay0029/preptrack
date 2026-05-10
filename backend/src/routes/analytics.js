@@ -4,7 +4,7 @@ const db = require('../db');
 const { requireInternalAuth } = require('../middleware/auth');
 
 // GET /analytics/:telegram_id — full analytics for web dashboard
-router.get('/:telegram_id', requireInternalAuth, async (req, res) => {
+router.get('/:telegram_id', async (req, res) => {
   try {
     const { rows: userRows } = await db.query(
       `SELECT u.*, c.slug AS company_slug, c.name AS company_name
@@ -75,12 +75,23 @@ router.get('/:telegram_id', requireInternalAuth, async (req, res) => {
       [userId]
     );
 
+    // Fetch today's questions
+    const { rows: todayQuestions } = await db.query(
+      `SELECT q.*, t.name AS topic_name
+       FROM daily_deliveries dd
+       JOIN questions q ON dd.question_id = q.id
+       JOIN topics t ON q.topic_id = t.id
+       WHERE dd.user_id = $1 AND dd.delivered_on = CURRENT_DATE`,
+      [userId]
+    );
+
     res.json({
       user: { streak, company: company_name },
       overall: overall[0],
       topicBreakdown,
       dailyActivity,
       difficultyBreakdown,
+      todayQuestions,
     });
   } catch (err) {
     console.error('GET /analytics error:', err);

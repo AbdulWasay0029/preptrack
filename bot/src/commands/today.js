@@ -11,7 +11,8 @@ module.exports = async (ctx) => {
   const telegramId = ctx.from.id;
 
   try {
-    const questions = await api.getDailyQuestions(telegramId);
+    const response = await api.getDailyQuestions(telegramId);
+    const questions = response.questions || response;
 
     if (!questions || questions.length === 0) {
       await ctx.reply(

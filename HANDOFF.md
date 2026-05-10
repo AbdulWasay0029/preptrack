@@ -47,7 +47,10 @@ Complete PostgreSQL schema with these tables:
 - `payments` — razorpay_order_id, razorpay_payment_id, amount_paise, status
 
 ### `/database/seed/questions.sql` ✅
-75 questions seeded across 5 companies with frequency weights.
+77 questions seeded across 8 companies with frequency weights.
+
+**Database hosting:** Neon PostgreSQL (free tier, ap-southeast-1 Singapore region).
+Seed script: `database/seed-neon.js` — run from project root: `node database/seed-neon.js`
 Topics covered per company: arrays, strings, trees, graphs, DP, stacks, binary search, greedy, backtracking, heap, design.
 
 ### `/backend/` ✅ COMPLETE
@@ -479,15 +482,15 @@ VITE_API_URL=https://your-backend.railway.app
 
 ## What To Do First (Priority Order)
 
-1. Build `bot/src/index.js` (entry point)
-2. Build `bot/src/commands/start.js` (onboarding — most critical path)
-3. Build `bot/src/handlers/questionCallback.js` (handles all button presses)
-4. Build `bot/src/commands/today.js` (core daily loop)
-5. Build `bot/src/commands/progress.js`
-6. Build `bot/src/commands/settings.js`
-7. Test the bot end-to-end locally
-8. Build the React web dashboard
-9. Write deployment docs
+1. ~~Build `bot/src/index.js` (entry point)~~ ✅ Done (2026-05-10)
+2. ~~Build `bot/src/commands/start.js` (onboarding)~~ ✅ Done (2026-05-10)
+3. ~~Build `bot/src/handlers/questionCallback.js` (all button presses)~~ ✅ Done (2026-05-10)
+4. ~~Build `bot/src/commands/today.js` (core daily loop)~~ ✅ Done (2026-05-10)
+5. ~~Build `bot/src/commands/progress.js`~~ ✅ Done (2026-05-10)
+6. ~~Build `bot/src/commands/settings.js`~~ ✅ Done (2026-05-10)
+7. **Test the bot end-to-end locally** ← YOU ARE HERE
+8. ~~Build the React web dashboard~~ ✅ Done (2026-05-10)
+9. ~~Write deployment docs~~ ✅ Done (2026-05-10)
 10. Deploy to Railway + Vercel
 
 ---
@@ -519,3 +522,42 @@ Don't over-engineer. The entire value prop is:
 > "I know which topics you keep getting stuck on, and I make sure you practice them more."
 
 Everything else (dashboard, payments, multiple companies) is secondary. The bot loop — question → mark status → adaptive selection — is the product. Build that first, make it work reliably, then layer on everything else.
+
+---
+
+## Session Log
+
+### 2026-05-10 — Antigravity (Claude Opus 4.6) — Full Build Session
+
+**What was built:**
+- `bot/src/index.js` — entry point, wires commands + callbacks + scheduler
+- `bot/src/commands/start.js` — onboarding with company picker (free vs Pro 🔒)
+- `bot/src/commands/today.js` — daily questions with ✅😕⏭️ inline keyboard, 403 Pro handling
+- `bot/src/commands/progress.js` — 30-day stats, streak, weak topic scores
+- `bot/src/commands/settings.js` — current settings, change company / questions-per-day
+- `bot/src/handlers/questionCallback.js` — central callback router (set_company, q_status, settings, set_qpd)
+- `web/` — full React dashboard (Vite + TailwindCSS + recharts + react-router-dom)
+  - Login.jsx (Telegram Widget), Dashboard.jsx, Progress.jsx
+  - Components: Navbar, StreakCard, DifficultyBadge, WeakTopicChart
+  - Dark theme: bg #0f0f0f, cards #1a1a1a, accent #22c55e
+- `docs/DEPLOYMENT.md` — Railway + Vercel step-by-step
+- `database/seed-neon.js` — script to seed Neon PostgreSQL from project root
+
+**Infrastructure set up:**
+- Neon PostgreSQL (free tier, Singapore ap-southeast-1)
+- Database seeded: 8 companies, 13 topics, 77 questions
+- `.env` files configured with matching INTERNAL_API_SECRET
+- Notion Engineering page updated with build log
+
+**Issues fixed:**
+- Leaked bot token in HANDOFF.md → replaced with placeholder, token reset on BotFather
+- Hardened `.gitignore` with explicit `.env.*` patterns + `!.env.example` exception
+- Fixed 403 (INTERNAL_API_SECRET mismatch between bot and backend)
+- Fixed 500 (DATABASE_URL pointing to nonexistent local Postgres → now points to Neon)
+
+**What's left:**
+- [ ] End-to-end bot test (restart backend + bot, try /start → /today → /progress)
+- [ ] Deploy to Railway (backend + bot) + Vercel (web)
+- [ ] Write ARCHITECTURE.md, API.md, DATABASE.md (hand off to Claude)
+- [ ] Test Telegram Login Widget on web dashboard
+- [ ] Set up Razorpay when ready for payments

@@ -98,6 +98,7 @@ DAILY_CRON=30 2 * * *
 
 ```env
 VITE_API_URL=<Render backend URL from step 2>
+VITE_TELEGRAM_BOT_NAME=<Your exact bot username without the @>
 ```
 
 5. Click **Deploy**
@@ -144,6 +145,7 @@ VITE_API_URL=<Render backend URL from step 2>
 | `BACKEND_URL` | Bot | Your Render backend URL |
 | `DAILY_CRON` | Bot | Cron expression (UTC), default `30 2 * * *` |
 | `VITE_API_URL` | Web | Your Render backend URL |
+| `VITE_TELEGRAM_BOT_NAME` | Web | Exact Bot username without @ (e.g., `PrepTrackBot`) |
 | `RAZORPAY_KEY_ID` | Backend | From Razorpay dashboard (when ready) |
 | `RAZORPAY_KEY_SECRET` | Backend | From Razorpay dashboard (when ready) |
 

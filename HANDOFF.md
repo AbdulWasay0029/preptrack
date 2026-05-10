@@ -437,6 +437,7 @@ DAILY_CRON=30 2 * * *
 ### `web/.env`
 ```
 VITE_API_URL=https://your-backend.onrender.com
+VITE_TELEGRAM_BOT_NAME=PrepTrackBot
 ```
 
 ---
@@ -555,6 +556,8 @@ Everything else (dashboard, payments, multiple companies) is secondary. The bot 
 - Fixed 500 (DATABASE_URL pointing to nonexistent local Postgres → now points to Neon)
 - Fixed undefined questions error in `/today` response parsing
 - Added missing company guardrails and chunked UI buttons for improved layout
+- Added a dummy HTTP server so bot can run on Render free Web Service tier
+- Added VITE_TELEGRAM_BOT_NAME environment variable to avoid Telegram widget mismatch
 
 **What's left for Claude:**
 - [ ] Test Telegram Login Widget on the web dashboard locally (`cd web && npm run dev`)

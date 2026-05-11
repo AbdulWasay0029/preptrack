@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface-container-lowest": "#091009",
+                  "surface-container-low": "#161d16",
+                  "surface-container": "#1a211a",
+                  "on-primary-fixed-variant": "#005322",
+                  "outline": "#869585",
+                  "surface-bright": "#343b33",
+                  "tertiary-fixed-dim": "#feb784",
+                  "primary-container": "#4be277",
+                  "surface-container-high": "#252c24",
+                  "error": "#ffb4ab",
+                  "secondary-container": "#3d4a3d",
+                  "on-tertiary-fixed-variant": "#6b3b12",
+                  "inverse-primary": "#006e2f",
+                  "on-secondary": "#273327",
+                  "on-background": "#dde5d9",
+                  "on-primary-fixed": "#002109",
+                  "surface": "#0e150e",
+                  "on-error": "#690005",
+                  "surface-container-highest": "#2f372e",
+                  "surface-tint": "#4ae176",
+                  "primary": "#6fff92",
+                  "on-error-container": "#ffdad6",
+                  "on-secondary-fixed-variant": "#3d4a3d",
+                  "inverse-surface": "#dde5d9",
+                  "primary-fixed": "#6aff90",
+                  "on-surface-variant": "#bccbb9",
+                  "outline-variant": "#3d4a3d",
+                  "tertiary": "#ffddc7",
+                  "secondary-fixed-dim": "#bccbb9",
+                  "on-secondary-fixed": "#121e14",
+                  "on-primary": "#003915",
+                  "secondary-fixed": "#d8e7d5",
+                  "error-container": "#93000a",
+                  "background": "#0e150e",
+                  "on-secondary-container": "#abb9a8",
+                  "tertiary-container": "#ffb885",
+                  "on-surface": "#dde5d9",
+                  "primary-fixed-dim": "#4ae176",
+                  "tertiary-fixed": "#ffdcc5",
+                  "on-tertiary": "#4f2500",
+                  "surface-dim": "#0e150e",
+                  "surface-variant": "#2f372e",
+                  "secondary": "#bccbb9",
+                  "on-primary-container": "#006129",
+                  "on-tertiary-fixed": "#301400",
+                  "on-tertiary-container": "#79471d",
+                  "inverse-on-surface": "#2b322a"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "unit_lg": "24px",
+                  "unit_xxl": "48px",
+                  "base": "16px",
+                  "unit_sm": "8px",
+                  "page_padding": "24px",
+                  "unit_xs": "4px",
+                  "unit_xl": "32px",
+                  "unit_md": "16px"
+          },
+          "fontFamily": {
+                  "display": ["Inter"],
+                  "label-bold": ["Inter"],
+                  "label-md": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "headline-md": ["Inter"],
+                  "headline-sm": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "body-md": ["Inter"],
+                  "headline-lg": ["Inter"]
+          },
+          "fontSize": {
+                  "display": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                  "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                  "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                  "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                  "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+      background-color: #0e150e;
+      color: #dde5d9;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1a221a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #3d4a3d;
+      border-radius: 2px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md antialiased pb-20 md:pb-0">
+<!-- Top Navigation Shell (Hidden on Mobile) -->
+<header class="fixed top-0 w-full z-50 border-b border-outline-variant bg-surface-container-lowest hidden md:flex justify-between items-center h-20 px-page_padding max-w-7xl mx-auto left-1/2 -translate-x-1/2">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">PrepTrack</span>
+</div>
+<nav class="flex gap-unit_xl">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Curriculum</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Mock</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Progress</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container px-unit_md py-unit_sm rounded-lg font-bold active:scale-95 transition-transform">Upgrade</button>
+</header>
+<!-- Mobile Header -->
+<header class="sticky top-0 w-full z-40 border-b border-outline-variant bg-surface md:hidden flex justify-between items-center h-14 px-page_padding">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Interview Prep</span>
+</div>
+<span class="material-symbols-outlined text-on-surface" data-icon="timer">timer</span>
+</header>
+<main class="max-w-7xl mx-auto px-page_padding pt-unit_xl md:pt-32 pb-unit_xxl">
+<!-- Title & Verdict Section -->
+<div class="mb-unit_xl flex flex-col md:flex-row md:items-end md:justify-between gap-unit_md">
+<div>
+<h1 class="text-display font-display text-on-surface mb-unit_xs">Interview Complete</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">System Design: Distributed Rate Limiter</p>
+</div>
+<!-- Verdict Card -->
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-xl flex items-center gap-unit_md min-w-[280px]">
+<div class="bg-primary-container/20 p-unit_sm rounded-full">
+<span class="material-symbols-outlined text-primary-container" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest">Final Verdict</p>
+<p class="text-headline-md font-headline-md text-primary-container">Strong Hire</p>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-unit_lg">
+<!-- Left Column: Metrics and Feedback -->
+<div class="lg:col-span-7 space-y-unit_lg">
+<!-- 2x2 Metric Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-unit_md">
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-lg">
+<div class="flex justify-between items-center mb-unit_sm">
+<span class="text-body-md font-label-bold text-on-surface">Approach Correctness</span>
+<span class="text-primary text-label-bold">92%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 92%"></div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-lg">
+<div class="flex justify-between items-center mb-unit_sm">
+<span class="text-body-md font-label-bold text-on-surface">Communication Clarity</span>
+<span class="text-primary text-label-bold">88%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 88%"></div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-lg">
+<div class="flex justify-between items-center mb-unit_sm">
+<span class="text-body-md font-label-bold text-on-surface">Complexity Awareness</span>
+<span class="text-primary text-label-bold">75%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 75%"></div>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-lg">
+<div class="flex justify-between items-center mb-unit_sm">
+<span class="text-body-md font-label-bold text-on-surface">Edge Case Handling</span>
+<span class="text-primary text-label-bold">82%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 82%"></div>
+</div>
+</div>
+</div>
+<!-- Detailed Feedback Card -->
+<div class="bg-surface-container border border-outline-variant p-unit_lg rounded-xl">
+<div class="flex items-center gap-unit_sm mb-unit_md">
+<span class="material-symbols-outlined text-primary" data-icon="psychology">psychology</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface">AI Analysis</h2>
+</div>
+<div class="space-y-unit_md text-body-md text-on-surface-variant leading-relaxed">
+<p>Your solution demonstrated a deep understanding of token bucket algorithms and their application in distributed environments. You correctly identified the race condition between Redis read-and-write operations and proposed an elegant Lua scripting solution to ensure atomicity. While your technical depth was impressive, you could further improve by explicitly discussing the trade-offs between sliding window logs and fixed window counters for smaller user bases. Overall, your ability to handle follow-up questions regarding regional latency showed professional-level preparedness and systems thinking.</p>
+</div>
+</div>
+<!-- Action Buttons (Desktop Inline) -->
+<div class="hidden md:flex items-center gap-unit_md pt-unit_md">
+<button class="bg-primary-container text-on-primary-container px-unit_xl py-unit_md rounded-lg font-bold text-body-md flex items-center gap-unit_sm hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+            Practice Again
+          </button>
+<button class="bg-transparent border border-outline-variant text-on-surface px-unit_xl py-unit_md rounded-lg font-bold text-body-md flex items-center gap-unit_sm hover:bg-surface-container-high active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+            Back to Dashboard
+          </button>
+</div>
+</div>
+<!-- Right Column: Transcript & Visualization -->
+<div class="lg:col-span-5 space-y-unit_lg">
+<!-- Code/Transcript Box (Bento Style) -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden flex flex-col h-full max-h-[600px]">
+<div class="p-unit_md border-b border-outline-variant flex justify-between items-center bg-surface-container-high">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="description">description</span>
+<span class="text-label-bold font-label-bold uppercase text-on-surface-variant">Interview Transcript</span>
+</div>
+<button class="text-primary hover:underline text-label-md font-label-md">Download .txt</button>
+</div>
+<div class="p-unit_md overflow-y-auto custom-scrollbar flex-grow space-y-unit_lg">
+<div class="space-y-unit_xs">
+<span class="text-label-md font-label-md text-primary uppercase">Interviewer [02:14]</span>
+<p class="text-body-sm text-on-surface-variant italic">"How would you handle a sudden burst of traffic that exceeds the Redis instance's capacity?"</p>
+</div>
+<div class="space-y-unit_xs pl-unit_md border-l border-primary/30">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase">You [02:45]</span>
+<p class="text-body-sm text-on-background">"I would implement a tiered fallback mechanism. Primary throttling would happen at the Redis layer using a Lua script to maintain atomicity. If Redis becomes a bottleneck or goes down, the local application nodes would fall back to a local in-memory leaky bucket algorithm as a safety valve, though this loses global state accuracy in favor of system availability..."</p>
+</div>
+<div class="space-y-unit_xs">
+<span class="text-label-md font-label-md text-primary uppercase">Interviewer [05:12]</span>
+<p class="text-body-sm text-on-surface-variant italic">"Interesting. Let's talk about the data structure you'd use for the sliding window log."</p>
+</div>
+<div class="space-y-unit_xs pl-unit_md border-l border-primary/30">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase">You [05:30]</span>
+<p class="text-body-sm text-on-background">"In Redis, I'd leverage a Sorted Set (ZSET). Each entry would have a score representing the timestamp. This allows for efficient removal of expired timestamps using ZREMRANGEBYSCORE and counting current entries with ZCARD..."</p>
+</div>
+</div>
+<!-- Collapsible Trigger (Mock) -->
+<div class="p-unit_sm text-center border-t border-outline-variant bg-surface-container-low">
+<button class="text-on-surface-variant text-label-md flex items-center justify-center w-full gap-unit_xs py-unit_xs">
+<span class="material-symbols-outlined text-sm" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+              Expand Full Transcript
+            </button>
+</div>
+</div>
+<!-- Decorative Progress Visual -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-unit_md relative overflow-hidden group">
+<div class="flex items-center justify-between mb-unit_md">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Skill Growth</h3>
+<span class="bg-primary/10 text-primary px-unit_sm py-1 rounded-full text-label-md font-label-bold">+120 XP</span>
+</div>
+<div class="flex items-end gap-1 h-32 relative z-10">
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/30 h-[45%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/60 h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/80 h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-[100%] rounded-t-sm border-t-2 border-white/20"></div>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between p-unit_md opacity-10 pointer-events-none">
+<div class="border-t border-on-surface w-full"></div>
+<div class="border-t border-on-surface w-full"></div>
+<div class="border-t border-on-surface w-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile Action Buttons (Fixed Bottom or End of Page) -->
+<div class="md:hidden flex flex-col gap-unit_md mt-unit_xl">
+<button class="bg-primary-container text-on-primary-container w-full py-unit_md rounded-lg font-bold text-body-md flex items-center justify-center gap-unit_sm active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+        Practice Again
+      </button>
+<button class="bg-transparent border border-outline-variant text-on-surface w-full py-unit_md rounded-lg font-bold text-body-md flex items-center justify-center gap-unit_sm active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        Back to Dashboard
+      </button>
+</div>
+</main>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<footer class="fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface md:hidden flex justify-around items-center h-16 px-page_padding">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Curriculum</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="video_call">video_call</span>
+<span class="text-label-md font-label-md">Mock</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="query_stats" style="font-variation-settings: 'FILL' 1;">query_stats</span>
+<span class="text-label-md font-label-md">Progress</span>
+</div>
+</footer>
+</body></html>

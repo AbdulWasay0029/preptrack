@@ -179,6 +179,15 @@ export default function Dashboard() {
               <p className="text-on-surface-variant font-body-base text-body-base mb-lg">
                 Keep practicing consistently. You have {data.todayQuestions?.length || 0} questions assigned for today to improve your patterns.
               </p>
+              <div className="mb-lg">
+                <button 
+                  onClick={() => navigate('/diagnostic')}
+                  className="bg-primary text-on-primary font-bold px-6 py-3 rounded-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
+                >
+                  <span className="material-symbols-outlined">quiz</span>
+                  Start Diagnostic Assessment
+                </button>
+              </div>
               <div className="flex flex-wrap gap-md">
                 <div className="bg-surface-container border border-outline-variant p-sm flex items-center gap-sm rounded-lg">
                   <span className="material-symbols-outlined text-on-surface-variant">history</span>

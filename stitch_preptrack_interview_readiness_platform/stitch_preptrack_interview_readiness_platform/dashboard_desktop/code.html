@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PrepTrack Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0e150e;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#091009",
+                      "surface-container-low": "#161d16",
+                      "surface-container": "#1a211a",
+                      "on-primary-fixed-variant": "#005322",
+                      "outline": "#869585",
+                      "surface-bright": "#343b33",
+                      "tertiary-fixed-dim": "#feb784",
+                      "primary-container": "#4be277",
+                      "surface-container-high": "#252c24",
+                      "error": "#ffb4ab",
+                      "secondary-container": "#3d4a3d",
+                      "on-tertiary-fixed-variant": "#6b3b12",
+                      "inverse-primary": "#006e2f",
+                      "on-secondary": "#273327",
+                      "on-background": "#dde5d9",
+                      "on-primary-fixed": "#002109",
+                      "surface": "#0e150e",
+                      "on-error": "#690005",
+                      "surface-container-highest": "#2f372e",
+                      "surface-tint": "#4ae176",
+                      "primary": "#6fff92",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#3d4a3d",
+                      "inverse-surface": "#dde5d9",
+                      "primary-fixed": "#6aff90",
+                      "on-surface-variant": "#bccbb9",
+                      "outline-variant": "#3d4a3d",
+                      "tertiary": "#ffddc7",
+                      "secondary-fixed-dim": "#bccbb9",
+                      "on-secondary-fixed": "#121e14",
+                      "on-primary": "#003915",
+                      "secondary-fixed": "#d8e7d5",
+                      "error-container": "#93000a",
+                      "background": "#0e150e",
+                      "on-secondary-container": "#abb9a8",
+                      "tertiary-container": "#ffb885",
+                      "on-surface": "#dde5d9",
+                      "primary-fixed-dim": "#4ae176",
+                      "tertiary-fixed": "#ffdcc5",
+                      "on-tertiary": "#4f2500",
+                      "surface-dim": "#0e150e",
+                      "surface-variant": "#2f372e",
+                      "secondary": "#bccbb9",
+                      "on-primary-container": "#006129",
+                      "on-tertiary-fixed": "#301400",
+                      "on-tertiary-container": "#79471d",
+                      "inverse-on-surface": "#2b322a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit_lg": "24px",
+                      "unit_xxl": "48px",
+                      "base": "16px",
+                      "unit_sm": "8px",
+                      "page_padding": "24px",
+                      "unit_xs": "4px",
+                      "unit_xl": "32px",
+                      "unit_md": "16px"
+              },
+              "fontFamily": {
+                      "display": ["Inter"],
+                      "label-bold": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "display": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 border-b border-outline-variant bg-surface-container-lowest h-20 px-page_padding flex justify-between items-center">
+<div class="flex items-center gap-unit_md max-w-7xl mx-auto w-full">
+<div class="flex items-center gap-unit_sm mr-unit_xl">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="terminal">terminal</span>
+<span class="text-headline-md font-headline-md font-extrabold text-primary tracking-tight">PrepTrack</span>
+</div>
+<nav class="hidden md:flex items-center gap-unit_lg ml-unit_xl">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Curriculum</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Mock</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Progress</a>
+</nav>
+<div class="ml-auto flex items-center gap-unit_md">
+<button class="bg-primary text-on-primary font-label-bold px-base py-unit_xs rounded hover:opacity-90 active:scale-95 transition-all">Upgrade</button>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden bg-surface-container-high">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A professional studio portrait of a young male software engineer with short dark hair, wearing a dark minimal t-shirt. The background is a clean, dark forest green gradient matching a high-tech developer aesthetic. Soft side lighting creates depth and a focused, professional mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTOtXnUnaOI4a4Sj_6BNPfwlVJq61X1ADNETKylxjqlD1BwF4tBLUUsBQUdj0wjWZwGX_G3btBVVstDc5gt75z1oSJL1mQ1YvLPPib28U3u9V5RoOW6u2T4NaB05Ujs0Bjxgxr2MIkVlRYz-qgrA42mTgH_38apk-rtNw1p6p_LH0s8y2XrLCJcntbxMnpkVbGdfYzNAnSqzySqpbRaq3YPFWvKXGoIuMuU_QiG6euAtegyg0cPe_0Q8ivSgxhXFnEWHaz8iuQXm4"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-28 pb-20 px-page_padding max-w-7xl mx-auto min-h-screen">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-unit_lg">
+<!-- Left Column: Readiness & Action -->
+<div class="md:col-span-3 space-y-unit_lg">
+<!-- Readiness Score Card -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_lg flex flex-col items-center text-center">
+<span class="text-label-bold text-on-surface-variant uppercase tracking-widest mb-unit_md">Readiness Score</span>
+<div class="relative flex items-center justify-center w-32 h-32 mb-unit_md">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-outline-variant" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="91.1" stroke-width="8"></circle>
+</svg>
+<span class="absolute text-headline-lg font-bold text-primary">75%</span>
+</div>
+<h3 class="text-headline-sm text-on-surface mb-unit_xs">Amazon SDE1</h3>
+<p class="text-body-sm text-on-surface-variant">Engineering Intern Readiness</p>
+</div>
+<!-- Next Action Card -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_lg">
+<h3 class="text-label-bold text-on-surface-variant mb-unit_md uppercase">Next Action</h3>
+<div class="bg-surface-container-high p-unit_md rounded border border-outline-variant">
+<div class="flex items-start gap-unit_sm mb-unit_sm">
+<span class="material-symbols-outlined text-primary" data-icon="play_circle">play_circle</span>
+<div>
+<p class="text-body-md font-bold text-on-surface">Dynamic Programming</p>
+<p class="text-body-sm text-on-surface-variant">Lec 4: Knapsack Patterns</p>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-on-secondary-container font-label-bold py-unit_sm rounded hover:bg-outline-variant transition-colors">Resume Learning</button>
+</div>
+</div>
+</div>
+<!-- Middle Column: Greeting & Main Feed -->
+<div class="md:col-span-6 space-y-unit_lg">
+<div>
+<h1 class="text-headline-lg font-bold text-on-surface">Good morning, Abdul</h1>
+<p class="text-body-md text-on-surface-variant">You're on a 12-day coding streak. Keep the momentum!</p>
+</div>
+<!-- Quick Stats Row -->
+<div class="grid grid-cols-3 gap-unit_md">
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_md">
+<p class="text-label-md text-on-surface-variant">Solved</p>
+<p class="text-headline-md font-bold text-primary">142</p>
+</div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_md">
+<p class="text-label-md text-on-surface-variant">Stuck</p>
+<p class="text-headline-md font-bold text-tertiary">08</p>
+</div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_md">
+<p class="text-label-md text-on-surface-variant">Skipped</p>
+<p class="text-headline-md font-bold text-outline">24</p>
+</div>
+</div>
+<!-- Today's Questions Section -->
+<section>
+<div class="flex justify-between items-end mb-unit_md">
+<h2 class="text-headline-sm font-bold text-on-surface">Today's Focus</h2>
+<a class="text-label-bold text-primary hover:underline" href="#">View All</a>
+</div>
+<div class="space-y-unit_sm">
+<!-- Question Card 1 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_md hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-unit_sm mb-unit_xs">
+<span class="bg-primary-container/20 text-primary-container text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">Medium</span>
+<span class="text-body-sm text-on-surface-variant">Arrays &amp; Hashing</span>
+</div>
+<h4 class="text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Top K Frequent Elements</h4>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-all" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Question Card 2 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_md hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-unit_sm mb-unit_xs">
+<span class="bg-error-container/20 text-error text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">Hard</span>
+<span class="text-body-sm text-on-surface-variant">Sliding Window</span>
+</div>
+<h4 class="text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Minimum Window Substring</h4>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-all" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Question Card 3 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_md hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-unit_sm mb-unit_xs">
+<span class="bg-secondary-container/50 text-on-secondary-container text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">Easy</span>
+<span class="text-body-sm text-on-surface-variant">Linked List</span>
+</div>
+<h4 class="text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">Reverse Linked List</h4>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-all" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Mocks & Mastery -->
+<div class="md:col-span-3 space-y-unit_lg">
+<!-- Recent Mock Sessions -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_lg">
+<h3 class="text-label-bold text-on-surface-variant mb-unit_md uppercase">Recent Mocks</h3>
+<div class="space-y-unit_md">
+<div class="flex items-center gap-unit_sm border-l-2 border-primary pl-unit_sm">
+<div class="flex-1">
+<p class="text-body-sm font-bold text-on-surface">Frontend Mock #4</p>
+<p class="text-label-md text-on-surface-variant">Yesterday · 88%</p>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center gap-unit_sm border-l-2 border-outline-variant pl-unit_sm">
+<div class="flex-1">
+<p class="text-body-sm font-bold text-on-surface">System Design Intro</p>
+<p class="text-label-md text-on-surface-variant">3 days ago · 64%</p>
+</div>
+<span class="material-symbols-outlined text-outline text-sm" data-icon="history">history</span>
+</div>
+</div>
+<button class="w-full mt-unit_lg border border-outline-variant text-on-surface font-label-bold py-unit_sm rounded hover:bg-surface-container-high transition-colors text-sm">Schedule Mock</button>
+</div>
+<!-- Mastery Growth Chart -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-unit_lg">
+<h3 class="text-label-bold text-on-surface-variant mb-unit_md uppercase">Mastery Growth</h3>
+<div class="flex items-end justify-between h-24 gap-1">
+<div class="w-full bg-outline-variant rounded-t-sm h-[30%]"></div>
+<div class="w-full bg-outline-variant rounded-t-sm h-[45%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[60%]"></div>
+<div class="w-full bg-outline-variant rounded-t-sm h-[40%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[75%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[90%]"></div>
+<div class="w-full bg-primary rounded-t-sm h-[85%]"></div>
+</div>
+<div class="flex justify-between mt-unit_sm">
+<span class="text-[10px] text-on-surface-variant uppercase">Mon</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Sun</span>
+</div>
+<div class="mt-unit_md pt-unit_md border-t border-outline-variant">
+<div class="flex justify-between items-center">
+<span class="text-body-sm text-on-surface-variant">Total Hours</span>
+<span class="text-body-sm font-bold text-on-surface">32.5h</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface h-16 px-page_padding flex justify-around items-center">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-transform active:scale-95">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Curriculum</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="video_call">video_call</span>
+<span class="text-label-md font-label-md">Mock</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-md font-label-md">Progress</span>
+</div>
+</nav>
+</body></html>

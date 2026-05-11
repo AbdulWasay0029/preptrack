@@ -1,18 +1,12 @@
 export default function DifficultyBadge({ difficulty }) {
-  const colors = {
-    easy: 'bg-green-500/20 text-green-400 border-green-500/30',
-    medium: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    hard: 'bg-red-500/20 text-red-400 border-red-500/30',
+  const styles = {
+    easy: 'bg-[#166534] text-[#4ade80]',
+    medium: 'bg-[#854d0e] text-[#fbbf24]',
+    hard: 'bg-[#7f1d1d] text-[#ef4444]',
   };
-  const labels = {
-    easy: '🟢 Easy',
-    medium: '🟡 Medium',
-    hard: '🔴 Hard',
-  };
-
   return (
-    <span className={`px-2 py-1 rounded text-xs font-medium border ${colors[difficulty] || colors.medium}`}>
-      {labels[difficulty] || difficulty}
+    <span className={`${styles[difficulty] || styles.medium} px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider`}>
+      {difficulty}
     </span>
   );
 }

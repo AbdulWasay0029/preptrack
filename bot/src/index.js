@@ -11,6 +11,7 @@ const webCommand = require('./commands/web');
 const helpCommand = require('./commands/help');
 const upgradeCommand = require('./commands/upgrade');
 const suggestCommand = require('./commands/suggest');
+const assessCommand = require('./commands/assess');
 const questionCallback = require('./handlers/questionCallback');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -22,6 +23,7 @@ bot.command('progress', progressCommand);
 bot.command('settings', settingsCommand);
 bot.command('web', webCommand);
 bot.command('help', helpCommand);
+bot.command('assess', assessCommand);
 upgradeCommand(bot); // Custom register for upgrade
 suggestCommand(bot); // Custom register for suggest
 

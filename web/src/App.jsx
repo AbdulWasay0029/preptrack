@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Progress from './pages/Progress';
 import Landing from './pages/Landing';
+import Diagnostic from './pages/Diagnostic';
 
 function AppLayout() {
   const location = useLocation();
@@ -27,6 +28,7 @@ function AppLayout() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/progress" element={<Progress />} />
+          <Route path="/diagnostic" element={<Diagnostic />} />
         </Routes>
       </main>
     </div>

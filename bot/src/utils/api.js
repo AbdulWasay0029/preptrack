@@ -58,6 +58,26 @@ const api = {
   async submitSuggestion(telegramId, url) {
     const { data } = await client.post('/users/suggest', { telegram_id: telegramId, url });
     return data;
+  },
+
+  async startAssessment(telegramId, companySlug) {
+    const { data } = await client.post('/assessments/start', { telegram_id: telegramId, company_slug: companySlug });
+    return data;
+  },
+
+  async submitResponse(assessmentId, payload) {
+    const { data } = await client.post(`/assessments/${assessmentId}/respond`, payload);
+    return data;
+  },
+
+  async completeAssessment(assessmentId) {
+    const { data } = await client.post(`/assessments/${assessmentId}/complete`);
+    return data;
+  },
+
+  async getLatestAssessment(telegramId) {
+    const { data } = await client.get(`/assessments/${telegramId}/latest`);
+    return data;
   }
 };
 

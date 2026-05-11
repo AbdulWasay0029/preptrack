@@ -142,7 +142,8 @@ async function selectDailyQuestions(userId, companySlug, count, db, isPro) {
     questions.push(...stdQ);
   }
 
-  return questions;
+  const unique = [...new Map(questions.map(q => [q.id, q])).entries()].map(([, q]) => q);
+  return unique.slice(0, count);
 }
 
 /**

@@ -7,6 +7,7 @@ const questionsRouter = require('./routes/questions');
 const progressRouter  = require('./routes/progress');
 const analyticsRouter = require('./routes/analytics');
 const paymentsRouter  = require('./routes/payments');
+const assessmentsRouter = require('./routes/assessments');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/questions', questionsRouter);
 app.use('/progress',  progressRouter);
 app.use('/analytics', analyticsRouter);
 app.use('/payments',  paymentsRouter);
+app.use('/assessments', assessmentsRouter);
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));

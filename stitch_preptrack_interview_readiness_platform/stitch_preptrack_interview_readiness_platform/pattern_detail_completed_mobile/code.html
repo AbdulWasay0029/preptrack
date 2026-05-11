@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<title>Pattern Details - PrepTrack</title>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#1a211a",
+                    "secondary-fixed-dim": "#bccbb9",
+                    "primary-fixed-dim": "#4ae176",
+                    "on-secondary-fixed": "#121e14",
+                    "outline-variant": "#3d4a3d",
+                    "on-error-container": "#ffdad6",
+                    "surface": "#0e150e",
+                    "on-background": "#dde5d9",
+                    "surface-container-high": "#252c24",
+                    "primary": "#6fff92",
+                    "on-primary": "#003915",
+                    "tertiary-fixed-dim": "#feb784",
+                    "tertiary": "#ffddc7",
+                    "surface-container-low": "#161d16",
+                    "surface-bright": "#343b33",
+                    "primary-container": "#4be277",
+                    "on-surface-variant": "#bccbb9",
+                    "inverse-primary": "#006e2f",
+                    "surface-variant": "#2f372e",
+                    "inverse-surface": "#dde5d9",
+                    "on-tertiary-container": "#79471d",
+                    "on-tertiary-fixed-variant": "#6b3b12",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#091009",
+                    "on-secondary": "#273327",
+                    "secondary-container": "#3d4a3d",
+                    "on-tertiary-fixed": "#301400",
+                    "tertiary-container": "#ffb885",
+                    "surface-dim": "#0e150e",
+                    "on-primary-fixed-variant": "#005322",
+                    "primary-fixed": "#6aff90",
+                    "on-primary-container": "#006129",
+                    "tertiary-fixed": "#ffdcc5",
+                    "surface-container-highest": "#2f372e",
+                    "on-error": "#690005",
+                    "outline": "#869585",
+                    "on-secondary-fixed-variant": "#3d4a3d",
+                    "secondary": "#bccbb9",
+                    "inverse-on-surface": "#2b322a",
+                    "on-secondary-container": "#abb9a8",
+                    "secondary-fixed": "#d8e7d5",
+                    "background": "#0e150e",
+                    "on-primary-fixed": "#002109",
+                    "error": "#ffb4ab",
+                    "on-surface": "#dde5d9",
+                    "surface-tint": "#4ae176",
+                    "on-tertiary": "#4f2500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit_xs": "4px",
+                    "unit_xxl": "48px",
+                    "base": "16px",
+                    "unit_lg": "24px",
+                    "page_padding": "24px",
+                    "unit_xl": "32px",
+                    "unit_md": "16px",
+                    "unit_sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar (Web & Tablet) -->
+<header class="fixed top-0 w-full z-50 border-b border-outline-variant bg-surface-container-lowest hidden md:flex justify-between items-center h-20 px-page_padding max-w-7xl mx-auto left-0 right-0">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="terminal">terminal</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">PrepTrack</span>
+</div>
+<nav class="flex gap-unit_xl">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Curriculum</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Mock</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Progress</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container font-bold px-unit_lg py-unit_sm rounded-full active:scale-95 transition-transform">Upgrade</button>
+</header>
+<!-- TopAppBar (Mobile) -->
+<header class="sticky top-0 w-full z-40 border-b border-outline-variant bg-surface md:hidden flex justify-between items-center h-14 px-page_padding">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="arrow_back">arrow_back</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Interview Prep</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="timer">timer</span>
+</header>
+<main class="pt-20 md:pt-28 pb-20 md:pb-12 px-page_padding max-w-7xl mx-auto">
+<!-- Header Section: Mastered State -->
+<section class="mb-unit_xxl">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-unit_lg">
+<div class="space-y-unit_sm">
+<div class="flex items-center gap-unit_sm text-primary">
+<span class="material-symbols-outlined" data-icon="stars" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="text-label-bold font-label-bold tracking-widest uppercase">PATTERN MASTERED</span>
+</div>
+<h1 class="text-display font-display leading-tight">Sliding Window</h1>
+<p class="text-on-surface-variant text-body-lg max-w-2xl">A computational technique used to reduce the time complexity of algorithms from O(N²) or O(N³) down to O(N) by maintaining a subset of data as it moves through the main set.</p>
+</div>
+<div class="bg-surface-container border border-outline-variant p-unit_lg rounded-xl flex items-center gap-unit_xl">
+<div class="text-center">
+<div class="text-headline-md font-headline-md text-primary">100%</div>
+<div class="text-label-md font-label-md text-on-surface-variant">COMPLETION</div>
+</div>
+<div class="h-10 w-[1px] bg-outline-variant"></div>
+<div class="text-center">
+<div class="text-headline-md font-headline-md text-primary">8/8</div>
+<div class="text-label-md font-label-md text-on-surface-variant">PROBLEMS</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-unit_lg">
+<!-- Learning Objectives (Left Column) -->
+<div class="md:col-span-4 space-y-unit_lg">
+<div class="bg-surface-container border border-outline-variant p-unit_lg rounded-xl">
+<h3 class="text-headline-sm font-headline-sm mb-unit_md">Core Logic</h3>
+<ul class="space-y-unit_md">
+<li class="flex gap-unit_sm items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="text-body-md">Fixed vs Variable window sizes</span>
+</li>
+<li class="flex gap-unit_sm items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="text-body-md">Hashing for character frequency</span>
+</li>
+<li class="flex gap-unit_sm items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-1" data-icon="check_circle">check_circle</span>
+<span class="text-body-md">Optimizing with two pointers</span>
+</li>
+</ul>
+</div>
+<!-- Code Template Preview -->
+<div class="bg-surface-container-high border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-unit_lg py-unit_md border-b border-outline-variant flex justify-between items-center">
+<span class="text-label-bold font-label-bold text-on-surface-variant">MASTER TEMPLATE</span>
+<span class="text-label-md font-label-md bg-surface px-2 py-1 rounded">Python</span>
+</div>
+<pre class="p-unit_lg text-xs font-mono overflow-x-auto text-on-surface/80"><code>def sliding_window(arr):
+    left, max_val = 0, 0
+    curr_sum = 0
+    for right in range(len(arr)):
+        curr_sum += arr[right]
+        while condition_met:
+            curr_sum -= arr[left]
+            left += 1
+        max_val = max(max_val, curr_sum)
+    return max_val</code></pre>
+</div>
+</div>
+<!-- Problem List (Right Column) -->
+<div class="md:col-span-8">
+<div class="bg-surface-container border border-outline-variant rounded-xl">
+<div class="p-unit_lg border-b border-outline-variant">
+<h2 class="text-headline-md font-headline-md">Problem Checklist</h2>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Problem 1: Maximum Sum Subarray -->
+<div class="p-unit_lg flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit_lg">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 border border-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h4 class="text-body-lg font-bold group-hover:text-primary transition-colors">Maximum Sum Subarray of Size K</h4>
+<div class="flex items-center gap-unit_md mt-unit_xs">
+<span class="text-label-md font-label-md uppercase tracking-wider text-primary">Easy</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Solved 2 days ago</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-unit_lg">
+<span class="hidden md:block text-label-bold font-label-bold text-primary bg-primary/10 px-unit_md py-1 rounded-full">Completed</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Problem 2: Longest Substring Without Repeating Characters -->
+<div class="p-unit_lg flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit_lg">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 border border-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h4 class="text-body-lg font-bold group-hover:text-primary transition-colors">Longest Substring Without Repeating Characters</h4>
+<div class="flex items-center gap-unit_md mt-unit_xs">
+<span class="text-label-md font-label-md uppercase tracking-wider text-tertiary">Medium</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Solved yesterday</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-unit_lg">
+<span class="hidden md:block text-label-bold font-label-bold text-primary bg-primary/10 px-unit_md py-1 rounded-full">Completed</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Problem 3: Smallest Subarray -->
+<div class="p-unit_lg flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit_lg">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 border border-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h4 class="text-body-lg font-bold group-hover:text-primary transition-colors">Smallest Subarray with a given sum</h4>
+<div class="flex items-center gap-unit_md mt-unit_xs">
+<span class="text-label-md font-label-md uppercase tracking-wider text-primary">Easy</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Solved 4 days ago</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-unit_lg">
+<span class="hidden md:block text-label-bold font-label-bold text-primary bg-primary/10 px-unit_md py-1 rounded-full">Completed</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Problem 4: Longest Substring with K Distinct Characters -->
+<div class="p-unit_lg flex items-center justify-between hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-unit_lg">
+<div class="w-12 h-12 rounded-full bg-primary-container/20 border border-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<h4 class="text-body-lg font-bold group-hover:text-primary transition-colors">Longest Substring with K Distinct Characters</h4>
+<div class="flex items-center gap-unit_md mt-unit_xs">
+<span class="text-label-md font-label-md uppercase tracking-wider text-tertiary">Medium</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Solved today</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-unit_lg">
+<span class="hidden md:block text-label-bold font-label-bold text-primary bg-primary/10 px-unit_md py-1 rounded-full">Completed</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pattern Mastery Visualizer -->
+<section class="mt-unit_xxl grid grid-cols-1 md:grid-cols-2 gap-unit_lg">
+<div class="bg-surface-container border border-outline-variant p-unit_lg rounded-xl relative overflow-hidden h-[300px]">
+<div class="relative z-10">
+<h3 class="text-headline-sm font-headline-sm mb-unit_xs">Historical Performance</h3>
+<p class="text-on-surface-variant text-sm mb-unit_lg">Your solving speed vs global average</p>
+<div class="flex items-end gap-2 h-32 mt-12">
+<div class="bg-primary/20 w-full h-24 rounded-t-sm border-t-2 border-primary relative group">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-surface border border-outline-variant px-2 py-1 text-[10px] opacity-0 group-hover:opacity-100 transition-opacity">7m 12s</div>
+</div>
+<div class="bg-primary/40 w-full h-32 rounded-t-sm border-t-2 border-primary"></div>
+<div class="bg-primary/20 w-full h-16 rounded-t-sm border-t-2 border-primary"></div>
+<div class="bg-primary/60 w-full h-28 rounded-t-sm border-t-2 border-primary"></div>
+<div class="bg-primary w-full h-20 rounded-t-sm border-t-2 border-primary"></div>
+</div>
+</div>
+<!-- Visual Background Texture -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<img alt="Technical chart background" class="w-full h-full object-cover grayscale" data-alt="A dark and moody architectural photograph of complex overlapping glass structures with sharp angles and glowing green linear lights. The image conveys a sense of technical precision and digital connectivity, using a deep monochromatic forest green palette to match the minimalist UI aesthetic. Soft reflections and high contrast create a professional data-driven atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWxcf_qcYSYaiuAMR8xnpZLXVpph9wnZo5aZTO0NiRFfXPRJbbEo63QBfwVaw9QICDk6EkG62LBx05zXseBgksdm9xQisELgndJxX4pPWW9MHWyNBGxYOXJkfsvCNuk_SIVx68aQkxtmG_dY-nflt80Qn82zOw8RO19dC3cDAiQog3C8D6a_2akS8Ls85xFBbgN8mI229v1QuEAEII52Q91t8ktb1JJMmIH2bubSfrimWnUcQCiADpl1-3A0Xf6euZsCAk6Dzdfrg"/>
+</div>
+</div>
+<div class="bg-surface-container border border-outline-variant p-unit_lg rounded-xl flex flex-col justify-center items-center text-center space-y-unit_md">
+<div class="relative">
+<div class="w-32 h-32 rounded-full border-4 border-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[64px] text-primary" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary text-on-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase">Verified</div>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm">Advanced Proficiency</h3>
+<p class="text-on-surface-variant text-body-md mt-unit_xs">You have demonstrated expert knowledge in linear time-complexity reductions. You are ready for the Hard-level sliding window problems.</p>
+</div>
+<button class="bg-primary text-on-primary font-bold px-unit_xl py-unit_sm rounded active:scale-95 transition-transform mt-unit_md">Next Pattern: Two Pointers</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface flex justify-around items-center h-16 px-page_padding">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Curriculum</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="video_call">video_call</span>
+<span class="text-label-md font-label-md">Mock</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-md font-label-md">Progress</span>
+</a>
+</nav>
+</body></html>

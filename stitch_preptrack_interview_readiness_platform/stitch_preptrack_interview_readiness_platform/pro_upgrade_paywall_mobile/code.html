@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PrepTrack Pro Upgrade</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#1a211a",
+                    "secondary-fixed-dim": "#bccbb9",
+                    "primary-fixed-dim": "#4ae176",
+                    "on-secondary-fixed": "#121e14",
+                    "outline-variant": "#3d4a3d",
+                    "on-error-container": "#ffdad6",
+                    "surface": "#0e150e",
+                    "on-background": "#dde5d9",
+                    "surface-container-high": "#252c24",
+                    "primary": "#6fff92",
+                    "on-primary": "#003915",
+                    "tertiary-fixed-dim": "#feb784",
+                    "tertiary": "#ffddc7",
+                    "surface-container-low": "#161d16",
+                    "surface-bright": "#343b33",
+                    "primary-container": "#4be277",
+                    "on-surface-variant": "#bccbb9",
+                    "inverse-primary": "#006e2f",
+                    "surface-variant": "#2f372e",
+                    "inverse-surface": "#dde5d9",
+                    "on-tertiary-container": "#79471d",
+                    "on-tertiary-fixed-variant": "#6b3b12",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#091009",
+                    "on-secondary": "#273327",
+                    "secondary-container": "#3d4a3d",
+                    "on-tertiary-fixed": "#301400",
+                    "tertiary-container": "#ffb885",
+                    "surface-dim": "#0e150e",
+                    "on-primary-fixed-variant": "#005322",
+                    "primary-fixed": "#6aff90",
+                    "on-primary-container": "#006129",
+                    "tertiary-fixed": "#ffdcc5",
+                    "surface-container-highest": "#2f372e",
+                    "on-error": "#690005",
+                    "outline": "#869585",
+                    "on-secondary-fixed-variant": "#3d4a3d",
+                    "secondary": "#bccbb9",
+                    "inverse-on-surface": "#2b322a",
+                    "on-secondary-container": "#abb9a8",
+                    "secondary-fixed": "#d8e7d5",
+                    "background": "#0e150e",
+                    "on-primary-fixed": "#002109",
+                    "error": "#ffb4ab",
+                    "on-surface": "#dde5d9",
+                    "surface-tint": "#4ae176",
+                    "on-tertiary": "#4f2500"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit_xs": "4px",
+                    "unit_xxl": "48px",
+                    "base": "16px",
+                    "unit_lg": "24px",
+                    "page_padding": "24px",
+                    "unit_xl": "32px",
+                    "unit_md": "16px",
+                    "unit_sm": "8px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0e150e;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopAppBar Small (Mobile) -->
+<header class="md:hidden flex justify-between items-center h-14 px-page_padding sticky top-0 w-full z-40 border-b border-outline-variant bg-surface">
+<div class="flex items-center gap-unit_sm text-primary">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Interview Prep</h1>
+<div class="flex items-center gap-unit_sm text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+</header>
+<!-- TopAppBar Medium (Desktop) -->
+<header class="hidden md:flex justify-between items-center h-20 px-page_padding max-w-7xl mx-auto fixed top-0 w-full z-50 border-b border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center gap-unit_md">
+<span class="material-symbols-outlined text-primary text-headline-md">terminal</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">PrepTrack</span>
+</div>
+<nav class="flex gap-unit_xl">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Curriculum</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Mock</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Progress</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container px-unit_lg py-unit_sm rounded-full font-label-bold text-label-bold cursor-pointer active:opacity-80 transition-transform active:scale-95">Upgrade</button>
+</header>
+<main class="min-h-screen pt-20 pb-24 md:pb-0 px-page_padding max-w-7xl mx-auto flex flex-col items-center justify-center">
+<!-- Paywall Hero Section -->
+<div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-unit_xl items-center">
+<!-- Left Side: Content Branding -->
+<div class="flex flex-col gap-unit_lg order-2 lg:order-1">
+<div class="inline-flex items-center gap-unit_sm bg-surface-container-high border border-outline-variant px-unit_md py-unit_xs rounded-full w-fit">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="text-label-bold font-label-bold text-primary">PREPTRACK PRO</span>
+</div>
+<h2 class="text-display font-display leading-tight text-on-surface">Master the Hardest Coding Interviews.</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Unlock the exact roadmap used by top engineers at Google, Meta, and Amazon. Transition from basic problem solving to architectural mastery.</p>
+<ul class="flex flex-col gap-unit_md mt-unit_sm">
+<li class="flex items-start gap-unit_md">
+<div class="mt-1 flex-shrink-0 bg-primary/20 p-unit_xs rounded">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label-bold text-on-surface">Unlimited Mock Interviews</p>
+<p class="text-body-sm text-on-surface-variant">Real-time simulation with AI-driven feedback loops.</p>
+</div>
+</li>
+<li class="flex items-start gap-unit_md">
+<div class="mt-1 flex-shrink-0 bg-primary/20 p-unit_xs rounded">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label-bold text-on-surface">Company-Specific Guides</p>
+<p class="text-body-sm text-on-surface-variant">Curated list of actual questions from top-tier tech giants.</p>
+</div>
+</li>
+<li class="flex items-start gap-unit_md">
+<div class="mt-1 flex-shrink-0 bg-primary/20 p-unit_xs rounded">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label-bold text-on-surface">Advanced Performance Analytics</p>
+<p class="text-body-sm text-on-surface-variant">Pinpoint your weak areas with deep behavioral metrics.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Right Side: The Upgrade Card -->
+<div class="order-1 lg:order-2 flex flex-col items-center">
+<div class="bg-surface-container border border-primary/30 p-unit_xl rounded-xl w-full relative overflow-hidden">
+<!-- Subtle Glow -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[100px] rounded-full"></div>
+<div class="relative z-10 flex flex-col gap-unit_lg">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-unit_xs">
+<span class="text-label-bold font-label-bold text-on-surface-variant opacity-70">ANNUAL PLAN</span>
+<h3 class="text-headline-lg font-headline-lg text-primary">₹499<span class="text-headline-sm text-on-surface-variant">/month</span></h3>
+</div>
+<div class="bg-primary text-on-primary px-unit_md py-unit_xs rounded-full text-label-bold font-label-bold">
+                                BEST VALUE
+                            </div>
+</div>
+<div class="h-[1px] bg-outline-variant w-full"></div>
+<div class="grid grid-cols-2 gap-unit_md">
+<div class="flex flex-col gap-unit_xs p-unit_md bg-surface-container-high rounded border border-outline-variant">
+<span class="material-symbols-outlined text-primary">query_stats</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Growth Rate</span>
+<span class="text-headline-sm text-on-surface">+140%</span>
+</div>
+<div class="flex flex-col gap-unit_xs p-unit_md bg-surface-container-high rounded border border-outline-variant">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Resources</span>
+<span class="text-headline-sm text-on-surface">2,500+</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container h-14 rounded-lg text-headline-sm font-bold active:scale-95 transition-all shadow-lg shadow-primary/20">
+                            Upgrade Now
+                        </button>
+<p class="text-body-sm text-on-surface-variant text-center px-unit_md">
+                            Billed annually (₹5,988). Secure payment via Razorpay. Cancel anytime.
+                        </p>
+</div>
+</div>
+<!-- Bento Style Secondary Options -->
+<div class="mt-unit_lg grid grid-cols-1 w-full gap-unit_md">
+<div class="bg-surface-container-low border border-outline-variant p-unit_md rounded-lg flex items-center justify-between group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-unit_md">
+<div class="p-unit_sm bg-surface-container rounded border border-outline-variant">
+<span class="material-symbols-outlined text-secondary">business</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-bold text-on-surface">Enterprise Account</span>
+<span class="text-body-sm text-on-surface-variant">For university batches &amp; teams</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Context Image -->
+<div class="mt-unit_xxl w-full rounded-xl overflow-hidden border border-outline-variant aspect-[21/9] relative">
+<img class="w-full h-full object-cover grayscale contrast-125 opacity-40" data-alt="A cinematic, high-contrast workspace in a dark tech-focused environment. A high-resolution curved monitor displays complex green code snippets and system performance graphs against a deep black background. The desk is minimalist with a mechanical keyboard and soft ambient green LED lighting. The overall mood is focused, professional, and high-performance, reflecting a top-tier developer tool aesthetic with a forest-green color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbU5TC-aS8iMvM8G18iVbw0IlFB9YCrZXlEgxpBw8pQVzTrT8v-R7byyWpz65VWfL2UbRvdZADEqD9XYaM1ipVRc04wCBNCM6goh6-whaKTFRUWR_GsBvghfc6fx9mAMTavFPr-Eh80wfVk5D0D1pKBKy05eiEq5wreuqPxOEbPMrLefbGTs67zbzluPhWlv9IroS4KrkwXOOSBqeY4QEgfd_48Ju8w7BQ2rMxrcFbyFxg3PPUjeXbIEjyo8z8tFIkHUb33hbP75Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+<div class="absolute bottom-unit_lg left-unit_lg right-unit_lg flex justify-between items-end">
+<div class="max-w-md">
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Locked Content Preview</h4>
+<p class="text-body-sm text-on-surface-variant">Dynamic Programming: Optimal Substructure Mastery Guide for FAANG interviews.</p>
+</div>
+<div class="flex items-center gap-unit_sm">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="text-label-md font-label-md text-primary">LIVE NOW</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden flex justify-around items-center h-16 px-page_padding fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-label-md font-label-md">Curriculum</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">video_call</span>
+<span class="text-label-md font-label-md">Mock</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-label-md font-label-md">Progress</span>
+</div>
+</nav>
+</body></html>

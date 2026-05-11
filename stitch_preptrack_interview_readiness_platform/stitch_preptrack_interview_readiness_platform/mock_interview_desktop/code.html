@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PrepTrack - Mock Interview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#091009",
+                    "surface-container-low": "#161d16",
+                    "surface-container": "#1a211a",
+                    "on-primary-fixed-variant": "#005322",
+                    "outline": "#869585",
+                    "surface-bright": "#343b33",
+                    "tertiary-fixed-dim": "#feb784",
+                    "primary-container": "#4be277",
+                    "surface-container-high": "#252c24",
+                    "error": "#ffb4ab",
+                    "secondary-container": "#3d4a3d",
+                    "on-tertiary-fixed-variant": "#6b3b12",
+                    "inverse-primary": "#006e2f",
+                    "on-secondary": "#273327",
+                    "on-background": "#dde5d9",
+                    "on-primary-fixed": "#002109",
+                    "surface": "#0e150e",
+                    "on-error": "#690005",
+                    "surface-container-highest": "#2f372e",
+                    "surface-tint": "#4ae176",
+                    "primary": "#6fff92",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#3d4a3d",
+                    "inverse-surface": "#dde5d9",
+                    "primary-fixed": "#6aff90",
+                    "on-surface-variant": "#bccbb9",
+                    "outline-variant": "#3d4a3d",
+                    "tertiary": "#ffddc7",
+                    "secondary-fixed-dim": "#bccbb9",
+                    "on-secondary-fixed": "#121e14",
+                    "on-primary": "#003915",
+                    "secondary-fixed": "#d8e7d5",
+                    "error-container": "#93000a",
+                    "background": "#0e150e",
+                    "on-secondary-container": "#abb9a8",
+                    "tertiary-container": "#ffb885",
+                    "on-surface": "#dde5d9",
+                    "primary-fixed-dim": "#4ae176",
+                    "tertiary-fixed": "#ffdcc5",
+                    "on-tertiary": "#4f2500",
+                    "surface-dim": "#0e150e",
+                    "surface-variant": "#2f372e",
+                    "secondary": "#bccbb9",
+                    "on-primary-container": "#006129",
+                    "on-tertiary-fixed": "#301400",
+                    "on-tertiary-container": "#79471d",
+                    "inverse-on-surface": "#2b322a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit_lg": "24px",
+                    "unit_xxl": "48px",
+                    "base": "16px",
+                    "unit_sm": "8px",
+                    "page_padding": "24px",
+                    "unit_xs": "4px",
+                    "unit_xl": "32px",
+                    "unit_md": "16px"
+            },
+            "fontFamily": {
+                    "display": ["Inter"],
+                    "label-bold": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "display": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0e150e;
+            color: #dde5d9;
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0e150e;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3d4a3d;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar (Medium / Desktop) -->
+<header class="fixed top-0 w-full z-50 border-b border-outline-variant bg-surface-container-lowest hidden md:flex items-center h-20 px-page_padding justify-between">
+<div class="flex items-center gap-unit_xl">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="terminal">terminal</span>
+<span class="text-headline-md font-headline-md font-bold text-primary">PrepTrack</span>
+</div>
+<nav class="flex items-center gap-unit_xl">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Curriculum</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Mock</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Progress</a>
+</nav>
+</div>
+<!-- Center Timer -->
+<div class="absolute left-1/2 -translate-x-1/2 flex items-center gap-unit_sm bg-surface-container px-unit_md py-unit_xs rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-primary" data-icon="timer">timer</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">24:18</span>
+</div>
+<div class="flex items-center gap-unit_md">
+<button class="bg-primary-container text-on-primary-container font-bold px-unit_lg py-unit_sm rounded-lg hover:opacity-90 active:scale-95 transition-all">Upgrade</button>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img alt="User Profile" data-alt="A professional headshot of a software engineer in a modern office setting. The lighting is soft and cinematic, with a color palette of deep greens and grays that matches the terminal-inspired brand identity. The mood is confident and prepared for a high-stakes technical interview." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtdMwS79Gs99hICQbfbqQo2eXARTwdGMiLB_Y9_mDnsT8KFluXT0aoLRWjT3LRRsnXKrxJ3T0Nbf7L4abhlYaueOVwHhU4pu3AYHrYE_nZkYVm8NF7CSKo2AFQd45fW9IBEoNC3SBtG25UzgbAGW45dkEnNgu687iaFSeIx4TjDx0sMflVSgxfpC9S-QbsCCUzLBQCG36tfNp4xrGSER1Ff7OKbg0frpOC_CL6jo-XSzTpkqmhKjX_Gvfz_1jgXoFy6b4IuQTmv1U"/>
+</div>
+</div>
+</header>
+<!-- TopAppBar (Small / Mobile - Just for Shell Integrity) -->
+<header class="md:hidden flex justify-between items-center h-14 px-page_padding sticky top-0 w-full z-40 border-b border-outline-variant bg-surface">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Mock Interview</span>
+</div>
+<span class="material-symbols-outlined text-primary" data-icon="timer">timer</span>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex mt-20 h-[calc(100vh-80px)] overflow-hidden">
+<!-- Left Panel (Question Details) - 45% -->
+<section class="w-[45%] flex flex-col border-r border-outline-variant bg-surface overflow-y-auto custom-scrollbar">
+<div class="p-page_padding space-y-unit_xl">
+<!-- Title & Meta -->
+<div>
+<div class="flex items-center gap-unit_sm mb-unit_xs">
+<span class="text-on-surface-variant text-label-md font-label-md uppercase tracking-wider">Problem 014</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-[10px] font-bold uppercase">Hard</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Sudoku Solver</h1>
+</div>
+<!-- Description -->
+<div class="space-y-unit_md text-body-md text-on-surface-variant">
+<p>Write a program to solve a Sudoku puzzle by filling the empty cells.</p>
+<p>A sudoku solution must satisfy all of the following rules:</p>
+<ul class="list-disc ml-unit_lg space-y-unit_xs">
+<li>Each of the digits 1-9 must occur exactly once in each row.</li>
+<li>Each of the digits 1-9 must occur exactly once in each column.</li>
+<li>Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.</li>
+</ul>
+<p>The '.' character indicates empty cells.</p>
+</div>
+<!-- Example Card -->
+<div class="bg-surface-container border border-outline-variant rounded-xl p-unit_md">
+<p class="text-label-bold text-primary mb-unit_sm">Example Input</p>
+<div class="bg-surface-container-high rounded-lg p-unit_md font-mono text-body-sm text-on-surface-variant">
+                        board = [["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]]
+                    </div>
+</div>
+<!-- Hints Accordion -->
+<div class="space-y-unit_sm">
+<h3 class="text-label-bold text-on-surface">Hints</h3>
+<div class="border border-outline-variant rounded-lg divide-y divide-outline-variant overflow-hidden">
+<button class="w-full flex items-center justify-between p-unit_md hover:bg-surface-container-high transition-colors">
+<span class="text-body-sm font-medium">1. Brute Force approach</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</button>
+<button class="w-full flex items-center justify-between p-unit_md hover:bg-surface-container-high transition-colors">
+<span class="text-body-sm font-medium">2. Backtracking optimization</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</button>
+<button class="w-full flex items-center justify-between p-unit_md hover:bg-surface-container-high transition-colors">
+<span class="text-body-sm font-medium text-primary">3. View recursive state space</span>
+<span class="material-symbols-outlined text-primary" data-icon="lock">lock</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Panel (Chat Interface) - 55% -->
+<section class="w-[55%] flex flex-col bg-surface-container-lowest relative">
+<!-- Chat Thread -->
+<div class="flex-1 overflow-y-auto p-page_padding space-y-unit_xl custom-scrollbar pb-32">
+<!-- AI Message -->
+<div class="flex gap-unit_md max-w-[85%]">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-sm" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="space-y-unit_sm">
+<p class="text-label-bold text-primary">Interviewer AI</p>
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-xl rounded-tl-none">
+<p class="text-body-md text-on-surface">Welcome to the technical interview. Today we'll be tackling the Sudoku Solver. Can you start by explaining the general approach you would take to solve this problem?</p>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-unit_md max-w-[85%] flex-row-reverse self-end ml-auto">
+<div class="w-8 h-8 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container text-sm" data-icon="person">person</span>
+</div>
+<div class="space-y-unit_sm text-right">
+<p class="text-label-bold text-secondary">You</p>
+<div class="bg-surface-container-high border border-outline-variant p-unit_md rounded-xl rounded-tr-none text-left">
+<p class="text-body-md text-on-surface">I'd use a backtracking approach. I'll iterate through the cells, and for each empty cell, I'll try placing digits 1-9 and check if they are valid according to Sudoku rules. If I hit a dead end, I'll backtrack.</p>
+</div>
+</div>
+</div>
+<!-- AI Message -->
+<div class="flex gap-unit_md max-w-[85%]">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-sm" data-icon="smart_toy" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="space-y-unit_sm">
+<p class="text-label-bold text-primary">Interviewer AI</p>
+<div class="bg-surface-container border border-outline-variant p-unit_md rounded-xl rounded-tl-none">
+<p class="text-body-md text-on-surface">That sounds correct. How would you optimize the validity check for rows, columns, and 3x3 grids? Checking the entire board every time might be inefficient.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="absolute bottom-0 w-full p-page_padding bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest to-transparent">
+<div class="max-w-3xl mx-auto flex items-end gap-unit_sm bg-surface border border-outline-variant rounded-xl p-unit_sm focus-within:border-primary transition-colors">
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-body-md text-on-surface custom-scrollbar resize-none py-unit_sm px-unit_sm h-12 max-h-48" placeholder="Type your response or code snippet here..."></textarea>
+<div class="flex items-center gap-unit_sm pb-1 px-1">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="code">code</span>
+</button>
+<button class="p-2 bg-primary-container text-on-primary-container rounded-lg hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="send" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+<div class="text-center mt-unit_sm">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-medium">Shift + Enter for new line • Feedback active</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<footer class="md:hidden fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface flex justify-around items-center h-16 px-page_padding">
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Curriculum</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1">
+<span class="material-symbols-outlined" data-icon="video_call" style="font-variation-settings: 'FILL' 1;">video_call</span>
+<span class="text-label-md font-label-md">Mock</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-md font-label-md">Progress</span>
+</div>
+</footer>
+</body></html>

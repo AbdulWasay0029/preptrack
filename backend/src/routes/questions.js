@@ -10,7 +10,14 @@ router.get('/companies', async (req, res) => {
     const { rows } = await db.query(
       `SELECT id, slug, name, is_pro_only FROM companies WHERE is_active = TRUE ORDER BY name`
     );
-    res.json(rows);
+    
+    const freeCompanies = ['amazon', 'microsoft'];
+    const enriched = rows.map(r => ({
+      ...r,
+      is_pro_only: !freeCompanies.includes(r.slug)
+    }));
+    
+    res.json(enriched);
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }

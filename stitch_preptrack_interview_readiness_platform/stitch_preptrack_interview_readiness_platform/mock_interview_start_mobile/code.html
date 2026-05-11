@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0e150e;
+      color: #dde5d9;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-card {
+      background: linear-gradient(135deg, rgba(26, 34, 26, 0.8) 0%, rgba(14, 21, 14, 0.9) 100%);
+      border: 1px solid #3d4a3d;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "surface-container": "#1a211a",
+                  "secondary-fixed-dim": "#bccbb9",
+                  "primary-fixed-dim": "#4ae176",
+                  "on-secondary-fixed": "#121e14",
+                  "outline-variant": "#3d4a3d",
+                  "on-error-container": "#ffdad6",
+                  "surface": "#0e150e",
+                  "on-background": "#dde5d9",
+                  "surface-container-high": "#252c24",
+                  "primary": "#6fff92",
+                  "on-primary": "#003915",
+                  "tertiary-fixed-dim": "#feb784",
+                  "tertiary": "#ffddc7",
+                  "surface-container-low": "#161d16",
+                  "surface-bright": "#343b33",
+                  "primary-container": "#4be277",
+                  "on-surface-variant": "#bccbb9",
+                  "inverse-primary": "#006e2f",
+                  "surface-variant": "#2f372e",
+                  "inverse-surface": "#dde5d9",
+                  "on-tertiary-container": "#79471d",
+                  "on-tertiary-fixed-variant": "#6b3b12",
+                  "error-container": "#93000a",
+                  "surface-container-lowest": "#091009",
+                  "on-secondary": "#273327",
+                  "secondary-container": "#3d4a3d",
+                  "on-tertiary-fixed": "#301400",
+                  "tertiary-container": "#ffb885",
+                  "surface-dim": "#0e150e",
+                  "on-primary-fixed-variant": "#005322",
+                  "primary-fixed": "#6aff90",
+                  "on-primary-container": "#006129",
+                  "tertiary-fixed": "#ffdcc5",
+                  "surface-container-highest": "#2f372e",
+                  "on-error": "#690005",
+                  "outline": "#869585",
+                  "on-secondary-fixed-variant": "#3d4a3d",
+                  "secondary": "#bccbb9",
+                  "inverse-on-surface": "#2b322a",
+                  "on-secondary-container": "#abb9a8",
+                  "secondary-fixed": "#d8e7d5",
+                  "background": "#0e150e",
+                  "on-primary-fixed": "#002109",
+                  "error": "#ffb4ab",
+                  "on-surface": "#dde5d9",
+                  "surface-tint": "#4ae176",
+                  "on-tertiary": "#4f2500"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "unit_xs": "4px",
+                  "unit_xxl": "48px",
+                  "base": "16px",
+                  "unit_lg": "24px",
+                  "page_padding": "24px",
+                  "unit_xl": "32px",
+                  "unit_md": "16px",
+                  "unit_sm": "8px"
+          },
+          "fontFamily": {
+                  "label-md": ["Inter"],
+                  "label-bold": ["Inter"],
+                  "headline-sm": ["Inter"],
+                  "headline-lg": ["Inter"],
+                  "display": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "headline-md": ["Inter"],
+                  "body-lg": ["Inter"],
+                  "body-md": ["Inter"]
+          },
+          "fontSize": {
+                  "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                  "label-bold": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                  "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                  "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "display": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                  "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                  "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                  "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar (Large Viewport) -->
+<header class="hidden md:flex justify-between items-center h-20 px-page_padding max-w-7xl mx-auto fixed top-0 w-full z-50 border-b border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="terminal">terminal</span>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">PrepTrack</h1>
+</div>
+<nav class="flex gap-unit_xl">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Curriculum</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">Mock</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Progress</a>
+</nav>
+<button class="bg-primary-container text-on-primary-container px-unit_lg py-unit_sm rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all">
+      Upgrade
+    </button>
+</header>
+<!-- TopAppBar (Mobile Viewport) -->
+<header class="md:hidden flex justify-between items-center h-14 px-page_padding sticky top-0 w-full z-40 border-b border-outline-variant bg-surface">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary">Interview Prep</h2>
+<span class="material-symbols-outlined text-primary" data-icon="timer">timer</span>
+</header>
+<main class="flex-grow pt-24 pb-20 md:pb-8 px-page_padding max-w-4xl mx-auto w-full">
+<!-- Hero Header -->
+<section class="mb-unit_xl text-center md:text-left">
+<h2 class="text-display font-display text-on-background mb-unit_sm">Start Mock Session</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Configure your technical assessment parameters. Our AI will conduct a comprehensive 45-minute technical evaluation based on company-specific rubrics.</p>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-unit_lg">
+<!-- Selection Panel -->
+<div class="md:col-span-8 space-y-unit_lg">
+<div class="glass-card p-unit_lg rounded-xl">
+<h3 class="text-headline-sm font-headline-sm mb-unit_lg flex items-center gap-unit_sm">
+<span class="material-symbols-outlined text-primary" data-icon="corporate_fare">corporate_fare</span>
+            Select Target Company
+          </h3>
+<!-- Company Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-unit_md">
+<button class="flex flex-col items-center justify-center p-unit_md rounded-lg border border-primary bg-primary-container/10 text-primary transition-all">
+<span class="material-symbols-outlined text-4xl mb-unit_xs" data-icon="google" style="font-variation-settings: 'FILL' 1;">google</span>
+<span class="text-label-bold font-label-bold">Google</span>
+</button>
+<button class="flex flex-col items-center justify-center p-unit_md rounded-lg border border-outline-variant hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-4xl mb-unit_xs text-on-surface-variant group-hover:text-primary" data-icon="shopping_cart">shopping_cart</span>
+<span class="text-label-bold font-label-bold">Amazon</span>
+</button>
+<button class="flex flex-col items-center justify-center p-unit_md rounded-lg border border-outline-variant hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-4xl mb-unit_xs text-on-surface-variant group-hover:text-primary" data-icon="all_inclusive">all_inclusive</span>
+<span class="text-label-bold font-label-bold">Meta</span>
+</button>
+<button class="flex flex-col items-center justify-center p-unit_md rounded-lg border border-outline-variant hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-4xl mb-unit_xs text-on-surface-variant group-hover:text-primary" data-icon="grid_view">grid_view</span>
+<span class="text-label-bold font-label-bold">Microsoft</span>
+</button>
+<button class="flex flex-col items-center justify-center p-unit_md rounded-lg border border-outline-variant hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-4xl mb-unit_xs text-on-surface-variant group-hover:text-primary" data-icon="rocket">rocket</span>
+<span class="text-label-bold font-label-bold">Netflix</span>
+</button>
+<button class="flex flex-col items-center justify-center p-unit_md rounded-lg border border-outline-variant border-dashed hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-4xl mb-unit_xs text-on-surface-variant group-hover:text-primary" data-icon="add">add</span>
+<span class="text-label-bold font-label-bold">Custom</span>
+</button>
+</div>
+</div>
+<!-- Session Details Bento Item -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-unit_lg">
+<div class="glass-card p-unit_md rounded-xl flex items-center gap-unit_md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Duration</p>
+<p class="text-body-lg font-bold">45 Minutes</p>
+</div>
+</div>
+<div class="glass-card p-unit_md rounded-xl flex items-center gap-unit_md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="psychology">psychology</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Focus</p>
+<p class="text-body-lg font-bold">Data Structures</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Action & Tips Panel -->
+<div class="md:col-span-4 space-y-unit_lg">
+<div class="glass-card p-unit_lg rounded-xl h-full flex flex-col">
+<h3 class="text-headline-sm font-headline-sm mb-unit_md">Interview Protocol</h3>
+<ul class="space-y-unit_md flex-grow">
+<li class="flex gap-unit_sm items-start">
+<span class="material-symbols-outlined text-primary text-body-md" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Real-time code execution environment with AI analysis.</span>
+</li>
+<li class="flex gap-unit_sm items-start">
+<span class="material-symbols-outlined text-primary text-body-md" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Follow-up questions on complexity and optimization.</span>
+</li>
+<li class="flex gap-unit_sm items-start">
+<span class="material-symbols-outlined text-primary text-body-md" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Comprehensive feedback report post-session.</span>
+</li>
+</ul>
+<div class="mt-unit_xl pt-unit_lg border-t border-outline-variant">
+<button class="w-full bg-primary-container text-on-primary-container py-unit_md rounded-lg font-bold text-headline-sm flex items-center justify-center gap-unit_sm active:scale-95 transition-transform">
+              Start Mock Interview
+              <span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+</button>
+<p class="text-center text-label-md font-label-md text-on-surface-variant mt-unit_sm">Ready to begin your Google assessment?</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Illustration / Decorative -->
+<div class="mt-unit_xxl glass-card rounded-xl overflow-hidden relative h-48 flex items-center justify-center">
+<img alt="Code Environment" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay" data-alt="A cinematic, high-contrast photograph of a professional developer workspace in a dark room. The scene features glowing green lines of code reflected on a sleek glass surface, with high-end mechanical keyboards and multiple monitors blurred in the background. The lighting is dominated by deep forest greens and vibrant terminal-green accents, creating an atmosphere of intense technical focus and elite performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcZUfnK-OWlecpfiIZ-0mlO2WeyOLSSjnkC7JEhMOuQxuUjTJjj9Xk2b7dRx5KXUyzq8aY4M0TKB-uSYd5SROvnz_ZY0ScTezPrhKFb80PJm8nEkUb_dKOL2ijCY-fRUkEqz2QtFSscWDBJhlt86h59Zs2um7LGuGesqOsVRBBITLjc3BH3eL1tw0vc-WpGd3WwguzQNse9G5YZt9aMqRA-EjJ8kwz3RfwJhF1wf8Nqs0kiw99NWQJYh3dNUZh5cBDRFyJPLgPAPI"/>
+<div class="relative z-10 text-center px-page_padding">
+<p class="text-primary font-bold text-headline-sm italic">"The best way to predict the future is to invent it."</p>
+<p class="text-on-surface-variant text-label-md">— Alan Kay</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<footer class="md:hidden fixed bottom-0 w-full z-50 border-t border-outline-variant bg-surface h-16 flex justify-around items-center px-page_padding">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-md font-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md">Curriculum</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="video_call" style="font-variation-settings: 'FILL' 1;">video_call</span>
+<span class="text-label-md font-label-md">Mock</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="query_stats">query_stats</span>
+<span class="text-label-md font-label-md">Progress</span>
+</div>
+</footer>
+</body></html>

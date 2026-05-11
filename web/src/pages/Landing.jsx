@@ -109,6 +109,14 @@ export default function Landing() {
               overflow: 'hidden',
             }}>
               <div style={{
+                position: 'absolute',
+                top: 0, left: 0, right: 0, bottom: 0,
+                backgroundImage: "url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop')",
+                backgroundSize: 'cover',
+                opacity: 0.08,
+                pointerEvents: 'none',
+              }}></div>
+              <div style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 borderBottom: `1px solid ${COLORS.border}`, paddingBottom: '12px', marginBottom: '16px',
               }}>

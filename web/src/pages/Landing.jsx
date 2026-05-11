@@ -115,15 +115,15 @@ export default function Landing() {
                 <span className="material-symbols-outlined" style={{ fontSize: '16px', color: COLORS.textDim }}>terminal</span>
                 <span style={{ fontSize: '11px', letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.textDim }}>Daily_Question_042.py</span>
               </div>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', lineHeight: 1.7, color: COLORS.primary, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span>class Solution:</span>
-                <span style={{ paddingLeft: '16px' }}>def trap(self, height):</span>
-                <span style={{ paddingLeft: '32px', color: COLORS.textDim }}># Analyzing your weak spots...</span>
-                <span style={{ paddingLeft: '32px', color: COLORS.textDim }}># Topic: Two Pointers / Hard</span>
-                <span style={{ paddingLeft: '32px' }}>left, right = 0, len(height) - 1</span>
-                <span style={{ paddingLeft: '32px' }}>ans = 0</span>
-                <span style={{ paddingLeft: '32px' }}>left_max, right_max = 0, 0</span>
-                <span style={{ display: 'inline-block', width: '8px', height: '16px', background: COLORS.primary, verticalAlign: 'middle', marginLeft: '4px', animation: 'pulse 1s infinite' }}></span>
+              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', lineHeight: 1.7, color: '#c9d1d9', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <span><span style={{ color: '#ff7b72' }}>class</span> Solution:</span>
+                <span style={{ paddingLeft: '16px' }}><span style={{ color: '#ff7b72' }}>def</span> <span style={{ color: '#d2a8ff' }}>trap</span>(self, height):</span>
+                <span style={{ paddingLeft: '32px', color: '#8b949e' }}># Analyzing your weak spots...</span>
+                <span style={{ paddingLeft: '32px', color: '#8b949e' }}># Topic: Two Pointers / Hard</span>
+                <span style={{ paddingLeft: '32px' }}>left, right = <span style={{ color: '#79c0ff' }}>0</span>, <span style={{ color: '#d2a8ff' }}>len</span>(height) - <span style={{ color: '#79c0ff' }}>1</span></span>
+                <span style={{ paddingLeft: '32px' }}>ans = <span style={{ color: '#79c0ff' }}>0</span></span>
+                <span style={{ paddingLeft: '32px' }}>left_max, right_max = <span style={{ color: '#79c0ff' }}>0</span>, <span style={{ color: '#79c0ff' }}>0</span></span>
+                <span className="animate-pulse" style={{ display: 'inline-block', width: '8px', height: '16px', background: COLORS.primary, verticalAlign: 'middle', marginLeft: '4px' }}></span>
               </div>
             </div>
           </div>

@@ -39,6 +39,7 @@ module.exports = async (ctx) => {
         ...Markup.inlineKeyboard(buttons)
       }
     );
+    await ctx.reply('Tap a company above to get started.');
   } catch (err) {
     console.error('/start error:', err.message);
     ctx.reply('Something went wrong. Please try /start again.');

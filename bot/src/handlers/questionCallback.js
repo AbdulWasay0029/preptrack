@@ -18,10 +18,23 @@ module.exports = async (ctx) => {
 
       try {
         await api.updateUser(telegramId, { target_company_slug: slug });
+        
+        // Fetch company name for better display
+        let companyName = slug;
+        try {
+          const companies = await api.getCompanies();
+          const company = companies.find(c => c.slug === slug);
+          if (company) companyName = company.name;
+        } catch (e) {
+          console.error('Failed to fetch company name', e);
+        }
+
+        await ctx.answerCbQuery('Company updated!').catch(() => {});
+
         await ctx.editMessageText(
-          `✅ Target company set to *${slug}*!\n\n` +
-          `Use /today to get your first batch of questions.\n` +
-          `Use /progress anytime to see your stats.`,
+          `✅ Target company set to *${companyName}*!\n\n` +
+          `Send /today to get your first questions.\n` +
+          `Send /progress anytime to see your stats.`,
           { parse_mode: 'Markdown' }
         );
       } catch (err) {

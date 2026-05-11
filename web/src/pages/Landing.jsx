@@ -15,10 +15,22 @@ export default function Landing() {
     <div className="font-body-base text-body-base selection:bg-primary selection:text-on-primary bg-background min-h-screen">
 
 
-      <main className="max-w-[1200px] mx-auto px-lg w-full">
+      <main style={{ paddingLeft: '24px', paddingRight: '24px' }} className="max-w-[1200px] mx-auto w-full">
         {/* Hero Section */}
-        <section className="py-xl md:py-32 flex flex-col md:flex-row gap-xl items-center">
-          <div className="w-full md:w-7/12 flex flex-col gap-lg shrink-0">
+        <section style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(12, 1fr)',
+          gap: '32px',
+          alignItems: 'center',
+          padding: '64px 0'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '16px',
+            gridColumn: 'span 7'
+          }}>
             <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
               Stop grinding randomly. <br />
               <span className="text-primary">Start fixing your weaknesses.</span>
@@ -26,31 +38,31 @@ export default function Landing() {
             <p className="text-base font-normal text-on-surface-variant w-full max-w-xl">
               PrepTrack sends you company-specific DSA questions daily and adapts based on what you keep getting stuck on. Tailored technical interview prep delivered straight to your workflow.
             </p>
-            <div className="flex flex-wrap gap-md mt-sm">
-              <a href={TELEGRAM_BOT_URL} className="bg-primary text-on-primary px-xl py-md rounded-lg font-bold flex items-center gap-sm hover:brightness-110 transition-all">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '12px' }}>
+              <a href={TELEGRAM_BOT_URL} style={{ padding: '12px 24px' }} className="bg-primary text-on-primary rounded-lg font-bold flex items-center gap-sm hover:brightness-110 transition-all">
                 <span className="material-symbols-outlined" data-icon="send">send</span>
                 Start Free on Telegram
               </a>
-              <a href="/dashboard" className="border border-outline-variant text-on-surface px-xl py-md rounded-lg font-bold hover:bg-surface-variant transition-all">
+              <a href="/dashboard" style={{ padding: '12px 24px' }} className="border border-outline-variant text-on-surface rounded-lg font-bold hover:bg-surface-variant transition-all">
                 View Dashboard
               </a>
             </div>
           </div>
-          <div className="w-full md:w-5/12 hidden md:block">
-            <div className="bg-surface-container border border-outline-variant rounded-xl p-lg relative overflow-hidden h-[400px]">
+          <div style={{ gridColumn: 'span 5' }} className="hidden md:block">
+            <div style={{ padding: '24px' }} className="bg-surface-container border border-outline-variant rounded-xl relative overflow-hidden h-[400px]">
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop')] bg-cover opacity-10" data-alt="Close-up macro photography of high-performance code on a dark monitor screen."></div>
-              <div className="relative z-10 font-code-snippet text-code-snippet text-primary flex flex-col gap-base">
-                <div className="flex items-center gap-sm mb-md border-b border-outline-variant pb-sm">
+              <div style={{ gap: '12px' }} className="relative z-10 font-code-snippet text-code-snippet text-primary flex flex-col">
+                <div style={{ gap: '8px', marginBottom: '16px', paddingBottom: '8px' }} className="flex items-center border-b border-outline-variant">
                   <span className="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
                   <span className="text-label-caps font-label-caps uppercase tracking-wider text-on-surface-variant">Daily_Question_042.py</span>
                 </div>
                 <span>class Solution:</span>
-                <span className="pl-md">def trap(self, height: List[int]) -&gt; int:</span>
-                <span className="pl-xl text-on-surface-variant"># Analyzing your weak spots...</span>
-                <span className="pl-xl text-on-surface-variant"># Topic: Two Pointers / Hard</span>
-                <span className="pl-xl">left, right = 0, len(height) - 1</span>
-                <span className="pl-xl">ans = 0</span>
-                <span className="pl-xl">left_max, right_max = 0, 0</span>
+                <span style={{ paddingLeft: '16px' }}>def trap(self, height: List[int]) -&gt; int:</span>
+                <span style={{ paddingLeft: '32px' }} className="text-on-surface-variant"># Analyzing your weak spots...</span>
+                <span style={{ paddingLeft: '32px' }} className="text-on-surface-variant"># Topic: Two Pointers / Hard</span>
+                <span style={{ paddingLeft: '32px' }}>left, right = 0, len(height) - 1</span>
+                <span style={{ paddingLeft: '32px' }}>ans = 0</span>
+                <span style={{ paddingLeft: '32px' }}>left_max, right_max = 0, 0</span>
                 <span className="animate-pulse bg-primary w-2 h-4 inline-block align-middle ml-1"></span>
               </div>
             </div>

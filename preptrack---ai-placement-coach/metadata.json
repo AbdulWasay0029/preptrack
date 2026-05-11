@@ -1,0 +1,6 @@
+{
+  "name": "PrepTrack - AI Placement Coach",
+  "description": "An adaptive DSA and System Design prep platform for technical placements. Features AI-powered diagnostic assessments, daily Telegram questions, and personalized coaching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["AI coaching", "Interview assessment", "DSA curriculum"]
+}

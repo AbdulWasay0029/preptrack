@@ -171,7 +171,7 @@ export default function Diagnostic() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-grow py-unit_xxl px-page_padding max-w-4xl mx-auto w-full flex flex-col gap-unit_lg">
+        <main className="flex-grow py-unit_xxl px-page_padding max-w-6xl mx-auto w-full flex flex-col gap-unit_lg">
           <section className="bg-surface-container border border-outline-variant p-unit_xl rounded-xl text-center">
             <h1 className="text-headline-lg font-bold mb-unit_md">Assessment Completed!</h1>
             
@@ -240,7 +240,7 @@ export default function Diagnostic() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow pt-unit_md pb-unit_xxl px-page_padding max-w-4xl mx-auto w-full flex flex-col gap-unit_lg">
+      <main className="flex-grow pt-unit_md pb-unit_xxl px-page_padding max-w-6xl mx-auto w-full flex flex-col gap-unit_lg">
         {/* Progress Section */}
         <section className="w-full mt-unit_md">
           <div className="flex justify-between items-end mb-unit_xs">

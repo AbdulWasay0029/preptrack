@@ -5,6 +5,9 @@ import Login from './pages/Login';
 import Progress from './pages/Progress';
 import Landing from './pages/Landing';
 import Diagnostic from './pages/Diagnostic';
+import Curriculum from './pages/Curriculum';
+import Lesson from './pages/Lesson';
+import Mock from './pages/Mock';
 
 function AppLayout() {
   const location = useLocation();
@@ -29,6 +32,9 @@ function AppLayout() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/progress" element={<Progress />} />
           <Route path="/diagnostic" element={<Diagnostic />} />
+          <Route path="/curriculum" element={<Curriculum />} />
+          <Route path="/lesson" element={<Lesson />} />
+          <Route path="/mock" element={<Mock />} />
         </Routes>
       </main>
     </div>

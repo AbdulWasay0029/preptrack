@@ -27,15 +27,15 @@ export default function Landing() {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
+            alignItems: 'stretch',
             gap: '16px',
             gridColumn: 'span 7'
           }}>
-            <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
+            <h1 style={{ width: '100%' }} className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
               Stop grinding randomly. <br />
               <span className="text-primary">Start fixing your weaknesses.</span>
             </h1>
-            <p className="text-base font-normal text-on-surface-variant w-full max-w-xl">
+            <p style={{ width: '100%' }} className="text-base font-normal text-on-surface-variant max-w-xl">
               PrepTrack sends you company-specific DSA questions daily and adapts based on what you keep getting stuck on. Tailored technical interview prep delivered straight to your workflow.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '12px' }}>

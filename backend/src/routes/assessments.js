@@ -11,7 +11,7 @@ async function getUserId(telegramId) {
 }
 
 // POST /assessments/start
-router.post('/start', requireInternalAuth, async (req, res) => {
+router.post('/start', async (req, res) => {
   const { telegram_id, company_slug } = req.body;
   
   try {
@@ -77,7 +77,7 @@ router.post('/start', requireInternalAuth, async (req, res) => {
 });
 
 // POST /assessments/:id/respond
-router.post('/:id/respond', requireInternalAuth, async (req, res) => {
+router.post('/:id/respond', async (req, res) => {
   const assessmentId = req.params.id;
   const { question_id, user_response, time_taken_seconds, question_title, difficulty, topic } = req.body;
 
@@ -122,7 +122,7 @@ Return ONLY valid JSON: {"score": <0-100>, "feedback": "<2 sentences>", "approac
 });
 
 // POST /assessments/:id/complete
-router.post('/:id/complete', requireInternalAuth, async (req, res) => {
+router.post('/:id/complete', async (req, res) => {
   const assessmentId = req.params.id;
 
   try {

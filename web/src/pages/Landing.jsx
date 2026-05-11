@@ -18,7 +18,7 @@ export default function Landing() {
       <main className="max-w-[1200px] mx-auto px-lg w-full">
         {/* Hero Section */}
         <section className="py-xl md:py-32 flex flex-col md:flex-row gap-xl items-center">
-          <div className="w-full md:w-7/12 flex flex-col gap-lg">
+          <div className="w-full md:w-7/12 flex flex-col gap-lg shrink-0">
             <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
               Stop grinding randomly. <br />
               <span className="text-primary">Start fixing your weaknesses.</span>

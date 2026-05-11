@@ -43,6 +43,12 @@ if (process.env.TELEGRAM_BOT_TOKEN) {
     // Generate assessment URL
     const url = `${APP_URL}/diagnostic?telegram_id=${telegramId}&company=${companySlug}`;
     
+    if (url.includes('localhost')) {
+      await ctx.answerCbQuery();
+      await ctx.reply(`⚠️ I cannot send a link to 'localhost' on Telegram. Please set the **APP_URL** environment variable in Render to your Vercel URL!`);
+      return;
+    }
+    
     await ctx.answerCbQuery();
     await ctx.reply(`Great! Starting your diagnostic assessment for ${companySlug.toUpperCase()}.\n\nClick below to begin:`, 
       Markup.inlineKeyboard([

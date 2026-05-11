@@ -17,8 +17,8 @@ export default function Landing() {
 
       <main className="max-w-[1200px] mx-auto px-lg w-full">
         {/* Hero Section */}
-        <section className="py-xl md:py-32 grid md:grid-cols-12 gap-xl items-center">
-          <div className="md:col-span-7 flex flex-col gap-lg w-full">
+        <section className="py-xl md:py-32 flex flex-col md:flex-row gap-xl items-center">
+          <div className="w-full md:w-7/12 flex flex-col gap-lg">
             <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">
               Stop grinding randomly. <br />
               <span className="text-primary">Start fixing your weaknesses.</span>
@@ -36,7 +36,7 @@ export default function Landing() {
               </a>
             </div>
           </div>
-          <div className="md:col-span-5 hidden md:block">
+          <div className="w-full md:w-5/12 hidden md:block">
             <div className="bg-surface-container border border-outline-variant rounded-xl p-lg relative overflow-hidden h-[400px]">
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop')] bg-cover opacity-10" data-alt="Close-up macro photography of high-performance code on a dark monitor screen."></div>
               <div className="relative z-10 font-code-snippet text-code-snippet text-primary flex flex-col gap-base">

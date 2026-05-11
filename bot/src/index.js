@@ -34,9 +34,14 @@ bot.on('message', (ctx) => {
 });
 
 // Start
-bot.launch().then(() => {
-  console.log('PrepTrack bot started');
-  startScheduler(bot);
+bot.telegram.deleteWebhook().then(() => {
+  console.log('Webhook deleted, launching bot...');
+  bot.launch().then(() => {
+    console.log('PrepTrack bot started');
+    startScheduler(bot);
+  });
+}).catch(err => {
+  console.error('Failed to launch bot:', err);
 });
 
 // Start a dummy HTTP server so Render (Free Web Service) doesn't crash the bot

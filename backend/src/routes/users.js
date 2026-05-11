@@ -39,7 +39,7 @@ router.get('/active', requireInternalAuth, async (req, res) => {
 });
 
 // GET /users/:telegram_id — fetch user by telegram ID
-router.get('/:telegram_id', requireInternalAuth, async (req, res) => {
+router.get('/:telegram_id', async (req, res) => {
   try {
     const { rows } = await db.query(
       `SELECT u.*, c.slug AS company_slug, c.name AS company_name

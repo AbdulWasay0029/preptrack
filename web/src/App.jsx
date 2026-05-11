@@ -1,50 +1,54 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Progress from './pages/Progress';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useSearchParams, useLocation, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
+
+// Pages
 import Landing from './pages/Landing';
-import Diagnostic from './pages/Diagnostic';
+import Dashboard from './pages/Dashboard';
 import Curriculum from './pages/Curriculum';
-import Lesson from './pages/Lesson';
 import Mock from './pages/Mock';
+import Progress from './pages/Progress';
+import Lesson from './pages/Lesson';
+import Diagnostic from './pages/Diagnostic';
 
-function AppLayout() {
+function AuthWrapper({ children }) {
+  const [searchParams] = useSearchParams();
   const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
-  const hideNavbar = isLoginPage;
+  const telegramId = searchParams.get('telegram_id');
 
-  // Magic link login bypass
-  const searchParams = new URLSearchParams(location.search);
-  const loginId = searchParams.get('login');
-  if (loginId) {
-    localStorage.setItem('telegram_id', loginId);
-    window.location.href = '/dashboard'; // clear url params and go to dashboard
+  useEffect(() => {
+    if (telegramId) {
+      localStorage.setItem('prep_telegram_id', telegramId);
+    }
+  }, [telegramId]);
+
+  const storedId = localStorage.getItem('prep_telegram_id');
+  const isPublicRoute = ['/', '/diagnostic'].includes(location.pathname);
+
+  // Allow access if linked or on landing/diagnostic
+  if (!storedId && !isPublicRoute) {
+    return <Navigate to="/" replace />;
   }
 
-  return (
-    <div className="min-h-screen bg-background text-white font-sans">
-      {!hideNavbar && <Navbar />}
-      <main>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/diagnostic" element={<Diagnostic />} />
-          <Route path="/curriculum" element={<Curriculum />} />
-          <Route path="/lesson" element={<Lesson />} />
-          <Route path="/mock" element={<Mock />} />
-        </Routes>
-      </main>
-    </div>
-  );
+  return <>{children}</>;
 }
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppLayout />
-    </BrowserRouter>
+    <Router>
+      <AuthWrapper>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/curriculum" element={<Curriculum />} />
+            <Route path="/mock" element={<Mock />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/lesson/:id" element={<Lesson />} />
+            <Route path="/diagnostic" element={<Diagnostic />} />
+          </Routes>
+        </Layout>
+      </AuthWrapper>
+    </Router>
   );
 }

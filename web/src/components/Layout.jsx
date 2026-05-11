@@ -1,11 +1,20 @@
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 import TopNav from './TopNav';
 import BottomNav from './BottomNav';
+import { cn } from '@/src/lib/utils';
 
 export default function Layout({ children, activePage }) {
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+
   return (
-    <div className="bg-background text-on-surface min-h-screen flex flex-col">
+    <div className="bg-background text-on-surface min-h-screen flex flex-col font-sans selection:bg-primary/30">
       <TopNav activePage={activePage} />
-      <main className="flex-1 pb-20 md:pb-0 md:pt-20">
+      <main className={cn(
+        "flex-1",
+        !isLanding ? "pb-20 md:pb-8 md:pt-20" : "pt-20"
+      )}>
         {children}
       </main>
       <BottomNav activePage={activePage} />

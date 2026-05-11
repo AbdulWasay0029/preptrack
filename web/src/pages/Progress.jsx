@@ -154,17 +154,37 @@ export default function Progress() {
         </div>
 
         {/* Empty States / Placeholder Section */}
-        <div className="mt-xl grid grid-cols-1 md:grid-cols-2 gap-gutter">
-          <div className="bg-surface-container border border-outline-variant border-dashed p-xl flex flex-col items-center justify-center text-center rounded-lg">
-            <span className="material-symbols-outlined text-outline mb-md" style={{ fontSize: '48px' }}>analytics</span>
-            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Detailed Breakdown</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Complete 10 more problems to unlock deep-dive performance analysis per difficulty level.</p>
+        <div style={{ marginTop: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          <div style={{
+            background: '#1a221a',
+            border: '1px dashed #3d4a3d',
+            padding: '32px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            borderRadius: '8px'
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#869585', marginBottom: '16px' }}>analytics</span>
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#dce5d9', marginBottom: '8px' }}>Detailed Breakdown</h3>
+            <p style={{ fontSize: '14px', color: '#bccbb9', lineHeight: 1.6, maxWidth: '320px', margin: 0 }}>Complete 10 more problems to unlock deep-dive performance analysis per difficulty level.</p>
           </div>
 
-          <div className="bg-surface-container border border-outline-variant border-dashed p-xl flex flex-col items-center justify-center text-center rounded-lg">
-            <span className="material-symbols-outlined text-outline mb-md" style={{ fontSize: '48px' }}>leaderboard</span>
-            <h3 className="font-headline-md text-headline-md text-on-surface mb-xs">Peer Comparison</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Global ranking data is currently being synthesized. Check back after your next mock assessment.</p>
+          <div style={{
+            background: '#1a221a',
+            border: '1px dashed #3d4a3d',
+            padding: '32px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            borderRadius: '8px'
+          }}>
+            <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#869585', marginBottom: '16px' }}>leaderboard</span>
+            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#dce5d9', marginBottom: '8px' }}>Peer Comparison</h3>
+            <p style={{ fontSize: '14px', color: '#bccbb9', lineHeight: 1.6, maxWidth: '320px', margin: 0 }}>Global ranking data is currently being synthesized. Check back after your next mock assessment.</p>
           </div>
         </div>
       </main>

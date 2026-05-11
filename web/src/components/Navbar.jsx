@@ -1,14 +1,30 @@
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import api from '../api/client';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const telegramId = localStorage.getItem('telegram_id');
-  const telegramName = localStorage.getItem('telegram_name') || 'User';
+  const [telegramName, setTelegramName] = useState(localStorage.getItem('telegram_name') || 'User');
+
+  useEffect(() => {
+    if (telegramId && (telegramName === 'User' || telegramName === '')) {
+      api.get(`/analytics/${telegramId}`)
+        .then(res => {
+          if (res.data.user?.name) {
+            localStorage.setItem('telegram_name', res.data.user.name);
+            setTelegramName(res.data.user.name);
+          }
+        })
+        .catch(err => console.error('Failed to fetch user name:', err));
+    }
+  }, [telegramId, telegramName]);
 
   const handleLogout = () => {
     localStorage.removeItem('telegram_id');
     localStorage.removeItem('telegram_name');
+    setTelegramName('User');
     navigate('/login');
   };
 

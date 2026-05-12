@@ -1,209 +1,138 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/client';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { motion } from 'motion/react';
+import { TrendingUp, Award, Clock, Star, ChevronRight, BarChart3, Loader2 } from 'lucide-react';
+import { cn } from '@/src/lib/utils';
 
 export default function Progress() {
+  const [searchParams] = useSearchParams();
+  const [telegramId, setTelegramId] = useState(searchParams.get('telegram_id') || localStorage.getItem('prep_telegram_id'));
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const telegramId = localStorage.getItem('telegram_id');
-    if (!telegramId) {
-      navigate('/login');
-      return;
+    const qid = searchParams.get('telegram_id');
+    if (qid) {
+      setTelegramId(qid);
+      localStorage.setItem('prep_telegram_id', qid);
     }
+  }, [searchParams]);
 
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/analytics/${telegramId}`);
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch progress data', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [navigate]);
+  useEffect(() => {
+    if (telegramId) {
+      setLoading(true);
+      fetch(`/api/assessments/${telegramId}/latest`)
+        .then(res => res.json())
+        .then(resData => {
+          setData(resData);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [telegramId]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('telegram_id');
-    localStorage.removeItem('telegram_name');
-    navigate('/login');
-  };
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh]">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+        <p className="mt-4 text-on-surface-variant">Fetching your latest progress...</p>
+      </div>
+    );
+  }
 
-  if (loading) return <div className="p-8 text-center text-on-surface-variant font-body-base">Loading...</div>;
-  if (!data) return <div className="p-8 text-center text-error font-body-base">Failed to load data</div>;
+  if (!telegramId || !data?.assessment) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-20 text-center">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <div className="w-24 h-24 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-8 border border-outline-variant">
+            <BarChart3 className="w-12 h-12 text-on-surface-variant" />
+          </div>
+          <h1 className="text-display-sm mb-4">No Data Points Yet</h1>
+          <p className="text-body-lg text-on-surface-variant mb-12 max-w-lg mx-auto">
+            We haven't tracked any assessments for this account. Start a diagnostic to see your company-readiness score.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href="https://t.me/PrepTrackBot?start=assess" 
+              target="_blank" 
+              rel="noreferrer"
+              className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-headline-sm"
+            >
+              Start Diagnostic on Telegram
+            </a>
+            <Link 
+              to="/dashboard" 
+              className="bg-surface-container border border-outline-variant px-8 py-4 rounded-xl font-bold text-headline-sm hover:bg-surface-container-high transition-all"
+            >
+              Go to Dashboard
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
-  const overall = data.overall || {};
-  const topicBreakdown = data.topicBreakdown || [];
-  const dailyActivity = data.dailyActivity || [];
-
-  // Get max solved for scaling the chart
-  const maxSolved = Math.max(...dailyActivity.map(d => parseInt(d.solved) || 0), 1);
-
-  // Take top 4 weak topics
-  const topWeakTopics = topicBreakdown.slice(0, 4);
-
-  const telegramName = localStorage.getItem('telegram_name') || data.user?.name || 'User';
+  const { assessment, responses } = data;
 
   return (
-    <div className="font-body-base text-body-base min-h-screen flex flex-col bg-background text-on-background selection:bg-primary selection:text-on-primary">
+    <div className="max-w-5xl mx-auto px-page_padding py-10">
+      <div className="mb-12">
+        <h1 className="text-display mb-2">Progress Dashboard</h1>
+        <p className="text-body-lg text-on-surface-variant">Your readiness score for {assessment.company_name}.</p>
+      </div>
 
-
-      <main className="max-w-container-max mx-auto px-lg py-xl flex-grow w-full">
-        {/* Page Header */}
-        <div className="mb-xl">
-          <h1 className="font-display-lg text-display-lg text-on-surface mb-xs">Performance Metrics</h1>
-          <p className="font-body-base text-body-base text-on-surface-variant">Analytical overview of your technical interview preparation cycle.</p>
-        </div>
-
-        {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-xl">
-          {/* Solved */}
-          <div className="bg-surface-container border border-outline-variant p-lg flex flex-col gap-xs rounded-lg">
-            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Solved</span>
-            <span className="font-display-lg text-display-lg text-primary">{overall.total_solved || 0}</span>
-            <div className="h-1 bg-outline-variant w-full mt-sm rounded-full overflow-hidden">
-              <div className="h-full bg-primary" style={{ width: `${Math.min(((overall.total_solved || 0) / (overall.total_attempted || 1)) * 100, 100)}%` }}></div>
-            </div>
-          </div>
-
-          {/* Stuck */}
-          <div className="bg-surface-container border border-outline-variant p-lg flex flex-col gap-xs rounded-lg">
-            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Stuck</span>
-            <span className="font-display-lg text-display-lg text-tertiary">{overall.total_stuck || 0}</span>
-            <div className="h-1 bg-outline-variant w-full mt-sm rounded-full overflow-hidden">
-              <div className="h-full bg-tertiary" style={{ width: `${Math.min(((overall.total_stuck || 0) / (overall.total_attempted || 1)) * 100, 100)}%` }}></div>
-            </div>
-          </div>
-
-          {/* Skipped */}
-          <div className="bg-surface-container border border-outline-variant p-lg flex flex-col gap-xs rounded-lg">
-            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase">Skipped</span>
-            <span className="font-display-lg text-display-lg text-outline">{overall.total_skipped || 0}</span>
-            <div className="h-1 bg-outline-variant w-full mt-sm rounded-full overflow-hidden">
-              <div className="h-full bg-outline" style={{ width: `${Math.min(((overall.total_skipped || 0) / (overall.total_attempted || 1)) * 100, 100)}%` }}></div>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="bg-surface-container border border-outline-variant p-6 rounded-2xl flex flex-col items-center justify-center">
+          <p className="text-label-md text-on-surface-variant uppercase mb-2">Overall Score</p>
+          <div className="relative w-24 h-24 flex items-center justify-center">
+            <svg className="w-full h-full -rotate-90">
+              <circle cx="48" cy="48" r="40" fill="none" stroke="currentColor" strokeWidth="8" className="text-surface-container-highest" />
+              <circle cx="48" cy="48" r="40" fill="none" stroke="currentColor" strokeWidth="8" className="text-primary" strokeDasharray={`${2 * Math.PI * 40}`} strokeDashoffset={`${2 * Math.PI * 40 * (1 - assessment.overall_score / 100)}`} />
+            </svg>
+            <span className="absolute text-headline-md font-bold">{assessment.overall_score}</span>
           </div>
         </div>
+        {[
+          { label: 'DSA Mastery', value: '72%', color: 'text-primary' },
+          { label: 'Time Env.', value: '14m avg', color: 'text-tertiary' },
+          { label: 'Rank', value: 'Top 15%', color: 'text-primary-container' },
+        ].map((stat, i) => (
+          <div key={i} className="bg-surface-container border border-outline-variant p-6 rounded-2xl">
+            <p className="text-label-md text-on-surface-variant uppercase mb-4">{stat.label}</p>
+            <p className={cn("text-display-sm", stat.color)}>{stat.value}</p>
+          </div>
+        ))}
+      </div>
 
-        {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
-          {/* Activity Chart Section */}
-          <div className="lg:col-span-8 bg-surface-container border border-outline-variant p-lg rounded-lg">
-            <div className="flex justify-between items-center mb-xl">
-              <h2 className="font-headline-md text-headline-md text-on-surface">30-Day Activity</h2>
-              <span className="font-label-caps text-label-caps text-on-surface-variant">Last 30 Days</span>
-            </div>
-            
-            {dailyActivity.length > 0 ? (
-              <div className="relative h-64 w-full flex items-end gap-[2px]">
-                {dailyActivity.map((day, index) => {
-                  const solvedCount = parseInt(day.solved) || 0;
-                  const heightPercent = maxSolved > 0 ? (solvedCount / maxSolved) * 100 : 0;
-                  return (
-                    <div 
-                      key={index} 
-                      className="flex-1 bg-primary/20 hover:bg-primary transition-colors cursor-pointer"
-                      style={{ height: `${Math.max(heightPercent, 5)}%` }}
-                      title={`${day.date}: ${solvedCount} solved`}
-                    ></div>
-                  );
-                })}
+      <h2 className="text-headline-lg mb-8">Question Breakdown</h2>
+      <div className="space-y-4">
+        {responses.map((resp, i) => (
+          <div key={i} className="bg-surface-container-low border border-outline-variant p-6 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <h3 className="text-headline-sm">{resp.question_title}</h3>
+                <span className="text-[10px] bg-surface-container-high px-2 py-0.5 rounded font-bold text-on-surface-variant border border-outline-variant uppercase">
+                  {resp.difficulty || 'Medium'}
+                </span>
               </div>
-            ) : (
-              <div className="h-64 w-full flex items-center justify-center border border-dashed border-outline-variant rounded-lg">
-                <span className="text-on-surface-variant font-body-sm">No activity data available yet.</span>
+              <p className="text-body-md text-on-surface-variant italic">"{resp.ai_feedback}"</p>
+            </div>
+            <div className="flex items-center gap-8 shrink-0">
+              <div className="text-center">
+                <p className="text-label-md text-on-surface-variant uppercase">Score</p>
+                <p className={cn("text-headline-sm font-bold", resp.ai_score > 70 ? "text-primary" : "text-error")}>
+                  {resp.ai_score}/100
+                </p>
               </div>
-            )}
-
-            <div className="mt-md pt-md border-t border-outline-variant flex justify-between text-on-surface-variant font-label-caps text-label-caps">
-              <span>30D AGO</span>
-              <span>TODAY</span>
+              <div className="text-center">
+                <p className="text-label-md text-on-surface-variant uppercase">Time</p>
+                <p className="text-headline-sm font-bold">
+                  {Math.floor(resp.time_taken_seconds / 60)}m
+                </p>
+              </div>
             </div>
           </div>
-
-          {/* Weak Topics Section */}
-          <div className="lg:col-span-4 bg-surface-container border border-outline-variant p-lg rounded-lg">
-            <h2 className="font-headline-md text-headline-md text-on-surface mb-xl">Weak Topics</h2>
-            <div className="flex flex-col gap-lg">
-              {topWeakTopics.length > 0 ? (
-                topWeakTopics.map((topic, index) => {
-                  const score = Math.round(parseFloat(topic.weak_score) * 100) || 0;
-                  return (
-                    <div key={index} className="flex flex-col gap-xs">
-                      <div className="flex justify-between items-center mb-xs">
-                        <span className="font-body-sm text-body-sm text-on-surface">{topic.topic}</span>
-                        <span className="font-code-snippet text-code-snippet text-primary">{score}%</span>
-                      </div>
-                      <div className="w-full h-2 bg-surface-variant rounded-full overflow-hidden">
-                        <div className="h-full bg-primary" style={{ width: `${score}%` }}></div>
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="text-on-surface-variant text-center py-xl">
-                  Not enough data to determine weak topics yet.
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Empty States / Placeholder Section */}
-        <div style={{ marginTop: '24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-          <div style={{
-            background: '#1a221a',
-            border: '1px dashed #3d4a3d',
-            padding: '32px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            borderRadius: '8px'
-          }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#869585', marginBottom: '16px' }}>analytics</span>
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#dce5d9', marginBottom: '8px' }}>Detailed Breakdown</h3>
-            <p style={{ fontSize: '14px', color: '#bccbb9', lineHeight: 1.6, maxWidth: '320px', margin: 0 }}>Complete 10 more problems to unlock deep-dive performance analysis per difficulty level.</p>
-          </div>
-
-          <div style={{
-            background: '#1a221a',
-            border: '1px dashed #3d4a3d',
-            padding: '32px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            borderRadius: '8px'
-          }}>
-            <span className="material-symbols-outlined" style={{ fontSize: '48px', color: '#869585', marginBottom: '16px' }}>leaderboard</span>
-            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#dce5d9', marginBottom: '8px' }}>Peer Comparison</h3>
-            <p style={{ fontSize: '14px', color: '#bccbb9', lineHeight: 1.6, maxWidth: '320px', margin: 0 }}>Global ranking data is currently being synthesized. Check back after your next mock assessment.</p>
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant mt-xl">
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-container-max mx-auto">
-          <div className="mb-md md:mb-0">
-            <span className="text-label-caps font-label-caps text-on-surface">PrepTrack</span>
-            <span className="mx-md text-outline-variant">|</span>
-            <span className="font-body-sm text-body-sm text-on-surface-variant dark:text-on-surface-variant">Built by Abdul Wasay</span>
-          </div>
-          <div className="flex gap-lg">
-            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
-            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms</a>
-            <a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
-          </div>
-        </div>
-      </footer>
+        ))}
+      </div>
     </div>
   );
 }

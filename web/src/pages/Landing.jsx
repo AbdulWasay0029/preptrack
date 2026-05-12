@@ -1,302 +1,182 @@
-import { useState, useEffect } from 'react';
-import api from '../api/client';
-
-const COLORS = {
-  bg: '#0e150e',
-  surface: '#1a221a',
-  surfaceHigh: '#242c24',
-  border: '#3d4a3d',
-  primary: '#4be277',
-  primaryDim: 'rgba(75,226,119,0.1)',
-  onPrimary: '#003915',
-  text: '#dce5d9',
-  textMuted: '#bccbb9',
-  textDim: '#869585',
-};
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { motion } from 'motion/react';
+import { Terminal, Send, Code, BarChart3, ChevronRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { cn } from '@/src/lib/utils';
 
 export default function Landing() {
-  const TELEGRAM_BOT_URL = "https://t.me/PrepTrackBot?start=web";
+  const navigate = useNavigate();
+  const [telegramId] = useState(localStorage.getItem('prep_telegram_id'));
+  const TELEGRAM_BOT_URL = `https://t.me/PrepTrackBot?start=${telegramId ? 'dashboard' : 'assess'}`;
   const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    api.get('/questions/companies')
-      .then(res => setCompanies(res.data))
+    fetch('/api/questions/companies')
+      .then(res => res.json())
+      .then(data => setCompanies(Array.isArray(data) ? data : []))
       .catch(err => console.error('Failed to fetch companies:', err));
   }, []);
 
   return (
-    <div style={{ background: COLORS.bg, color: COLORS.text, fontFamily: 'Inter, system-ui, sans-serif', minHeight: '100vh' }}>
+    <div id="landing-page" className="min-h-screen bg-background text-on-surface">
+      {/* Hero Section */}
+      <section className="pt-20 pb-20 px-page_padding max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 flex flex-col items-start gap-8">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span className="text-label-bold">AI-DRIVEN PLACEMENT COACH</span>
+            </motion.div>
 
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-display sm:text-[4.5rem] leading-[1.1] font-bold tracking-tight"
+            >
+              Stop grinding randomly. <br />
+              <span className="text-primary italic">Fix your weaknesses.</span>
+            </motion.h1>
 
-        {/* Hero */}
-        <section style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(12, 1fr)',
-          gap: '32px',
-          alignItems: 'center',
-          padding: '80px 0 64px',
-        }}>
-          <div style={{
-            gridColumn: 'span 7',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: '20px',
-          }}>
-            <h1 style={{
-              fontSize: 'clamp(28px, 4vw, 40px)',
-              fontWeight: 700,
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              color: COLORS.text,
-              margin: 0,
-            }}>
-              Stop grinding randomly.<br />
-              <span style={{ color: COLORS.primary }}>Start fixing your weaknesses.</span>
-            </h1>
-            <p style={{
-              fontSize: '16px',
-              lineHeight: 1.6,
-              color: COLORS.textMuted,
-              margin: 0,
-              maxWidth: '520px',
-            }}>
-              PrepTrack sends you company-specific DSA questions daily and adapts based on what you keep getting stuck on. Tailored technical interview prep delivered straight to your workflow.
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '8px' }}>
-              <a
-                href={TELEGRAM_BOT_URL}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '8px',
-                  background: COLORS.primary, color: COLORS.onPrimary,
-                  padding: '12px 24px', borderRadius: '4px',
-                  fontWeight: 700, fontSize: '14px', textDecoration: 'none',
-                  transition: 'filter 0.2s',
-                }}
-                onMouseOver={e => e.currentTarget.style.filter = 'brightness(1.1)'}
-                onMouseOut={e => e.currentTarget.style.filter = 'brightness(1)'}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-headline-sm text-on-surface-variant max-w-xl leading-relaxed"
+            >
+              PrepTrack analyzes your DSA patterns, predicts company-specific questions, and coaches you in real-time. Tailored prep delivered straight to Telegram.
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex flex-wrap gap-4"
+            >
+              {telegramId ? (
+                <button 
+                  onClick={() => navigate('/dashboard')}
+                  className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-primary/20"
+                >
+                  <BarChart3 className="w-5 h-5" />
+                  GO TO DASHBOARD
+                </button>
+              ) : (
+                <a 
+                  href={TELEGRAM_BOT_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-primary/20"
+                >
+                  <Send className="w-5 h-5" />
+                  START FREE ON TELEGRAM
+                </a>
+              )}
+              <Link 
+                to="/curriculum" 
+                className="bg-surface-container border border-outline-variant text-on-surface px-8 py-4 rounded-xl font-bold hover:bg-surface-container-high transition-all"
               >
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>send</span>
-                Start Free on Telegram
-              </a>
-              <a
-                href="/dashboard"
-                style={{
-                  display: 'inline-flex', alignItems: 'center',
-                  border: `1px solid ${COLORS.border}`, color: COLORS.text,
-                  padding: '12px 24px', borderRadius: '4px',
-                  fontWeight: 600, fontSize: '14px', textDecoration: 'none',
-                  transition: 'background 0.2s',
-                }}
-                onMouseOver={e => e.currentTarget.style.background = COLORS.surface}
-                onMouseOut={e => e.currentTarget.style.background = 'transparent'}
-              >
-                View Dashboard
-              </a>
-            </div>
+                BROWSE PATHS
+              </Link>
+            </motion.div>
           </div>
 
-          {/* Code preview panel — hidden on mobile */}
-          <div style={{ gridColumn: 'span 5' }} className="hidden md:block">
-            <div style={{
-              background: COLORS.surface,
-              border: `1px solid ${COLORS.border}`,
-              borderRadius: '8px',
-              padding: '24px',
-              height: '380px',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                backgroundImage: "url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop')",
-                backgroundSize: 'cover',
-                opacity: 0.08,
-                pointerEvents: 'none',
-              }}></div>
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                borderBottom: `1px solid ${COLORS.border}`, paddingBottom: '12px', marginBottom: '16px',
-              }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '16px', color: COLORS.textDim }}>terminal</span>
-                <span style={{ fontSize: '11px', letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.textDim }}>Daily_Question_042.py</span>
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-5 hidden lg:block"
+          >
+            <div className="bg-surface-container border border-outline-variant p-6 rounded-3xl relative overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+              <div className="flex items-center gap-2 mb-6 border-b border-outline-variant pb-4">
+                <Terminal className="w-4 h-4 text-primary" />
+                <span className="text-[10px] font-mono tracking-widest text-on-surface-variant">DIAGNOSTIC_ANALYSIS.PY</span>
               </div>
-              <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', lineHeight: 1.7, color: COLORS.primary, display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span>class Solution:</span>
-                <span style={{ paddingLeft: '16px' }}>def trap(self, height):</span>
-                <span style={{ paddingLeft: '32px', color: COLORS.textDim }}># Analyzing your weak spots...</span>
-                <span style={{ paddingLeft: '32px', color: COLORS.textDim }}># Topic: Two Pointers / Hard</span>
-                <span style={{ paddingLeft: '32px' }}>left, right = 0, len(height) - 1</span>
-                <span style={{ paddingLeft: '32px' }}>ans = 0</span>
-                <span style={{ paddingLeft: '32px' }}>left_max, right_max = 0, 0</span>
-                <span className="animate-pulse" style={{ display: 'inline-block', width: '8px', height: '16px', background: COLORS.primary, verticalAlign: 'middle', marginLeft: '4px' }}></span>
+              <div className="font-mono text-sm space-y-2 text-primary">
+                <p>class AdaptivePrep:</p>
+                <p className="ml-4">def analyze_performance(userData):</p>
+                <p className="ml-8 text-on-surface-variant"># Detected gap in Sliding Window</p>
+                <p className="ml-8 text-on-surface-variant"># Recommended: LC#3, LC#76</p>
+                <p className="ml-8">if userData.accuracy {'<'} 0.7:</p>
+                <p className="ml-12">return Curriculum.Foundations()</p>
+                <p className="ml-4 cursor-blink">|</p>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* How It Works */}
-        <section style={{ padding: '64px 0', borderTop: `1px solid ${COLORS.border}` }}>
-          <div style={{ marginBottom: '40px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.primary }}>Workflow</span>
-            <h2 style={{ fontSize: '20px', fontWeight: 600, color: COLORS.text, marginTop: '8px', marginBottom: 0 }}>The Preparatory Loop</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-            {[
-              { icon: 'mail', title: '1. Receive', desc: 'Get a handpicked DSA problem every morning via Telegram based on your target company.' },
-              { icon: 'code', title: '2. Solve', desc: 'Solve the problem in your favorite IDE and mark it as solved, stuck, or skipped.' },
-              { icon: 'analytics', title: '3. Adapt', desc: 'Our engine identifies pattern gaps and adjusts tomorrow\'s questions to reinforce your weaknesses.' },
-            ].map((step, i) => (
-              <div key={i} style={{
-                background: COLORS.surface, border: `1px solid ${COLORS.border}`,
-                borderRadius: '4px', padding: '24px',
-                transition: 'border-color 0.2s',
-              }}
-                onMouseOver={e => e.currentTarget.style.borderColor = COLORS.textDim}
-                onMouseOut={e => e.currentTarget.style.borderColor = COLORS.border}
-              >
-                <span className="material-symbols-outlined" style={{ fontSize: '32px', color: COLORS.primary, display: 'block', marginBottom: '12px' }}>{step.icon}</span>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: COLORS.text, marginBottom: '8px', marginTop: 0 }}>{step.title}</h3>
-                <p style={{ fontSize: '14px', color: COLORS.textMuted, lineHeight: 1.6, margin: 0 }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Companies */}
-        <section style={{ padding: '64px 0', borderTop: `1px solid ${COLORS.border}` }}>
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.textDim }}>Database</span>
-            <h2 style={{ fontSize: '20px', fontWeight: 600, color: COLORS.text, marginTop: '8px', marginBottom: 0 }}>Company-Specific Tracks</h2>
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
-            {(companies.length > 0 ? companies : [{ name: 'Amazon', slug: 'amazon', is_pro_only: false }, { name: 'Microsoft', slug: 'microsoft', is_pro_only: false }]).map(c => (
-              <span key={c.slug} style={{
-                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                background: COLORS.surface,
-                border: `1px solid ${c.is_pro_only ? COLORS.primary : COLORS.border}`,
-                color: c.is_pro_only ? COLORS.primary : COLORS.text,
-                padding: '8px 20px', borderRadius: '100px',
-                fontSize: '14px', fontWeight: c.is_pro_only ? 600 : 400,
-              }}>
-                {c.name}
-                {c.is_pro_only && (
-                  <span style={{
-                    fontSize: '10px', background: COLORS.primary, color: COLORS.onPrimary,
-                    padding: '1px 6px', borderRadius: '3px', fontWeight: 700, textTransform: 'uppercase',
-                  }}>Pro</span>
-                )}
-              </span>
-            ))}
-          </div>
-        </section>
-
-        {/* Pricing */}
-        <section style={{ padding: '64px 0', borderTop: `1px solid ${COLORS.border}` }}>
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <h2 style={{ fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 700, color: COLORS.text, margin: 0 }}>Precision Training Plans</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', maxWidth: '800px', margin: '0 auto' }}>
-            {/* Free */}
-            <div style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '8px', padding: '32px', display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.textDim, marginBottom: '8px' }}>Standard</span>
-              <div style={{ fontSize: '40px', fontWeight: 700, color: COLORS.text, marginBottom: '24px' }}>Free</div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                {['1 Company Track (Amazon/Microsoft)', 'Daily Problem Delivery', 'Basic Weakness Tracking'].map((f, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: COLORS.textMuted }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '18px', color: COLORS.primary }}>check_circle</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <a href={TELEGRAM_BOT_URL} style={{
-                display: 'block', textAlign: 'center', border: `1px solid ${COLORS.border}`,
-                color: COLORS.text, padding: '12px', borderRadius: '4px',
-                fontWeight: 600, fontSize: '14px', textDecoration: 'none',
-                transition: 'background 0.2s',
-              }}>Get Started</a>
-            </div>
-
-            {/* Pro */}
-            <div style={{ background: COLORS.surface, border: `2px solid ${COLORS.primary}`, borderRadius: '8px', padding: '32px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-              <div style={{
-                position: 'absolute', top: '-13px', right: '24px',
-                background: COLORS.primary, color: COLORS.onPrimary,
-                fontSize: '10px', fontWeight: 700, letterSpacing: '0.05em',
-                padding: '4px 12px', borderRadius: '3px', textTransform: 'uppercase',
-              }}>Recommended</div>
-              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.primary, marginBottom: '8px' }}>Engineer Pro</span>
-              <div style={{ marginBottom: '24px' }}>
-                <span style={{ fontSize: '40px', fontWeight: 700, color: COLORS.text }}>₹199</span>
-                <span style={{ fontSize: '16px', color: COLORS.textDim }}>/month</span>
-              </div>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                {['All Premium Companies (Google, etc.)', 'Advanced Adaptive AI Engine', 'Weak Topic Detection', 'Priority Telegram Support'].map((f, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: COLORS.textMuted }}>
-                    <span className="material-symbols-outlined" style={{ fontSize: '18px', color: COLORS.primary }}>check_circle</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <button style={{
-                background: COLORS.primary, color: COLORS.onPrimary,
-                border: 'none', padding: '12px', borderRadius: '4px',
-                fontWeight: 700, fontSize: '14px', cursor: 'pointer',
-                transition: 'filter 0.2s',
-              }}
-                onMouseOver={e => e.currentTarget.style.filter = 'brightness(1.1)'}
-                onMouseOut={e => e.currentTarget.style.filter = 'brightness(1)'}
-              >Upgrade Now</button>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section style={{ padding: '64px 0', borderTop: `1px solid ${COLORS.border}`, maxWidth: '720px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 600, color: COLORS.text, textAlign: 'center', marginBottom: '32px' }}>FAQ</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              { q: 'How does the adaptive logic work?', a: 'We track which topics you mark as Stuck or Skip. The engine increases frequency of those topics in your daily feed automatically.' },
-              { q: 'Which Telegram bot do I use?', a: 'Just search @PrepTrackBot on Telegram and send /start. No signup needed.' },
-              { q: 'Can I switch company tracks?', a: 'Yes. Use /settings in the bot to change your target company anytime.' },
-              { q: 'Is it really free?', a: 'Yes, Amazon and Microsoft tracks are free forever. Pro unlocks all other companies and advanced features.' },
-            ].map((item, i) => (
-              <details key={i} style={{ background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: '4px', padding: '16px' }}>
-                <summary style={{ fontWeight: 600, fontSize: '15px', color: COLORS.text, cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', listStyle: 'none' }}>
-                  {item.q}
-                  <span className="material-symbols-outlined" style={{ fontSize: '20px', color: COLORS.textDim }}>expand_more</span>
-                </summary>
-                <p style={{ fontSize: '14px', color: COLORS.textMuted, lineHeight: 1.6, marginTop: '12px', paddingTop: '12px', borderTop: `1px solid ${COLORS.border}`, marginBottom: 0 }}>
-                  {item.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer style={{ borderTop: `1px solid ${COLORS.border}`, marginTop: '64px', background: '#091009' }}>
-        <div style={{
-          maxWidth: '1200px', margin: '0 auto', padding: '32px 24px',
-          display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '16px',
-        }}>
-          <div>
-            <span style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: COLORS.text }}>PREPTRACK</span>
-            <p style={{ fontSize: '13px', color: COLORS.textDim, margin: '4px 0 0' }}>Built by Abdul Wasay</p>
-          </div>
-          <nav style={{ display: 'flex', gap: '24px' }}>
-            {['Privacy', 'Terms', 'Support'].map(l => (
-              <a key={l} href="#" style={{ fontSize: '13px', color: COLORS.textDim, textDecoration: 'none', transition: 'color 0.2s' }}
-                onMouseOver={e => e.currentTarget.style.color = COLORS.primary}
-                onMouseOut={e => e.currentTarget.style.color = COLORS.textDim}
-              >{l}</a>
-            ))}
-          </nav>
+          </motion.div>
         </div>
-      </footer>
+      </section>
+
+      {/* Stats/Companies Bar */}
+      <section className="bg-surface-container-low border-y border-outline-variant py-10 px-page_padding">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all">
+          {(companies.length > 0 ? companies : [{name:'Amazon'},{name:'Microsoft'},{name:'Google'},{name:'Meta'}]).slice(0, 5).map((c, i) => (
+            <span key={i} className="text-headline-sm font-bold tracking-tighter uppercase">{c.name}</span>
+          ))}
+        </div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-24 px-page_padding max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-display-sm mb-4">Precision Placement Prep</h2>
+          <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+            Everything you need to go from "coding" to "interview ready".
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { 
+              icon: Send, 
+              title: 'Telegram Daily Feed', 
+              desc: 'Get curated problems delivered to your morning routine. No more scrolling through 3000 problems.',
+              color: 'bg-blue-500/10 text-blue-500'
+            },
+            { 
+              icon: BarChart3, 
+              title: 'Weak Spot Detection', 
+              desc: 'Our AI analyzes every response to identify exactly which DSA patterns you keep failing at.',
+              color: 'bg-primary/10 text-primary'
+            },
+            { 
+              icon: Sparkles, 
+              title: 'AI Video Mock', 
+              desc: 'Practice behavioral and technical rounds with an AI interviewer that provides instant feedback.',
+              color: 'bg-secondary/10 text-secondary'
+            }
+          ].map((f, i) => (
+            <div key={i} className="p-8 rounded-3xl bg-surface-container border border-outline-variant hover:border-primary/50 transition-all group">
+              <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform", f.color)}>
+                <f.icon className="w-7 h-7" />
+              </div>
+              <h3 className="text-headline-sm mb-3">{f.title}</h3>
+              <p className="text-body-md text-on-surface-variant leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-page_padding">
+        <div className="max-w-4xl mx-auto bg-primary rounded-[3rem] p-12 md:p-20 text-center text-on-primary relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/20 to-transparent pointer-events-none" />
+          <h2 className="text-display-sm md:text-display font-bold mb-8 relative z-10">Ready to beat the odds?</h2>
+          <p className="text-headline-sm opacity-90 mb-12 max-w-xl mx-auto relative z-10">
+            Join 2,000+ students landing jobs at MAANG and top startups. Start your diagnostic now.
+          </p>
+          <div className="relative z-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href={TELEGRAM_BOT_URL}
+              className="bg-on-primary text-primary px-10 py-5 rounded-2xl font-bold text-headline-sm hover:scale-105 transition-all shadow-2xl"
+            >
+              Open Telegram Bot
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

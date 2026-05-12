@@ -8,18 +8,12 @@ import { cn } from '@/src/lib/utils';
 // Initialize Gemini
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
-
 export default function Lesson() {
   const { id } = useParams();
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     // Initial greeting
@@ -44,7 +38,7 @@ export default function Lesson() {
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
 
-    const userMessage: Message = { role: 'user', content: input, timestamp: new Date() };
+    const userMessage = { role: 'user', content: input, timestamp: new Date() };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
@@ -62,7 +56,7 @@ export default function Lesson() {
         }
       });
       
-      const assistantMessage: Message = { 
+      const assistantMessage = { 
         role: 'assistant', 
         content: response.text || "I couldn't generate a response.", 
         timestamp: new Date() 

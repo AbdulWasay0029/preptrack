@@ -4,13 +4,14 @@ import { CheckCircle2, Lock, Play, Search, Filter, Loader2 } from 'lucide-react'
 import DifficultyBadge from '@/src/components/DifficultyBadge';
 import { cn } from '@/src/lib/utils';
 import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 
 export default function Curriculum() {
-  const [topics, setTopics] = useState<any[]>([]);
+  const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [telegramId] = useState(localStorage.getItem('prep_telegram_id'));
-  const [latestAssessment, setLatestAssessment] = useState<any>(null);
+  const [latestAssessment, setLatestAssessment] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +80,7 @@ export default function Curriculum() {
             <h3 className="text-headline-md mb-6">{module.title}</h3>
             <div className="grid gap-4">
               {module.topics.map((topic) => {
-                const isRecommended = latestAssessment?.responses?.some((r: any) => 
+                const isRecommended = latestAssessment?.responses?.some((r) => 
                   r.question_title.toLowerCase().includes(topic.name.toLowerCase()) || 
                   topic.name.toLowerCase().includes(r.question_title.toLowerCase())
                 );
@@ -121,5 +122,3 @@ export default function Curriculum() {
     </div>
   );
 }
-
-import { ChevronRight } from 'lucide-react';

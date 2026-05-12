@@ -1,279 +1,179 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/client';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import { Play, Star, ChevronRight, TrendingUp, Award, Clock, Link as LinkIcon, Send } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { cn } from '@/src/lib/utils';
 
 export default function Dashboard() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [telegramId, setTelegramId] = useState(localStorage.getItem('prep_telegram_id'));
+  const [latestAssessment, setLatestAssessment] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const telegramId = localStorage.getItem('telegram_id');
-    if (!telegramId) {
-      navigate('/login');
-      return;
+    const queryId = searchParams.get('telegram_id');
+    if (queryId) {
+      setTelegramId(queryId);
+      localStorage.setItem('prep_telegram_id', queryId);
     }
-
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/analytics/${telegramId}`);
-        setData(response.data);
-      } catch (error) {
-        console.error('Failed to fetch dashboard data', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [navigate]);
-
-  const handleUpgrade = () => {
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_dummy',
-      amount: 19900, // ₹199 in paise
-      currency: 'INR',
-      name: 'PrepTrack',
-      description: 'Upgrade to PrepTrack Pro',
-      image: 'https://cdn.lucide.react/zap.png',
-      handler: function (response) {
-        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}. Your account will be upgraded shortly via webhook.`);
-      },
-      prefill: {
-        name: localStorage.getItem('telegram_name') || 'User',
-        contact: '9999999999'
-      },
-      theme: {
-        color: '#4be277' // Use primary color from design
-      }
-    };
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  };
+  }, [searchParams]);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('telegram_id');
-    localStorage.removeItem('telegram_name');
-    navigate('/login');
-  };
-
-  const [companies, setCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState('');
-  const [submittingCompany, setSubmittingCompany] = useState(false);
-
-  useEffect(() => {
-    if (data && !data.user?.company) {
-      api.get('/questions/companies').then(res => setCompanies(res.data)).catch(console.error);
+    if (telegramId) {
+      setLoading(true);
+      fetch(`/api/assessments/${telegramId}/latest`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.assessment) setLatestAssessment(data);
+        })
+        .finally(() => setLoading(false));
     }
-  }, [data]);
-
-  const handleCompanySubmit = async () => {
-    if (!selectedCompany) return;
-    setSubmittingCompany(true);
-    try {
-      const telegramId = localStorage.getItem('telegram_id');
-      await api.patch(`/users/${telegramId}`, { target_company_slug: selectedCompany });
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-      alert('Failed to set company. Please try again.');
-      setSubmittingCompany(false);
-    }
-  };
-
-  if (loading) return <div className="p-8 text-center text-on-surface-variant font-body-base">Loading...</div>;
-  if (!data) return <div className="p-8 text-center text-error font-body-base">Failed to load data</div>;
-
-  const telegramName = localStorage.getItem('telegram_name') || data.user?.name || 'User';
-
-  const getDifficultyColor = (diff) => {
-    switch (diff?.toLowerCase()) {
-      case 'easy': return 'text-[#22c55e] border-[#22c55e]/30';
-      case 'medium': return 'text-[#eab308] border-[#eab308]/30';
-      case 'hard': return 'text-[#ef4444] border-[#ef4444]/30';
-      default: return 'text-on-surface-variant border-outline-variant/30';
-    }
-  };
-
-  // If user hasn't selected a company
-  if (!data.user?.company) {
-    return (
-      <div className="fixed inset-0 bg-background/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-        <div className="bg-surface-container p-8 rounded-lg border border-outline-variant max-w-md w-full shadow-2xl">
-          <h2 className="text-display-lg-mobile font-display-lg-mobile mb-xs text-on-surface">Welcome to PrepTrack! 🚀</h2>
-          <p className="text-on-surface-variant mb-xl font-body-base">Let's get started. Which company are you targeting?</p>
-          <div className="space-y-sm mb-xl max-h-60 overflow-y-auto pr-xs">
-            {companies.map(c => (
-              <label key={c.slug} className={`flex items-center p-md rounded-lg border cursor-pointer transition-colors ${selectedCompany === c.slug ? 'border-primary bg-primary/10' : 'border-outline-variant hover:border-outline'}`}>
-                <input
-                  type="radio"
-                  name="company"
-                  value={c.slug}
-                  checked={selectedCompany === c.slug}
-                  onChange={(e) => setSelectedCompany(e.target.value)}
-                  className="mr-md text-primary focus:ring-primary bg-surface-variant border-outline-variant"
-                  disabled={c.is_pro_only && !data.user?.is_pro}
-                />
-                <span className="flex-1 font-body-base text-on-surface">{c.name}</span>
-                {c.is_pro_only && !data.user?.is_pro && (
-                  <span className="text-label-caps font-label-caps bg-surface-variant text-on-surface-variant px-xs py-0.5 rounded uppercase">PRO</span>
-                )}
-              </label>
-            ))}
-          </div>
-          <button
-            onClick={handleCompanySubmit}
-            disabled={!selectedCompany || submittingCompany}
-            className="w-full py-md bg-primary text-on-primary font-bold rounded-lg transition-colors disabled:opacity-50 hover:brightness-110"
-          >
-            {submittingCompany ? 'Setting up...' : 'Start Practicing'}
-          </button>
-        </div>
-      </div>
-    );
-  }
+  }, [telegramId]);
 
   return (
-    <div className="font-body-base text-body-base min-h-screen flex flex-col bg-background">
-
-
-      {/* Main Content */}
-      <main className="flex-grow w-full max-w-container-max mx-auto px-lg py-xl">
-        {/* Header Section: Greeting & Streak */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-xl items-end">
-          <div className="md:col-span-8">
-            <h1 className="font-display-lg text-display-lg mb-xs">Good morning, {telegramName}</h1>
-            <p className="text-on-surface-variant font-body-base text-body-base">Ready to tackle today's algorithms?</p>
+    <div id="dashboard-page" className="max-w-7xl mx-auto px-page_padding py-10">
+      {/* Telegram Link Banner */}
+      {!telegramId && (
+        <motion.div 
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          className="mb-8 bg-primary/10 border border-primary/30 p-4 rounded-xl flex items-center justify-between"
+        >
+          <div className="flex items-center gap-3">
+            <LinkIcon className="text-primary" />
+            <p className="text-body-sm">Link your Telegram account to sync your progress and daily questions.</p>
           </div>
-          <div className="md:col-span-4">
-            <div className="bg-surface-container border border-outline-variant p-md flex items-center justify-between rounded-lg">
-              <div className="flex items-center gap-sm">
-                <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
-                <span className="font-headline-md text-headline-md">{data.user?.streak || 0} Day Streak</span>
-              </div>
-              <div className="h-1.5 w-24 bg-surface-variant overflow-hidden rounded-full">
-                <div className="bg-primary h-full" style={{ width: `${Math.min((data.user?.streak || 0) * 10, 100)}%` }}></div>
-              </div>
+          <a 
+            href="https://t.me/PrepTrackBot?start=link" 
+            target="_blank" 
+            rel="noreferrer"
+            className="bg-primary text-on-primary px-4 py-1.5 rounded-lg text-label-bold flex items-center gap-2"
+          >
+            <Send className="w-4 h-4" /> BOT
+          </a>
+        </motion.div>
+      )}
+
+      {/* Latest Performance Section */}
+      {latestAssessment && (
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 bg-surface-container border border-outline-variant p-6 rounded-2xl flex items-center justify-between"
+        >
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/30">
+              <span className="text-headline-sm font-bold text-primary">{latestAssessment.assessment.overall_score}%</span>
+            </div>
+            <div>
+              <h3 className="text-headline-sm">Latest Assessment: {latestAssessment.assessment.company_name}</h3>
+              <p className="text-body-md text-on-surface-variant">Completed on {new Date(latestAssessment.assessment.completed_at).toLocaleDateString()}</p>
             </div>
           </div>
-        </div>
+          <Link to="/progress" className="bg-surface-container-high px-4 py-2 rounded-lg text-label-bold hover:bg-primary/20 transition-all">
+            VIEW FULL SCORECARD
+          </Link>
+        </motion.section>
+      )}
 
-        {/* Hero: Today's Focus */}
-        <section className="mb-xl">
-          <div className="bg-surface-container-high border border-outline-variant p-xl relative overflow-hidden rounded-lg">
-            <div className="relative z-10 max-w-2xl">
-              <div className="inline-flex items-center gap-xs px-sm py-xs bg-primary/10 text-primary border border-primary/20 mb-md rounded-lg">
-                <span className="material-symbols-outlined text-[18px]">psychology</span>
-                <span className="font-label-caps text-label-caps uppercase">Today's Focus</span>
-              </div>
-              <h2 className="font-display-lg-mobile text-display-lg-mobile mb-sm">Your target: {data.user?.company || 'DSA'}</h2>
-              <p className="text-on-surface-variant font-body-base text-body-base mb-lg">
-                Keep practicing consistently. You have {data.todayQuestions?.length || 0} questions assigned for today to improve your patterns.
-              </p>
-              <div className="mb-lg">
-                <button 
-                  onClick={() => navigate('/diagnostic')}
-                  className="bg-primary text-on-primary font-bold px-6 py-3 rounded-lg hover:brightness-110 active:scale-95 transition-all flex items-center gap-2"
-                >
-                  <span className="material-symbols-outlined">quiz</span>
-                  Start Diagnostic Assessment
+      {/* Hero Section */}
+      <section className="mb-16 relative overflow-hidden rounded-2xl bg-surface-container-low border border-outline-variant p-8 md:p-12">
+        <div className="relative z-10 max-w-2xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-label-bold text-primary tracking-widest uppercase mb-4 block">Welcome back, Developer</span>
+            <h1 className="text-display mb-6">Master the Art of the Technical Interview</h1>
+            <p className="text-body-lg text-on-surface-variant mb-8">
+              AI-powered paths tailored to your goals. From dynamic programming to distributed systems design.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/curriculum">
+                <button className="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold flex items-center gap-2 hover:scale-105 active:scale-95 transition-all">
+                  <Play className="w-5 h-5 fill-current" />
+                  Continue Learning
                 </button>
-              </div>
-              <div className="flex flex-wrap gap-md">
-                <div className="bg-surface-container border border-outline-variant p-sm flex items-center gap-sm rounded-lg">
-                  <span className="material-symbols-outlined text-on-surface-variant">history</span>
-                  <span className="text-body-sm font-body-sm">Active Track</span>
-                </div>
-              </div>
+              </Link>
+              <Link to="/mock">
+                <button className="bg-surface-container-high text-on-surface border border-outline-variant px-8 py-3 rounded-lg font-bold hover:bg-surface-container-highest transition-all">
+                  Mock Interview
+                </button>
+              </Link>
             </div>
-            {/* Abstract visual element */}
-            <div className="absolute right-[-10%] top-[-20%] w-64 h-64 border border-outline-variant/30 rotate-45 pointer-events-none"></div>
-            <div className="absolute right-[5%] bottom-[-10%] w-48 h-48 border border-outline-variant/20 -rotate-12 pointer-events-none"></div>
-          </div>
-        </section>
-
-        {/* Question List */}
-        <section className="mb-xl">
-          <div className="flex items-center justify-between mb-md">
-            <h3 className="font-headline-md text-headline-md">Daily Problem Set</h3>
-            <span className="text-on-surface-variant font-body-sm text-body-sm uppercase tracking-widest">
-              {data.todayQuestions?.length || 0} Problems Remaining
-            </span>
-          </div>
-          <div className="grid grid-cols-1 gap-base">
-            {data.todayQuestions && data.todayQuestions.length > 0 ? (
-              data.todayQuestions.map(q => (
-                <div key={q.id} className="bg-surface-container border border-outline-variant hover:border-outline transition-colors p-md flex flex-col md:flex-row md:items-center justify-between gap-md rounded-lg">
-                  <div className="flex items-center gap-md">
-                    <div className="w-10 h-10 flex items-center justify-center bg-surface-variant text-primary rounded-lg">
-                      <span className="material-symbols-outlined">code</span>
-                    </div>
-                    <div>
-                      <h4 className="font-headline-md text-headline-md leading-tight">{q.title}</h4>
-                      <div className="flex gap-sm mt-xs">
-                        <span className="font-label-caps text-label-caps bg-surface-variant px-xs py-0.5 rounded text-on-surface-variant">Topic: {q.topic_name}</span>
-                        <span className={`font-label-caps text-label-caps border px-xs py-0.5 rounded ${getDifficultyColor(q.difficulty)}`}>
-                          {q.difficulty}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-xl">
-                    <a className="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors font-body-sm text-body-sm" href={q.leetcode_link} target="_blank" rel="noopener noreferrer">
-                      View on LeetCode
-                      <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                    </a>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-on-surface-variant text-center py-xl bg-surface-container border border-outline-variant rounded-lg">
-                No questions for today. You might have finished them all!
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Upgrade Banner */}
-        {!data.user?.is_pro && (
-          <section>
-            <div className="bg-surface-container-lowest border border-outline-variant p-lg flex flex-col md:flex-row md:items-center justify-between gap-md rounded-lg">
-              <div className="flex items-center gap-md">
-                <div className="w-12 h-12 bg-primary/20 flex items-center justify-center rounded-full">
-                  <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>stars</span>
-                </div>
-                <div>
-                  <p className="font-body-base text-body-base font-bold">Unlock company-specific questions with PrepTrack Pro.</p>
-                  <p className="text-on-surface-variant font-body-sm text-body-sm">Target Google, Meta, and Amazon interview patterns.</p>
-                </div>
-              </div>
-              <button onClick={handleUpgrade} className="bg-primary text-on-primary font-label-caps text-label-caps px-xl py-md hover:brightness-110 transition-all rounded-lg uppercase">Upgrade Now</button>
-            </div>
-          </section>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant mt-xl">
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-lg py-xl max-w-container-max mx-auto gap-md">
-          <div className="text-label-caps font-label-caps text-on-surface uppercase tracking-widest">PrepTrack</div>
-          <div className="flex gap-xl">
-            <a className="text-on-surface-variant font-body-sm text-body-sm hover:text-primary transition-colors" href="#">Privacy</a>
-            <a className="text-on-surface-variant font-body-sm text-body-sm hover:text-primary transition-colors" href="#">Terms</a>
-            <a className="text-on-surface-variant font-body-sm text-body-sm hover:text-primary transition-colors" href="#">Support</a>
-          </div>
-          <div className="text-on-surface-variant font-body-sm text-body-sm opacity-60">Built by Abdul Wasay</div>
+          </motion.div>
         </div>
-      </footer>
+        
+        {/* Background Visuals */}
+        <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+          <div className="w-full h-full bg-primary blur-[120px] rounded-full" />
+        </div>
+      </section>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        {[
+          { label: 'Current Streak', value: '12 Days', icon: TrendingUp, color: 'text-primary' },
+          { label: 'Modules Ready', value: '8/24', icon: Award, color: 'text-tertiary' },
+          { label: 'Interview Score', value: '840', icon: Star, color: 'text-primary-container' },
+        ].map((stat, i) => (
+          <motion.div 
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="bg-surface-container border border-outline-variant p-6 rounded-xl flex items-center gap-4"
+          >
+            <div className={cn("p-3 rounded-lg bg-surface-container-high", stat.color)}>
+              <stat.icon className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-label-md text-on-surface-variant uppercase">{stat.label}</p>
+              <p className="text-headline-sm">{stat.value}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Suggested Next Steps */}
+      <section>
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-headline-lg">Continue Path</h2>
+          <Link to="/curriculum" className="text-primary text-label-bold flex items-center hover:underline">
+            VIEW FULL CURRICULUM <ChevronRight className="w-4 h-4 ml-1" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { id: 1, title: 'Dynamic Programming II', type: 'Concepts', time: '15 min', difficulty: 'hard' },
+            { id: 2, title: 'B-Trees & Indexing', type: 'Database', time: '20 min', difficulty: 'medium' },
+            { id: 3, title: 'React Performance', type: 'Frontend', time: '12 min', difficulty: 'medium' },
+          ].map((item, i) => (
+            <motion.div 
+              key={i}
+              whileHover={{ y: -4 }}
+              className="bg-surface-container-low border border-outline-variant p-6 rounded-xl group cursor-pointer"
+            >
+              <div className="flex justify-between items-start mb-6">
+                <span className="text-label-md text-primary bg-primary/10 px-2 py-1 rounded">{item.type}</span>
+                <span className="text-[10px] uppercase font-bold text-on-surface-variant border border-outline-variant px-2 py-0.5 rounded">{item.difficulty}</span>
+              </div>
+              <h3 className="text-headline-sm mb-4 group-hover:text-primary transition-colors">{item.title}</h3>
+              <div className="flex items-center gap-4 text-on-surface-variant text-body-sm">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {item.time}
+                </div>
+                <div className="flex items-center gap-1">
+                  <Award className="w-4 h-4" />
+                  +50 XP
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

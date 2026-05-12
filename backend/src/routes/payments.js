@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const db = require('../db');
-const { requireInternalAuth } = require('../middleware/auth');
+const { requireInternalAuth, requireJwtAuth } = require('../middleware/auth');
 
 let Razorpay;
 try {
@@ -15,11 +15,12 @@ const PRO_AMOUNT_PAISE = 19900; // ₹199
 
 // POST /payments/create-order — create a Razorpay order
 // Called by web dashboard when user clicks "Upgrade to Pro"
-router.post('/create-order', async (req, res) => {
+router.post('/create-order', requireJwtAuth, async (req, res) => {
   if (!Razorpay) return res.status(503).json({ error: 'Payments not configured' });
 
   const { telegram_id } = req.body;
   if (!telegram_id) return res.status(400).json({ error: 'telegram_id required' });
+
 
   try {
     const { rows: userRows } = await db.query(
@@ -27,6 +28,12 @@ router.post('/create-order', async (req, res) => {
       [telegram_id]
     );
     if (!userRows.length) return res.status(404).json({ error: 'User not found' });
+    
+    // Verify ownership
+    if (userRows[0].id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    
     const userId = userRows[0].id;
 
     const razorpay = new Razorpay({
@@ -60,7 +67,7 @@ router.post('/create-order', async (req, res) => {
 });
 
 // POST /payments/verify — verify Razorpay payment signature
-router.post('/verify', async (req, res) => {
+router.post('/verify', requireJwtAuth, async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, telegram_id } = req.body;
 
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !telegram_id) {
@@ -78,6 +85,17 @@ router.post('/verify', async (req, res) => {
   }
 
   try {
+    const { rows: userRows } = await db.query(
+      'SELECT id FROM users WHERE telegram_id = $1',
+      [telegram_id]
+    );
+    if (!userRows.length) return res.status(404).json({ error: 'User not found' });
+    
+    // Verify ownership
+    if (userRows[0].id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     // Update payment record
     await db.query(
       `UPDATE payments

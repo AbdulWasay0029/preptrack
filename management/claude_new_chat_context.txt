@@ -1,0 +1,35 @@
+# COMPLETE PROJECT CONTEXT & MIGRATION GUIDE FOR CLAUDE
+
+## 1. What is PrepTrack? (The Foundation)
+PrepTrack started as a tool for Indian Computer Science students to prepare for placements. 
+*   **V1 Vision**: A Telegram bot that sends 3 LeetCode questions per day to help with consistency.
+*   **The Pivot to V2**: We realized students don't need more questions; they need to know if they are ready. So we are pivoting to an **AI-powered Interview Readiness Platform**.
+*   **V2 Vision**: A personal interview coach that assesses readiness (score), teaches patterns (Curriculum), and simulates real interviews (Mock Interviews with AI).
+
+## 2. The Tech Stack
+*   **Frontend**: React (Vite) - Mobile-first design.
+*   **Backend**: Node.js / Express.
+*   **AI**: Google Gemini 1.5 Flash (via `@google/generative-ai` SDK) - Chosen because it is free in AI Studio and handles volume.
+*   **Messaging**: Telegram Bot (originally the main product, now just the notification layer).
+
+## 3. The Full History (Summary of Previous Context)
+The user previously shared a long chat log (`claude_context.txt` in the repo) which established:
+*   The target audience is students 3 months from placement.
+*   The app should be mobile-first because students use phones.
+*   Stitch generated 14 screens for the new designs.
+*   We decided to use Gemini instead of Anthropic to save costs.
+*   The user feels the app structure is getting messy because different agents (like Antigravity and Google AI Studio) built parallel versions.
+
+## 4. The Current Mess (Current State)
+We have a major context loss and codebase fragmentation issue:
+*   **Duplicate Files**: In `web/src/pages`, we have both `.jsx` and `.tsx` files for the same pages (e.g., `Dashboard`, `Landing`, `Progress`).
+*   **Incomplete Features**: The "Diagnostic" test is hidden or disconnected. The "Mock Interview" is in the nav but not working.
+*   **Stitch Designs**: There is a "LeetCode-like" interface in the designs (Questions left, IDE right) that we haven't integrated.
+*   **The Dilemma**: We are torn between forcing a 20-minute test first (Assessment-First) vs. just showing them what to study (Curriculum-First). The user feels features are being ignored.
+
+## 5. Your Role as Lead PM (Instructions for Claude)
+Please act as the **Lead Product Manager and Developer**. Do not just agree with the user.
+1.  **Read the PRD** (in the repo) and the analysis above to understand the full product.
+2.  **Help the user decide on a clean codebase structure** (should we stick to JSX or TSX? How to merge?).
+3.  **Create a Cohesive User Flow** that integrates the Diagnostic, the Curriculum, the Mock Interviews, and the LeetCode IDE into a logical path.
+4.  Solve the "Curriculum-First" vs "Assessment-First" dilemma without losing the premium "AI Coach" value.

@@ -43,4 +43,24 @@ function verifyTelegramLogin(data) {
   return hmac === hash;
 }
 
-module.exports = { requireInternalAuth, verifyTelegramLogin };
+const jwt = require('jsonwebtoken');
+
+function requireJwtAuth(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing or invalid authorization header' });
+  }
+
+  const token = authHeader.slice(7);
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // Attach user info to request (contains id and email)
+    next();
+  } catch (err) {
+    console.error('JWT verification error:', err);
+    return res.status(403).json({ error: 'Invalid or expired token' });
+  }
+}
+
+module.exports = { requireInternalAuth, verifyTelegramLogin, requireJwtAuth };
+

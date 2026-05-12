@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const db = require('../services/db');
 const { evaluateResponse } = require('../services/gemini');
+const { requireJwtAuth } = require('../middleware/auth');
 
 // POST /assessments/start
-router.post('/start', async (req, res) => {
+router.post('/start', requireJwtAuth, async (req, res) => {
   const { telegram_id, company_slug } = req.body;
+
   
   try {
     // 1. Ensure user exists
@@ -17,6 +19,11 @@ router.post('/start', async (req, res) => {
         userId = newUser.rows[0].id;
       } else {
         userId = userRes.rows[0].id;
+      }
+
+      // Verify ownership
+      if (userId !== req.user.id) {
+        return res.status(403).json({ error: 'Forbidden' });
       }
     }
 
@@ -61,11 +68,18 @@ router.post('/start', async (req, res) => {
 });
 
 // POST /assessments/:id/respond
-router.post('/:id/respond', async (req, res) => {
+router.post('/:id/respond', requireJwtAuth, async (req, res) => {
   const assessmentId = req.params.id;
   const { question_id, user_response, time_taken_seconds } = req.body;
 
   try {
+    // Verify ownership
+    const assessRes = await db.query('SELECT user_id FROM assessments WHERE id = $1', [assessmentId]);
+    if (assessRes.rows.length === 0) return res.status(404).json({ error: 'Assessment not found' });
+    if (assessRes.rows[0].user_id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     // Fetch question details
     const qRes = await db.query('SELECT title, difficulty, topic FROM questions WHERE id = $1', [question_id]);
     const question = qRes.rows[0] || { title: 'Unknown Question', difficulty: 'easy', topic: 'general' };
@@ -86,10 +100,17 @@ router.post('/:id/respond', async (req, res) => {
 });
 
 // POST /assessments/:id/complete
-router.post('/:id/complete', async (req, res) => {
+router.post('/:id/complete', requireJwtAuth, async (req, res) => {
   const assessmentId = req.params.id;
 
   try {
+    // Verify ownership
+    const assessRes = await db.query('SELECT user_id FROM assessments WHERE id = $1', [assessmentId]);
+    if (assessRes.rows.length === 0) return res.status(404).json({ error: 'Assessment not found' });
+    if (assessRes.rows[0].user_id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const responses = await db.query('SELECT ai_score, question_id FROM assessment_responses WHERE assessment_id = $1', [assessmentId]);
     
     if (responses.rows.length === 0) return res.status(400).json({ error: 'No responses found' });
@@ -113,10 +134,16 @@ router.post('/:id/complete', async (req, res) => {
 });
 
 // GET /assessments/:telegram_id/latest
-router.get('/:telegram_id/latest', async (req, res) => {
+router.get('/:telegram_id/latest', requireJwtAuth, async (req, res) => {
   const telegramId = req.params.telegram_id;
 
   try {
+    const { rows: userRows } = await db.query('SELECT id FROM users WHERE telegram_id = $1', [telegramId]);
+    if (!userRows.length) return res.status(404).json({ error: 'User not found' });
+    if (userRows[0].id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
     const assessRes = await db.query(`
       SELECT a.*, c.name as company_name
       FROM assessments a

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const { requireInternalAuth } = require('../middleware/auth');
+const { requireInternalAuth, requireJwtAuth } = require('../middleware/auth');
 
 // GET /analytics/:telegram_id — full analytics for web dashboard
-router.get('/:telegram_id', async (req, res) => {
+router.get('/:telegram_id', requireJwtAuth, async (req, res) => {
   try {
     const { rows: userRows } = await db.query(
       `SELECT u.id, u.name, u.streak, c.slug AS company_slug, c.name AS company_name
@@ -14,7 +14,14 @@ router.get('/:telegram_id', async (req, res) => {
       [req.params.telegram_id]
     );
     if (!userRows.length) return res.status(404).json({ error: 'User not found' });
+    
+    // Verify ownership
+    if (userRows[0].id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    
     const { id: userId, name, streak, company_name } = userRows[0];
+
 
     // Overall stats
     const { rows: overall } = await db.query(

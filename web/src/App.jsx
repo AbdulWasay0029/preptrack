@@ -14,19 +14,21 @@ import Diagnostic from './pages/Diagnostic';
 function AuthWrapper({ children }) {
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const telegramId = searchParams.get('telegram_id');
+  const token = searchParams.get('token');
 
   useEffect(() => {
-    if (telegramId) {
-      localStorage.setItem('prep_telegram_id', telegramId);
+    if (token) {
+      localStorage.setItem('prep_auth_token', token);
+      // Clean up URL
+      window.history.replaceState({}, document.title, location.pathname);
     }
-  }, [telegramId]);
+  }, [token, location.pathname]);
 
-  const storedId = localStorage.getItem('prep_telegram_id');
+  const storedToken = localStorage.getItem('prep_auth_token');
   const isPublicRoute = ['/', '/diagnostic'].includes(location.pathname);
 
-  // Allow access if linked or on landing/diagnostic
-  if (!storedId && !isPublicRoute) {
+  // Allow access if logged in or on public route
+  if (!storedToken && !isPublicRoute) {
     return <Navigate to="/" replace />;
   }
 

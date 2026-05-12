@@ -39,7 +39,7 @@ router.get('/active', requireInternalAuth, async (req, res) => {
 });
 
 // GET /users/:telegram_id — fetch user by telegram ID
-router.get('/:telegram_id', async (req, res) => {
+router.get('/:telegram_id', requireJwtAuth, async (req, res) => {
   try {
     const { rows } = await db.query(
       `SELECT u.*, c.slug AS company_slug, c.name AS company_name
@@ -49,6 +49,12 @@ router.get('/:telegram_id', async (req, res) => {
       [req.params.telegram_id]
     );
     if (!rows.length) return res.status(404).json({ error: 'User not found' });
+    
+    // Verify ownership
+    if (rows[0].id !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    
     res.json(rows[0]);
   } catch (err) {
     console.error('GET /users/:telegram_id error:', err);
@@ -57,7 +63,7 @@ router.get('/:telegram_id', async (req, res) => {
 });
 
 // PATCH /users/:telegram_id — update company, questions_per_day
-router.patch('/:telegram_id', async (req, res) => {
+router.patch('/:telegram_id', requireJwtAuth, async (req, res) => {
   const { target_company_slug, questions_per_day } = req.body;
   const updates = [];
   const values = [];
@@ -76,14 +82,15 @@ router.patch('/:telegram_id', async (req, res) => {
   if (!updates.length) return res.status(400).json({ error: 'Nothing to update' });
 
   values.push(req.params.telegram_id);
+  values.push(req.user.id); // From JWT
   try {
     const { rows } = await db.query(
       `UPDATE users SET ${updates.join(', ')}
-       WHERE telegram_id = $${idx}
+       WHERE telegram_id = $${idx} AND id = $${idx+1}
        RETURNING *`,
       values
     );
-    if (!rows.length) return res.status(404).json({ error: 'User not found' });
+    if (!rows.length) return res.status(404).json({ error: 'User not found or forbidden' });
     res.json(rows[0]);
   } catch (err) {
     console.error('PATCH /users/:telegram_id error:', err);

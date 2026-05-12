@@ -6,16 +6,17 @@ import { cn } from '@/src/lib/utils';
 
 export default function Landing() {
   const navigate = useNavigate();
-  const [telegramId] = useState(localStorage.getItem('prep_telegram_id'));
-  const TELEGRAM_BOT_URL = `https://t.me/PrepTrackBot?start=${telegramId ? 'dashboard' : 'assess'}`;
+  const [token] = useState(localStorage.getItem('prep_auth_token'));
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const GOOGLE_AUTH_URL = `${API_URL}/auth/google`;
   const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    fetch('/api/questions/companies')
+    fetch(`${API_URL}/questions/companies`)
       .then(res => res.json())
       .then(data => setCompanies(Array.isArray(data) ? data : []))
       .catch(err => console.error('Failed to fetch companies:', err));
-  }, []);
+  }, [API_URL]);
 
   return (
     <div id="landing-page" className="min-h-screen bg-background text-on-surface">
@@ -56,7 +57,7 @@ export default function Landing() {
               transition={{ delay: 0.2 }}
               className="flex flex-wrap gap-4"
             >
-              {telegramId ? (
+              {token ? (
                 <button 
                   onClick={() => navigate('/dashboard')}
                   className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-primary/20"
@@ -66,13 +67,11 @@ export default function Landing() {
                 </button>
               ) : (
                 <a 
-                  href={TELEGRAM_BOT_URL}
-                  target="_blank"
-                  rel="noreferrer"
+                  href={GOOGLE_AUTH_URL}
                   className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-primary/20"
                 >
-                  <Send className="w-5 h-5" />
-                  START FREE ON TELEGRAM
+                  <Sparkles className="w-5 h-5" />
+                  LOGIN WITH GOOGLE
                 </a>
               )}
               <Link 
@@ -169,10 +168,10 @@ export default function Landing() {
           </p>
           <div className="relative z-10 flex flex-col sm:flex-row gap-4 justify-center">
             <a 
-              href={TELEGRAM_BOT_URL}
+              href={GOOGLE_AUTH_URL}
               className="bg-on-primary text-primary px-10 py-5 rounded-2xl font-bold text-headline-sm hover:scale-105 transition-all shadow-2xl"
             >
-              Open Telegram Bot
+              Get Started with Google
             </a>
           </div>
         </div>

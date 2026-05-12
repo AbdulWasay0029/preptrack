@@ -94,3 +94,20 @@ Completed the cleanup task specified in Section 5 of `PREPTRACK_PRD_FOR_ANTIGRAV
   - `web/src/pages/Mock.jsx` (created)
 - **Fixed typo** in `web/src/pages/Progress.jsx` line 9.
 - **Verified build**: Ran `npm run build` in `/web` and it succeeded.
+
+### 2026-05-12 — Google OAuth & JWT Auth Implementation (Antigravity)
+- **Backend Google OAuth**:
+  - Configured Passport with `passport-google-oauth20` strategy in `backend/src/config/passport.js`.
+  - Created `/auth/google` and `/auth/google/callback` routes in `backend/src/routes/auth.js`.
+  - Generates JWT on success and redirects to frontend with `?token=...`.
+- **JWT Middleware**:
+  - Added `requireJwtAuth` in `backend/src/middleware/auth.js` to verify JWT and attach user to `req.user`.
+- **Protected Routes**:
+  - Updated `GET /users/:telegram_id`, `PATCH /users/:telegram_id`, `GET /analytics/:telegram_id`, `POST /payments/create-order`, and `POST /payments/verify` to use `requireJwtAuth` and check ownership.
+  - Updated `/assessments` routes (`/start`, `/:id/respond`, `/:id/complete`, `/:telegram_id/latest`) to use `requireJwtAuth` and check ownership.
+- **Frontend Updates**:
+  - Updated `AuthWrapper` in `web/src/App.jsx` to check for `token` in URL, store it as `prep_auth_token` in `localStorage`, and use it for auth.
+  - Updated API client in `web/src/api/client.js` to send the token in the `Authorization` header as `Bearer <token>`.
+  - Updated `Landing.jsx` to replace Telegram login with "Login with Google" button pointing to backend auth route.
+- **Verified build**: Ran `npm run build` in `/web` and it succeeded.
+

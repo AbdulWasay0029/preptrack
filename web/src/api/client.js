@@ -4,11 +4,11 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001',
 });
 
-// Automatically attach telegram_id if present
+// Automatically attach JWT token if present
 api.interceptors.request.use((config) => {
-  const telegramId = localStorage.getItem('telegram_id');
-  if (telegramId) {
-    config.params = { ...config.params, telegram_id: telegramId };
+  const token = localStorage.getItem('prep_auth_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });

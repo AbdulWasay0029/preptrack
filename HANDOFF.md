@@ -123,4 +123,14 @@ Completed the cleanup task specified in Section 5 of `PREPTRACK_PRD_FOR_ANTIGRAV
   - Updated it to use the new backend routes.
 - **Cleanup**: Deleted the temporary migration script `run_migration_phase1.js`.
 
+### 2026-05-13 — Route Cleanup & Deployment Verification (Antigravity)
+- **Frontend Route Fixes**:
+  - Found that `Dashboard.jsx` and `Curriculum.jsx` were still using the old `/api/assessments/.../latest` routes.
+  - Updated both files to use the `api` client and the new `/assessment/latest` route (which relies on JWT instead of URL params).
+- **Verification**:
+  - Verified that `Diagnostic.jsx` in the repo correctly uses the new singular `/assessment` routes.
+  - Confirmed that the errors reported by the user (requests to `/assessments/...` plural) are due to the **old frontend code** still running in the browser or pending deployment on Vercel.
+- **Push**: Pushed all changes to GitHub (Commit `d99f166`).
+
+
 

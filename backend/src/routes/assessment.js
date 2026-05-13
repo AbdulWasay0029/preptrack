@@ -18,7 +18,7 @@ router.post('/start', requireJwtAuth, async (req, res) => {
     }
 
     // 2. Select 1 question from 5 diverse topics
-    const topicSlugs = ['arrays-hashing', 'trees', 'dynamic-programming', 'graphs', 'stack'];
+    const topicSlugs = ['arrays', 'trees', 'dynamic-prog', 'graphs', 'stacks-queues'];
     const questions = [];
 
     for (const slug of topicSlugs) {
@@ -38,7 +38,7 @@ router.post('/start', requireJwtAuth, async (req, res) => {
 
     // 3. Create assessment record
     const assessRes = await db.query(`
-      INSERT INTO assessments (user_id, company_id)
+      INSERT INTO assessments (user_id, target_company_id)
       VALUES ($1, $2)
       RETURNING id
     `, [userId, companyId]);
@@ -130,7 +130,7 @@ router.post('/:id/complete', requireJwtAuth, async (req, res) => {
 
     await db.query(`
       UPDATE assessments
-      SET score = $1, topic_scores = $2, completed_at = NOW()
+      SET overall_score = $1, topic_scores = $2, completed_at = NOW()
       WHERE id = $3
     `, [overallScore, JSON.stringify(topicScores), assessmentId]);
 
@@ -149,7 +149,7 @@ router.get('/latest', requireJwtAuth, async (req, res) => {
     const assessRes = await db.query(`
       SELECT a.*, c.name as company_name
       FROM assessments a
-      LEFT JOIN companies c ON a.company_id = c.id
+      LEFT JOIN companies c ON a.target_company_id = c.id
       WHERE a.user_id = $1
       AND a.completed_at IS NOT NULL
       ORDER BY a.completed_at DESC

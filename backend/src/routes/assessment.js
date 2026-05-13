@@ -4,34 +4,20 @@ const db = require('../services/db');
 const { evaluateResponse } = require('../services/gemini');
 const { requireJwtAuth } = require('../middleware/auth');
 
-// POST /assessments/start
+// POST /assessment/start
 router.post('/start', requireJwtAuth, async (req, res) => {
-  const { telegram_id, company_slug } = req.body;
+  const { companySlug } = req.body;
+  const userId = req.user.id;
 
-  
   try {
-    // 1. Ensure user exists
-    let userId = null;
-    if (telegram_id) {
-      const userRes = await db.query('SELECT id FROM users WHERE telegram_id = $1', [telegram_id]);
-      if (userRes.rows.length === 0) {
-        const newUser = await db.query('INSERT INTO users (telegram_id) VALUES ($1) RETURNING id', [telegram_id]);
-        userId = newUser.rows[0].id;
-      } else {
-        userId = userRes.rows[0].id;
-      }
-
-      // Verify ownership
-      if (userId !== req.user.id) {
-        return res.status(403).json({ error: 'Forbidden' });
-      }
+    // 1. Get company id
+    let companyId = null;
+    if (companySlug) {
+      const compRes = await db.query('SELECT id FROM companies WHERE slug = $1', [companySlug]);
+      companyId = compRes.rows.length > 0 ? compRes.rows[0].id : null;
     }
 
-    // 2. Get company id
-    const compRes = await db.query('SELECT id FROM companies WHERE slug = $1', [company_slug]);
-    const companyId = compRes.rows.length > 0 ? compRes.rows[0].id : null;
-
-    // 3. Select 1 question from 5 diverse topics
+    // 2. Select 1 question from 5 diverse topics
     const topicSlugs = ['arrays-hashing', 'trees', 'dynamic-programming', 'graphs', 'stack'];
     const questions = [];
 
@@ -50,15 +36,15 @@ router.post('/start', requireJwtAuth, async (req, res) => {
       }
     }
 
-    // 4. Create assessment record
+    // 3. Create assessment record
     const assessRes = await db.query(`
-      INSERT INTO assessments (user_id, telegram_id, target_company_id)
-      VALUES ($1, $2, $3)
+      INSERT INTO assessments (user_id, company_id)
+      VALUES ($1, $2)
       RETURNING id
-    `, [userId, telegram_id, companyId]);
+    `, [userId, companyId]);
 
     res.json({
-      assessment_id: assessRes.rows[0].id,
+      assessmentId: assessRes.rows[0].id,
       questions
     });
   } catch (error) {
@@ -67,10 +53,10 @@ router.post('/start', requireJwtAuth, async (req, res) => {
   }
 });
 
-// POST /assessments/:id/respond
-router.post('/:id/respond', requireJwtAuth, async (req, res) => {
+// POST /assessment/:id/submit-answer
+router.post('/:id/submit-answer', requireJwtAuth, async (req, res) => {
   const assessmentId = req.params.id;
-  const { question_id, user_response, time_taken_seconds } = req.body;
+  const { questionId, response, timeSpentSeconds } = req.body;
 
   try {
     // Verify ownership
@@ -81,25 +67,26 @@ router.post('/:id/respond', requireJwtAuth, async (req, res) => {
     }
 
     // Fetch question details
-    const qRes = await db.query('SELECT title, difficulty, topic FROM questions WHERE id = $1', [question_id]);
+    const qRes = await db.query('SELECT q.title, q.difficulty, t.name as topic FROM questions q JOIN topics t ON q.topic_id = t.id WHERE q.id = $1', [questionId]);
     const question = qRes.rows[0] || { title: 'Unknown Question', difficulty: 'easy', topic: 'general' };
 
     // Evaluate with Gemini
-    const evaluation = await evaluateResponse(question, user_response);
+    const evaluation = await evaluateResponse(question, response);
 
+    // Insert into assessment_questions
     await db.query(`
-      INSERT INTO assessment_responses (assessment_id, question_id, user_response, ai_score, ai_feedback, time_taken_seconds)
+      INSERT INTO assessment_questions (assessment_id, question_id, user_response, ai_score, ai_feedback, time_spent_seconds)
       VALUES ($1, $2, $3, $4, $5, $6)
-    `, [assessmentId, question_id, user_response, evaluation.score, evaluation.feedback, time_taken_seconds || 0]);
+    `, [assessmentId, questionId, response, evaluation.score, evaluation.feedback, timeSpentSeconds || 0]);
 
     res.json({ success: true, score: evaluation.score, feedback: evaluation.feedback });
   } catch (error) {
-    console.error(error);
+    console.error('Submit Answer Error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// POST /assessments/:id/complete
+// POST /assessment/:id/complete
 router.post('/:id/complete', requireJwtAuth, async (req, res) => {
   const assessmentId = req.params.id;
 
@@ -111,62 +98,77 @@ router.post('/:id/complete', requireJwtAuth, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const responses = await db.query('SELECT ai_score, question_id FROM assessment_responses WHERE assessment_id = $1', [assessmentId]);
+    const responses = await db.query(`
+      SELECT aq.ai_score, aq.question_id, t.name as topic_name
+      FROM assessment_questions aq
+      JOIN questions q ON aq.question_id = q.id
+      JOIN topics t ON q.topic_id = t.id
+      WHERE aq.assessment_id = $1
+    `, [assessmentId]);
     
     if (responses.rows.length === 0) return res.status(400).json({ error: 'No responses found' });
 
     const overallScore = Math.round(responses.rows.reduce((acc, r) => acc + r.ai_score, 0) / responses.rows.length);
 
-    // Calculate topic scores if needed (here we just have 1 per topic usually)
-    const topicScores = {}; // Simplified for now
+    // Calculate topic scores
+    const topicScores = {};
+    const topicCounts = {};
+    
+    responses.rows.forEach(r => {
+      const topic = r.topic_name;
+      if (!topicScores[topic]) {
+        topicScores[topic] = 0;
+        topicCounts[topic] = 0;
+      }
+      topicScores[topic] += r.ai_score;
+      topicCounts[topic] += 1;
+    });
+
+    for (const topic in topicScores) {
+      topicScores[topic] = Math.round(topicScores[topic] / topicCounts[topic]);
+    }
 
     await db.query(`
       UPDATE assessments
-      SET overall_score = $1, topic_scores = $2, completed_at = NOW()
+      SET score = $1, topic_scores = $2, completed_at = NOW()
       WHERE id = $3
     `, [overallScore, JSON.stringify(topicScores), assessmentId]);
 
-    res.json({ overall_score: overallScore, topic_scores: topicScores });
+    res.json({ overallScore, topicScores });
   } catch (error) {
-    console.error(error);
+    console.error('Complete Assessment Error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// GET /assessments/:telegram_id/latest
-router.get('/:telegram_id/latest', requireJwtAuth, async (req, res) => {
-  const telegramId = req.params.telegram_id;
+// GET /assessment/latest
+router.get('/latest', requireJwtAuth, async (req, res) => {
+  const userId = req.user.id;
 
   try {
-    const { rows: userRows } = await db.query('SELECT id FROM users WHERE telegram_id = $1', [telegramId]);
-    if (!userRows.length) return res.status(404).json({ error: 'User not found' });
-    if (userRows[0].id !== req.user.id) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
-
     const assessRes = await db.query(`
       SELECT a.*, c.name as company_name
       FROM assessments a
-      LEFT JOIN companies c ON a.target_company_id = c.id
-      WHERE (a.telegram_id = $1 OR a.user_id = (SELECT id FROM users WHERE telegram_id = $1))
+      LEFT JOIN companies c ON a.company_id = c.id
+      WHERE a.user_id = $1
       AND a.completed_at IS NOT NULL
       ORDER BY a.completed_at DESC
       LIMIT 1
-    `, [telegramId]);
+    `, [userId]);
 
     if (assessRes.rows.length === 0) return res.json({ assessment: null });
 
     const assessment = assessRes.rows[0];
     const responsesRes = await db.query(`
-      SELECT ar.*, q.title as question_title
-      FROM assessment_responses ar
-      JOIN questions q ON ar.question_id = q.id
-      WHERE ar.assessment_id = $1
+      SELECT aq.*, q.title as question_title
+      FROM assessment_questions aq
+      JOIN questions q ON aq.question_id = q.id
+      WHERE aq.assessment_id = $1
     `, [assessment.id]);
 
     res.json({
       assessment,
-      responses: responsesRes.rows
+      questions: responsesRes.rows
     });
   } catch (error) {
     console.error('Fetch Latest Error:', error);

@@ -3,32 +3,24 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { TrendingUp, Award, Clock, Star, ChevronRight, BarChart3, Loader2 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import api from '../api/client';
 
 export default function Progress() {
   const [searchParams] = useSearchParams();
-  const [telegramId, setTelegramId] = useState(searchParams.get('telegram_id') || localStorage.getItem('prep_telegram_id'));
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    const qid = searchParams.get('telegram_id');
-    if (qid) {
-      setTelegramId(qid);
-      localStorage.setItem('prep_telegram_id', qid);
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (telegramId) {
-      setLoading(true);
-      fetch(`/api/assessments/${telegramId}/latest`)
-        .then(res => res.json())
-        .then(resData => {
-          setData(resData);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [telegramId]);
+    setLoading(true);
+    api.get('/assessment/latest')
+      .then(res => {
+        setData(res.data);
+      })
+      .catch(err => {
+        console.error('Fetch Latest Error:', err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   if (loading) {
     return (
@@ -39,7 +31,7 @@ export default function Progress() {
     );
   }
 
-  if (!telegramId || !data?.assessment) {
+  if (!data?.assessment) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
@@ -51,14 +43,12 @@ export default function Progress() {
             We haven't tracked any assessments for this account. Start a diagnostic to see your company-readiness score.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="https://t.me/PrepTrackBot?start=assess" 
-              target="_blank" 
-              rel="noreferrer"
-              className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-headline-sm"
+            <Link 
+              to="/diagnostic" 
+              className="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold text-headline-sm hover:scale-105 transition-all"
             >
-              Start Diagnostic on Telegram
-            </a>
+              Start Web Diagnostic
+            </Link>
             <Link 
               to="/dashboard" 
               className="bg-surface-container border border-outline-variant px-8 py-4 rounded-xl font-bold text-headline-sm hover:bg-surface-container-high transition-all"

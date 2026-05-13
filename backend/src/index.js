@@ -6,7 +6,7 @@ require('dotenv').config();
 require('./config/passport'); // Load passport config
 
 const app = express();
-const assessmentsRouter = require('./routes/assessments');
+const assessmentRouter = require('./routes/assessment');
 const questionsRouter = require('./routes/questions');
 const usersRouter     = require('./routes/users');
 const progressRouter  = require('./routes/progress');
@@ -25,7 +25,7 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 
 
-app.use('/assessments', assessmentsRouter);
+app.use('/assessment', assessmentRouter);
 app.use('/questions', questionsRouter);
 app.use('/users',     usersRouter);
 app.use('/progress',  progressRouter);

@@ -111,3 +111,16 @@ Completed the cleanup task specified in Section 5 of `PREPTRACK_PRD_FOR_ANTIGRAV
   - Updated `Landing.jsx` to replace Telegram login with "Login with Google" button pointing to backend auth route.
 - **Verified build**: Ran `npm run build` in `/web` and it succeeded.
 
+### 2026-05-13 — Phase 1: Diagnostic Assessment (Antigravity)
+- **Database Migration**: Ran migration to create `assessments` and `assessment_questions` tables as per PRD Section 6.
+- **Backend Routes**:
+  - Created `backend/src/routes/assessment.js` (singular) with routes: `/assessment/start`, `/assessment/:id/submit-answer`, `/assessment/:id/complete`, `/assessment/:telegramId/latest`.
+  - Absorbed logic from the old `assessments.js` and adapted it to the new schema and JWT auth.
+  - Deleted the old `backend/src/routes/assessments.js` (plural).
+  - Updated `backend/src/index.js` to mount the new router at `/assessment`.
+- **Frontend Updates**:
+  - Rewrote `web/src/pages/Diagnostic.jsx` to use the new grid layout specified in the PRD (sidebar of question numbers, center area, right sidebar with timer).
+  - Updated it to use the new backend routes.
+- **Cleanup**: Deleted the temporary migration script `run_migration_phase1.js`.
+
+

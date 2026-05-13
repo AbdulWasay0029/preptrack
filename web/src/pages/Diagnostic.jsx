@@ -14,6 +14,7 @@ export default function Diagnostic() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [responses, setResponses] = useState({});
   const [assessmentId, setAssessmentId] = useState(null);
+  const [assessmentResults, setAssessmentResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState(1200); // 20 mins total
@@ -76,9 +77,9 @@ export default function Diagnostic() {
         }))
       };
 
-      await api.post(`/assessment/${assessmentId}/complete`, payload);
-      alert('Assessment completed successfully!');
-      navigate('/dashboard');
+      const res = await api.post(`/assessment/${assessmentId}/complete`, payload);
+      setAssessmentResults(res.data);
+      setStep('results');
     } catch (err) {
       console.error(err);
       alert('Failed to complete assessment.');
@@ -157,6 +158,13 @@ export default function Diagnostic() {
               {q.difficulty?.toUpperCase()}
             </span>
           </div>
+          
+          {q.description && (
+            <div className="text-body-md text-on-surface bg-surface-container-highest p-4 rounded-lg">
+              {q.description}
+            </div>
+          )}
+
           <p className="text-body-md text-on-surface-variant">
             Please explain your approach and write the code for this problem.
             {q.leetcode_link && (
@@ -201,6 +209,95 @@ export default function Diagnostic() {
               )}
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 'results' && assessmentResults) {
+    const { overallScore, topicScores, questions: resultQuestions } = assessmentResults;
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-10 flex flex-col gap-8">
+        <div className="text-center">
+          <h1 className="text-display mb-2">Assessment Results</h1>
+          <p className="text-body-lg text-on-surface-variant">Here is how you performed in the diagnostic.</p>
+        </div>
+
+        {/* Score Circle */}
+        <div className="flex justify-center">
+          <div className="w-32 h-32 bg-primary/10 rounded-full flex flex-col items-center justify-center border-4 border-primary">
+            <span className="text-display font-bold text-primary">{overallScore}%</span>
+            <span className="text-label-bold text-primary/70">SCORE</span>
+          </div>
+        </div>
+
+        {/* Topic Breakdown */}
+        <div className="bg-surface-container border border-outline-variant p-6 rounded-2xl">
+          <h3 className="text-headline-sm mb-4">Topic Breakdown</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Object.entries(topicScores).map(([topic, score]) => (
+              <div key={topic} className="flex justify-between items-center bg-surface-container-highest p-3 rounded-lg">
+                <span className="text-body-md font-bold uppercase">{topic}</span>
+                <span className={`text-label-bold px-3 py-1 rounded-full ${
+                  score >= 70 ? 'bg-green-100 text-green-800' :
+                  score >= 40 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {score}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Per-Question Accordion */}
+        <div className="flex flex-col gap-4">
+          <h3 className="text-headline-sm">Question Details</h3>
+          {resultQuestions.map((q, idx) => (
+            <details key={idx} className="bg-surface-container border border-outline-variant rounded-2xl">
+              <summary className="flex justify-between items-center p-6 cursor-pointer list-none">
+                <div className="flex items-center gap-3">
+                  <h4 className="text-headline-sm">{q.title}</h4>
+                  <span className="text-label-bold bg-surface-container-highest px-2 py-0.5 rounded-full text-sm">
+                    {q.topic ? q.topic.toUpperCase() : 'TOPIC'}
+                  </span>
+                </div>
+                <span className={`text-label-bold px-3 py-1 rounded-full ${
+                  q.ai_score >= 70 ? 'bg-green-100 text-green-800' :
+                  q.ai_score >= 40 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {q.ai_score}%
+                </span>
+              </summary>
+              <div className="p-6 pt-0 flex flex-col gap-3 border-t border-outline-variant">
+                <div className="text-body-md text-on-surface">
+                  <span className="font-bold">Your Response:</span>
+                  <pre className="mt-1 p-3 bg-surface-container-highest rounded-lg font-mono text-sm overflow-x-auto">
+                    {q.user_response || 'No response'}
+                  </pre>
+                </div>
+                <div className="text-body-md text-on-surface">
+                  <span className="font-bold">AI Feedback:</span>
+                  <p className="mt-1 text-on-surface-variant">{q.ai_feedback}</p>
+                </div>
+              </div>
+            </details>
+          ))}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <button
+            onClick={() => navigate('/curriculum')}
+            className="flex-1 bg-primary text-on-primary py-4 rounded-xl font-bold hover:scale-105 transition-all text-headline-sm flex items-center justify-center"
+          >
+            Start Curriculum
+          </button>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="flex-1 bg-surface-container-highest text-on-surface py-4 rounded-xl font-bold hover:scale-105 transition-all text-headline-sm flex items-center justify-center"
+          >
+            Go to Dashboard
+          </button>
         </div>
       </div>
     );

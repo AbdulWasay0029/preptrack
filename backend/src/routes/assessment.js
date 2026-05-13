@@ -23,7 +23,7 @@ router.post('/start', requireJwtAuth, async (req, res) => {
 
     for (const slug of topicSlugs) {
       const qRes = await db.query(`
-        SELECT q.id, q.title, q.difficulty, t.name as topic, q.leetcode_link 
+        SELECT q.id, q.title, q.difficulty, t.name as topic, q.leetcode_link, q.description 
         FROM questions q
         JOIN topics t ON q.topic_id = t.id
         WHERE t.slug = $1
@@ -124,7 +124,14 @@ router.post('/:id/complete', requireJwtAuth, async (req, res) => {
         VALUES ($1, $2, $3, $4, $5, $6)
       `, [assessmentId, questionId, response, evaluation.score, evaluation.feedback, timeSpentSeconds || 0]);
 
-      evaluationResults.push({ ai_score: evaluation.score, topic: question.topic });
+      evaluationResults.push({ 
+        questionId, 
+        title: question.title, 
+        topic: question.topic, 
+        ai_score: evaluation.score, 
+        ai_feedback: evaluation.feedback,
+        user_response: response
+      });
 
       // Track topic scores
       const topic = question.topic;
@@ -150,7 +157,7 @@ router.post('/:id/complete', requireJwtAuth, async (req, res) => {
       WHERE id = $3
     `, [overallScore, JSON.stringify(topicScores), assessmentId]);
 
-    res.json({ overallScore, topicScores });
+    res.json({ overallScore, topicScores, questions: evaluationResults });
   } catch (error) {
     console.error('Complete Assessment Error:', error);
     res.status(500).json({ error: 'Internal server error' });

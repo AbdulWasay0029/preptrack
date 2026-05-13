@@ -55,8 +55,8 @@ export default function Dashboard() {
         </motion.div>
       )}
 
-      {/* Latest Performance Section */}
-      {latestAssessment && (
+      {/* Latest Performance Section or Diagnostic Call to Action */}
+      {latestAssessment ? (
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -73,6 +73,20 @@ export default function Dashboard() {
           </div>
           <Link to="/progress" className="bg-surface-container-high px-4 py-2 rounded-lg text-label-bold hover:bg-primary/20 transition-all">
             VIEW FULL SCORECARD
+          </Link>
+        </motion.section>
+      ) : (
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 bg-surface-container border border-primary/30 p-6 rounded-2xl flex items-center justify-between"
+        >
+          <div>
+            <h3 className="text-headline-sm">Find out if you're ready</h3>
+            <p className="text-body-md text-on-surface-variant">Take a diagnostic assessment to evaluate your skills.</p>
+          </div>
+          <Link to="/diagnostic" className="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold hover:scale-105 transition-all">
+            Take Diagnostic
           </Link>
         </motion.section>
       )}

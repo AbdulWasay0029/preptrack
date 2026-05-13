@@ -131,9 +131,18 @@ export default function Diagnostic() {
               {q.topic ? q.topic.toUpperCase() : 'TOPIC'}
             </span>
           </div>
-          <div className={`flex items-center gap-2 font-mono font-bold ${timeLeft < 300 ? 'text-error' : 'text-on-surface'}`}>
-            <Timer className="w-5 h-5" />
-            {formatTime(timeLeft)}
+          <div className="flex items-center gap-4">
+            <div className={`flex items-center gap-2 font-mono font-bold ${timeLeft < 300 ? 'text-error' : 'text-on-surface'}`}>
+              <Timer className="w-5 h-5" />
+              {formatTime(timeLeft)}
+            </div>
+            <button
+              onClick={completeAssessment}
+              disabled={loading}
+              className="px-4 py-2 bg-secondary text-on-secondary rounded-lg font-bold flex items-center gap-2 hover:scale-105 transition-all text-sm"
+            >
+              {loading ? <Loader2 className="animate-spin w-4 h-4" /> : 'Finish Assessment'}
+            </button>
           </div>
         </div>
 
@@ -182,15 +191,7 @@ export default function Diagnostic() {
                 {submitting ? <Loader2 className="animate-spin" /> : <Send className="w-4 h-4" />} Submit Answer
               </button>
               
-              {currentIdx === questions.length - 1 ? (
-                <button
-                  onClick={completeAssessment}
-                  disabled={loading}
-                  className="px-6 py-3 bg-secondary text-on-secondary rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all"
-                >
-                  {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Finish Assessment'}
-                </button>
-              ) : (
+              {currentIdx < questions.length - 1 && (
                 <button
                   onClick={() => setCurrentIdx(prev => Math.min(questions.length - 1, prev + 1))}
                   className="px-6 py-3 bg-surface-container-highest text-on-surface rounded-xl font-bold flex items-center gap-2"

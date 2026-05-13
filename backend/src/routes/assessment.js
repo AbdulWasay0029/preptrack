@@ -184,7 +184,7 @@ router.get('/latest', requireJwtAuth, async (req, res) => {
 
     res.json({
       assessment,
-      questions: responsesRes.rows
+      responses: responsesRes.rows
     });
   } catch (error) {
     console.error('Fetch Latest Error:', error);

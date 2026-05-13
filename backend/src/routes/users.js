@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const { requireInternalAuth, verifyTelegramLogin } = require('../middleware/auth');
+const { requireInternalAuth, verifyTelegramLogin, requireJwtAuth } = require('../middleware/auth');
 
 // POST /users — create or update a user (called by bot on /start)
 router.post('/', requireInternalAuth, async (req, res) => {

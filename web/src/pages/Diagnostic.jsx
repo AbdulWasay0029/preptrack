@@ -127,38 +127,27 @@ export default function Diagnostic() {
   if (step === 'questions') {
     const q = questions[currentIdx];
     return (
-      <div className="grid grid-cols-12 gap-6 max-w-7xl mx-auto px-4 py-10 h-[80vh]">
-        {/* Left Sidebar: Question Numbers */}
-        <div className="col-span-2 bg-surface-container border border-outline-variant p-4 rounded-2xl flex flex-col gap-3">
-          <h3 className="text-label-bold mb-2">Questions</h3>
-          {questions.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIdx(idx)}
-              className={`py-3 rounded-lg font-bold text-center transition-all ${
-                currentIdx === idx 
-                  ? 'bg-primary text-on-primary' 
-                  : 'bg-surface-container-highest text-on-surface hover:bg-primary/20'
-              }`}
-            >
-              Question {idx + 1}
-            </button>
-          ))}
-          <div className="mt-auto">
-            <button
-              onClick={completeAssessment}
-              disabled={loading}
-              className="w-full bg-secondary text-on-secondary py-3 rounded-lg font-bold hover:bg-secondary-container transition-all"
-            >
-              {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Finish Assessment'}
-            </button>
+      <div className="max-w-4xl mx-auto px-4 py-10 flex flex-col gap-6">
+        {/* Header: Question Number and Timer */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="bg-primary/20 text-primary px-3 py-1 rounded-full font-bold">
+              Q{currentIdx + 1} / {questions.length}
+            </span>
+            <span className="bg-surface-container-highest text-on-surface px-3 py-1 rounded-full text-sm font-bold">
+              {q.topic ? q.topic.toUpperCase() : 'TOPIC'}
+            </span>
+          </div>
+          <div className={`flex items-center gap-2 font-mono font-bold ${timeLeft < 300 ? 'text-error' : 'text-on-surface'}`}>
+            <Timer className="w-5 h-5" />
+            {formatTime(timeLeft)}
           </div>
         </div>
 
-        {/* Center Area: Question & Response */}
-        <div className="col-span-8 bg-surface-container border border-outline-variant p-6 rounded-2xl flex flex-col gap-4">
+        {/* Question & Response Box */}
+        <div className="bg-surface-container border border-outline-variant p-6 rounded-2xl flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-headline-md">{q.topic ? q.topic.toUpperCase() : 'TOPIC'}</h2>
+            <h3 className="text-headline-md">{q.title}</h3>
             <span className={`text-label-bold px-3 py-1 rounded-full ${
               q.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
               q.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
@@ -166,7 +155,6 @@ export default function Diagnostic() {
               {q.difficulty?.toUpperCase()}
             </span>
           </div>
-          <h3 className="text-display-sm">{q.title}</h3>
           <p className="text-body-md text-on-surface-variant">
             Please explain your approach and write the code for this problem.
             {q.leetcode_link && (
@@ -179,9 +167,11 @@ export default function Diagnostic() {
             value={responses[currentIdx] || ''}
             onChange={(e) => setResponses({ ...responses, [currentIdx]: e.target.value })}
             placeholder="Write your response here..."
-            className="w-full flex-grow bg-surface-container-highest text-on-surface p-4 rounded-xl border border-outline focus:outline-primary font-mono text-body-md resize-none"
+            className="w-full h-60 bg-surface-container-highest text-on-surface p-4 rounded-xl border border-outline focus:outline-primary font-mono text-body-md resize-none"
           />
-          <div className="flex justify-between items-center mt-auto">
+          
+          {/* Footer: Navigation and Actions */}
+          <div className="flex justify-between items-center mt-4">
             <button
               onClick={() => setCurrentIdx(prev => Math.max(0, prev - 1))}
               disabled={currentIdx === 0}
@@ -189,35 +179,34 @@ export default function Diagnostic() {
             >
               <ArrowLeft className="w-4 h-4" /> Previous
             </button>
-            <button
-              onClick={handleSubmitAnswer}
-              disabled={submitting || !responses[currentIdx]}
-              className="px-6 py-3 bg-primary text-on-primary rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50"
-            >
-              {submitting ? <Loader2 className="animate-spin" /> : <Send className="w-4 h-4" />} Submit Answer
-            </button>
-            <button
-              onClick={() => setCurrentIdx(prev => Math.min(questions.length - 1, prev + 1))}
-              disabled={currentIdx === questions.length - 1}
-              className="px-6 py-3 bg-primary text-on-primary rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50"
-            >
-              Next <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* Right Sidebar: Countdown Timer */}
-        <div className="col-span-2 bg-surface-container border border-outline-variant p-4 rounded-2xl flex flex-col items-center justify-center gap-4">
-          <Timer className={`w-12 h-12 ${timeLeft < 300 ? 'text-error' : 'text-primary'}`} />
-          <h3 className="text-label-bold">Time Remaining</h3>
-          <div className={`font-mono text-display-sm font-bold ${timeLeft < 300 ? 'text-error' : 'text-on-surface'}`}>
-            {formatTime(timeLeft)}
-          </div>
-          {timeLeft < 300 && (
-            <div className="text-error text-label-small text-center flex items-center gap-1">
-              <AlertCircle className="w-4 h-4" /> Hurry up!
+            
+            <div className="flex gap-3">
+              <button
+                onClick={handleSubmitAnswer}
+                disabled={submitting || !responses[currentIdx]}
+                className="px-6 py-3 bg-primary text-on-primary rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50"
+              >
+                {submitting ? <Loader2 className="animate-spin" /> : <Send className="w-4 h-4" />} Submit Answer
+              </button>
+              
+              {currentIdx === questions.length - 1 ? (
+                <button
+                  onClick={completeAssessment}
+                  disabled={loading}
+                  className="px-6 py-3 bg-secondary text-on-secondary rounded-xl font-bold flex items-center gap-2 hover:scale-105 transition-all"
+                >
+                  {loading ? <Loader2 className="animate-spin mx-auto" /> : 'Finish Assessment'}
+                </button>
+              ) : (
+                <button
+                  onClick={() => setCurrentIdx(prev => Math.min(questions.length - 1, prev + 1))}
+                  className="px-6 py-3 bg-surface-container-highest text-on-surface rounded-xl font-bold flex items-center gap-2"
+                >
+                  Next <ChevronRight className="w-4 h-4" />
+                </button>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     );

@@ -89,6 +89,11 @@ router.post('/:id/submit-answer', requireJwtAuth, async (req, res) => {
 // POST /assessment/:id/complete
 router.post('/:id/complete', requireJwtAuth, async (req, res) => {
   const assessmentId = req.params.id;
+  const { responses } = req.body; // Expect array of { questionId, response, timeSpentSeconds }
+
+  if (!responses || !Array.isArray(responses)) {
+    return res.status(400).json({ error: 'Responses array is required' });
+  }
 
   try {
     // Verify ownership
@@ -98,31 +103,42 @@ router.post('/:id/complete', requireJwtAuth, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden' });
     }
 
-    const responses = await db.query(`
-      SELECT aq.ai_score, aq.question_id, t.name as topic_name
-      FROM assessment_questions aq
-      JOIN questions q ON aq.question_id = q.id
-      JOIN topics t ON q.topic_id = t.id
-      WHERE aq.assessment_id = $1
-    `, [assessmentId]);
-    
-    if (responses.rows.length === 0) return res.status(400).json({ error: 'No responses found' });
-
-    const overallScore = Math.round(responses.rows.reduce((acc, r) => acc + r.ai_score, 0) / responses.rows.length);
-
-    // Calculate topic scores
+    const evaluationResults = [];
     const topicScores = {};
     const topicCounts = {};
-    
-    responses.rows.forEach(r => {
-      const topic = r.topic_name;
+
+    // Process all responses (using for loop to avoid rate limits or handle errors better than Promise.all if one fails)
+    for (const r of responses) {
+      const { questionId, response, timeSpentSeconds } = r;
+
+      // Fetch question details
+      const qRes = await db.query('SELECT q.title, q.difficulty, t.name as topic FROM questions q JOIN topics t ON q.topic_id = t.id WHERE q.id = $1', [questionId]);
+      const question = qRes.rows[0] || { title: 'Unknown Question', difficulty: 'easy', topic: 'general' };
+
+      // Evaluate with Gemini
+      const evaluation = await evaluateResponse(question, response);
+
+      // Insert into assessment_questions
+      await db.query(`
+        INSERT INTO assessment_questions (assessment_id, question_id, user_response, ai_score, ai_feedback, time_spent_seconds)
+        VALUES ($1, $2, $3, $4, $5, $6)
+      `, [assessmentId, questionId, response, evaluation.score, evaluation.feedback, timeSpentSeconds || 0]);
+
+      evaluationResults.push({ ai_score: evaluation.score, topic: question.topic });
+
+      // Track topic scores
+      const topic = question.topic;
       if (!topicScores[topic]) {
         topicScores[topic] = 0;
         topicCounts[topic] = 0;
       }
-      topicScores[topic] += r.ai_score;
+      topicScores[topic] += evaluation.score;
       topicCounts[topic] += 1;
-    });
+    }
+
+    if (evaluationResults.length === 0) return res.status(400).json({ error: 'No responses processed' });
+
+    const overallScore = Math.round(evaluationResults.reduce((acc, r) => acc + r.ai_score, 0) / evaluationResults.length);
 
     for (const topic in topicScores) {
       topicScores[topic] = Math.round(topicScores[topic] / topicCounts[topic]);

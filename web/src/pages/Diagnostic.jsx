@@ -59,32 +59,25 @@ export default function Diagnostic() {
     }
   };
 
-  const handleSubmitAnswer = async () => {
-    const q = questions[currentIdx];
-    const responseText = responses[currentIdx] || '';
-    const seconds = timeSpent[currentIdx] || 0;
-
-    setSubmitting(true);
-    try {
-      await api.post(`/assessment/${assessmentId}/submit-answer`, {
-        questionId: q.id,
-        response: responseText,
-        timeSpentSeconds: seconds
-      });
-      
-      alert('Answer submitted successfully!');
-    } catch (err) {
-      console.error(err);
-      alert('Failed to submit answer.');
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmitAnswer = () => {
+    // Answers are already saved in the 'responses' state on change.
+    // We just provide visual feedback here.
+    alert('Answer saved locally! It will be evaluated when you click "Finish Assessment".');
   };
 
   const completeAssessment = async () => {
     setLoading(true);
     try {
-      await api.post(`/assessment/${assessmentId}/complete`);
+      const payload = {
+        responses: questions.map((q, idx) => ({
+          questionId: q.id,
+          response: responses[idx] || '',
+          timeSpentSeconds: timeSpent[idx] || 0
+        }))
+      };
+
+      await api.post(`/assessment/${assessmentId}/complete`, payload);
+      alert('Assessment completed successfully!');
       navigate('/dashboard');
     } catch (err) {
       console.error(err);

@@ -144,4 +144,16 @@ Completed the cleanup task specified in Section 5 of `PREPTRACK_PRD_FOR_ANTIGRAV
   - Placed the question number on top of the question block and the timer on the top right.
 - **Push**: Pushed all changes to GitHub (Commit `4cbcc56`).
 
-
+### 2026-05-13 — Flow Update & Gemini Fixes (Antigravity)
+- **Flow Update (Deferred Evaluation)**:
+  - Changed the flow of the diagnostic assessment as requested.
+  - The frontend `Diagnostic.jsx` no longer calls `/submit-answer` for each question. Answers are saved locally in state.
+  - When the user clicks "Finish Assessment", the frontend sends ALL responses in a single request to `/assessment/:id/complete`.
+  - The backend `/complete` route was updated to receive the responses array, evaluate them all with Gemini (in a loop), and then calculate the overall score!
+- **Gemini Fixes**:
+  - Changed the Gemini model from `gemini-3-flash-preview` to `gemini-1.5-flash` in `backend/src/services/gemini.js` for better stability.
+- **Identified Issues for Next Session (Claude)**:
+  - **No Question Descriptions**: The `questions` table in the database lacks a `description` column. Currently, only the title is displayed. Descriptions need to be added to the DB or hardcoded for the mock questions.
+  - **Made-up LeetCode Links**: The links in the `leetcode_link` column of the `questions` table appear to be made up or broken. They need to be updated with real links.
+  - **No Access to Diagnostic**: There is currently no clear link or automatic redirect to the diagnostic assessment for new users. It should be added to the landing page or dashboard.
+  - **Navigation After Assessment**: The user mentioned that the flow used to take them to a progress page or scorecard. Currently, it redirects to `/dashboard` after completion. This might need to be reverted or updated if a progress page exists.

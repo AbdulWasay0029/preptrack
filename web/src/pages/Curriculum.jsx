@@ -5,26 +5,22 @@ import DifficultyBadge from '@/src/components/DifficultyBadge';
 import { cn } from '@/src/lib/utils';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import api from '../api/client';
 
 export default function Curriculum() {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [telegramId] = useState(localStorage.getItem('prep_telegram_id'));
   const [latestAssessment, setLatestAssessment] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tRes = await fetch('/api/questions/topics');
-        const tData = await tRes.json();
-        setTopics(tData);
+        const tRes = await api.get('/questions/topics');
+        setTopics(tRes.data);
 
-        if (telegramId) {
-          const aRes = await fetch(`/api/assessments/${telegramId}/latest`);
-          const aData = await aRes.json();
-          if (aData.assessment) setLatestAssessment(aData);
-        }
+        const aRes = await api.get('/assessment/latest');
+        if (aRes.data.assessment) setLatestAssessment(aRes.data);
       } catch (err) {
         console.error('Failed to fetch curriculum:', err);
       } finally {
@@ -32,7 +28,7 @@ export default function Curriculum() {
       }
     };
     fetchData();
-  }, [telegramId]);
+  }, []);
 
   const filteredTopics = topics.filter(t => 
     t.name.toLowerCase().includes(search.toLowerCase())

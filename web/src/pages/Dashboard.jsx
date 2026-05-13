@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Play, Star, ChevronRight, TrendingUp, Award, Clock, Link as LinkIcon, Send } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
+import api from '../api/client';
 
 export default function Dashboard() {
   const [searchParams] = useSearchParams();
@@ -19,16 +20,16 @@ export default function Dashboard() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (telegramId) {
-      setLoading(true);
-      fetch(`/api/assessments/${telegramId}/latest`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.assessment) setLatestAssessment(data);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [telegramId]);
+    setLoading(true);
+    api.get('/assessment/latest')
+      .then(res => {
+        if (res.data.assessment) setLatestAssessment(res.data);
+      })
+      .catch(err => {
+        console.error('Failed to fetch latest assessment:', err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div id="dashboard-page" className="max-w-7xl mx-auto px-page_padding py-10">

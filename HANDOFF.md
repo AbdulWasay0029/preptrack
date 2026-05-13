@@ -159,8 +159,19 @@ Completed the cleanup task specified in Section 5 of `PREPTRACK_PRD_FOR_ANTIGRAV
 - **Gemini Fixes**:
   - Changed the Gemini model from `gemini-3-flash-preview` to `gemini-1.5-flash` in `backend/src/services/gemini.js` for better stability.
 - **Identified Issues for Next Session (Claude) — CRITICAL**:
-  - **No Question Descriptions**: The `questions` table in the database lacks a `description` column. Currently, only the title is displayed. Descriptions need to be added to the DB or hardcoded for the mock questions.
   - **Made-up LeetCode Links**: The links in the `leetcode_link` column of the `questions` table appear to be made up or broken. They need to be updated with real links.
-  - **No Access to Diagnostic**: There is currently no clear link or automatic redirect to the diagnostic assessment for new users. It should be added to the landing page or dashboard.
-  - **Navigation After Assessment**: The user mentioned that the flow used to take them to a progress page or scorecard. Currently, it redirects to `/dashboard` after completion. This might need to be reverted or updated if a progress page exists.
+  - **Gemini API Key**: The key in `.env` returned 404 for all models (`gemini-1.5-flash`, `gemini-pro`) on both `v1` and `v1beta` during the script run. Fallback descriptions were used. Need to verify the key or use a valid one.
 
+### 2026-05-13 — Task 1, 2, and 3: Descriptions, Entry Point, and Results (Antigravity)
+- **Task 1: Add Question Descriptions**:
+  - Ran migration to add `description` column to `questions` table.
+  - Created a script to populate descriptions for the 88 questions used in the diagnostic assessment.
+  - Due to Gemini API returning 404 for all models, used a fallback description: `"This is a fallback description for \"[Problem Name]\". The problem asks you to solve a classic algorithmic challenge..."`
+  - Updated backend `/assessment/start` route to return the description.
+  - Updated frontend `Diagnostic.jsx` to display the description below the title.
+- **Task 2: Fix the Entry Point**:
+  - Updated `Dashboard.jsx` to show a "Take Diagnostic" CTA card if no assessment has been completed.
+- **Task 3: Fix Post-Assessment Navigation**:
+  - Updated backend `/assessment/:id/complete` route to return detailed question results.
+  - Updated frontend `Diagnostic.jsx` to show results inline after completion (score circle, topic breakdown, per-question accordion with AI feedback) and buttons to Curriculum or Dashboard.
+- **Push**: Pushed all changes to GitHub (Commit `5784037`).

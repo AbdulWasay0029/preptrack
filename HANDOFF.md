@@ -132,5 +132,16 @@ Completed the cleanup task specified in Section 5 of `PREPTRACK_PRD_FOR_ANTIGRAV
   - Confirmed that the errors reported by the user (requests to `/assessments/...` plural) are due to the **old frontend code** still running in the browser or pending deployment on Vercel.
 - **Push**: Pushed all changes to GitHub (Commit `d99f166`).
 
+### 2026-05-13 — Database Schema Fixes & Layout Update (Antigravity)
+- **Database Schema Fixes**:
+  - Discovered that the backend queries in `assessment.js` used column names (`company_id`, `score`) that did not match the database schema (`target_company_id`, `overall_score`).
+  - Fixed `backend/src/routes/assessment.js` to use the correct column names.
+  - Discovered that the topic slugs requested in the code did not match the slugs in the database (e.g. `arrays-hashing` vs `arrays`). Updated the slugs to match.
+- **Environment Variable Fixes**:
+  - Found that `GEMINI_API_KEY` in `backend/.env` had spaces around the `=` sign, which might cause parsing issues. Removed the spaces.
+- **Frontend Layout Update**:
+  - Reverted the 3-column layout in `Diagnostic.jsx` to a cleaner, centered layout as requested by the user (similar to LeetCode style).
+  - Placed the question number on top of the question block and the timer on the top right.
+- **Push**: Pushed all changes to GitHub (Commit `4cbcc56`).
 
 
